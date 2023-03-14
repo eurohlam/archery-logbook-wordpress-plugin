@@ -214,7 +214,9 @@
                     var scoreSummary = jQuery('<summary><table class="table table-sm">' +
                                 '<caption>Score summary</caption>' +
                                 '<thead><tr>' +
-                                '<th scope="col">Distance</th>' +
+                                '<th scope="col">Match</th>' +
+                                '<th scope="col">Country</th>' +
+                                '<th scope="col">City</th>' +
                                 '<th scope="col">Date</th>' +
                                 '<th scope="col">Number of ends</th>' +
                                 '<th scope="col">Sum</th>' +
@@ -222,8 +224,10 @@
                                 '<th scope="col">Comment</th>' +
                                 '</tr></thead>' +
                                 '<tbody class="table-group-divider"><tr>' +
-                                '<th scope="row">' + score.distance + '</th>' +
-                                '<td>' + score.scoreDate + '</td>' +
+                                '<th scope="row">' + score.match + '</th>' +
+                                '<td>' + score.country + '</td>' +
+                                '<td>' + score.city + '</td>' +
+                                '<td>' + new Date(score.scoreDate).toLocaleString() + '</td>' +
                                 '<td>' + score.endsCount + '</td>' +
                                 '<td>' + score.sum + '</td>' +
                                 '<td>' + score.avg + '</td>' +
@@ -234,7 +238,7 @@
                     var scoreDetails = jQuery('<table>')
                         .addClass('table')
                         .addClass('table-striped')
-                        .addClass('table-secondary')
+                        .addClass('table-primary')
                         .addClass('table-bordered')
                         .append('<caption>Score details</caption>');
 
