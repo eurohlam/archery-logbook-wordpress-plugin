@@ -211,9 +211,9 @@
 
                 jQuery.each(data, function (s, score) {
                     var details = jQuery('<details>');
-                    var scoreSummary = jQuery('<summary><table class="table table-sm">' +
+                    var scoreSummary = jQuery('<summary><table class="table table-sm table-striped-columns">' +
                                 '<caption>Score summary</caption>' +
-                                '<thead><tr>' +
+                                '<thead class="table-success"><tr>' +
                                 '<th scope="col">Match</th>' +
                                 '<th scope="col">Country</th>' +
                                 '<th scope="col">City</th>' +
@@ -238,11 +238,10 @@
                     var scoreDetails = jQuery('<table>')
                         .addClass('table')
                         .addClass('table-striped')
-                        .addClass('table-primary')
                         .addClass('table-bordered')
                         .append('<caption>Score details</caption>');
 
-                    var scoreDetailsHeader = jQuery('<thead>');
+                    var scoreDetailsHeader = jQuery('<thead>').addClass('table-success');
                     var scoreDetailsHeaderTr = jQuery('<tr>')
                                 .append('<th scope="col">End #</th>')
                                 .append('<th scope="col">Sum</th>')

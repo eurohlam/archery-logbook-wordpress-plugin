@@ -45,7 +45,7 @@ function archery_logbook_shortcodes_init()
                     <div id="success"></div>
                     <div class="row mb-3">
                        <div class="form-group col">
-                          <button id="btnAddClub" class="btn btn-success btn-lg" type="submit">Add Club</button>
+                          <button id="btnAddClub" class="btn btn-outline-success btn-lg" type="submit">Add Club</button>
                        </div>
                     </div>
                 </form>
@@ -118,7 +118,7 @@ function archery_logbook_shortcodes_init()
                 <div id="success"></div>
                 <div class="row mb-3">
                    <div class="form-group col">
-                      <button id="btnAddClub" class="btn btn-success btn-lg" type="submit">Add Club</button>
+                      <button id="btnAddArcher" class="btn btn-outline-success btn-lg" type="submit">Add Archer</button>
                    </div>
                 </div>
             </form>
@@ -220,7 +220,7 @@ function archery_logbook_shortcodes_init()
                 <div id="success"></div>
                 <div class="row mb-3">
                    <div class="col">
-                      <button id="btnAddBow" class="btn btn-success btn-lg" type="submit">Add Bow</button>
+                      <button id="btnAddBow" class="btn btn-outline-success btn-lg" type="submit">Add Bow</button>
                    </div>
                 </div>
             </form>
@@ -270,13 +270,13 @@ function archery_logbook_shortcodes_init()
                 <div id="success"></div>
                 <div class="row mb-3">
                    <div class="col">
-                      <button id="btnAddDistanceSettings" class="btn btn-success btn-lg" type="submit">Add Distance Settings</button>
+                      <button id="btnAddDistanceSettings" class="btn btn-outline-success btn-lg" type="submit">Add Distance Settings</button>
                    </div>
                 </div>
             </form>
         </div>
     </section>
-            <script> 
+            <script>
                 jQuery(document).ready(function () {
                     jQuery.fn.getBowsAsDropdown(1, jQuery("div#bowListDiv"));
                 });
@@ -287,4 +287,66 @@ function archery_logbook_shortcodes_init()
     }
     add_shortcode('archery_logbook_new_distance_settings', 'archery_logbook_new_distance_settings_shortcode');
 
+
+    /**
+     * Shortcode that shows a form for a new score
+	 */
+    function archery_logbook_new_score_shortcode($atts = [], $content = null)
+    {
+        $form = '<head>
+            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css">
+            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap-icons.css">
+        </head>
+        <section id="archery_logbook_section">
+        <div class="container">
+            <!--<form id="newScoreForm">-->
+                <h3>ADD NEW SCORE</h3>
+                <div id="scoreDiv" class="row mb-3">
+                <table id="newScoreTable" class="table table-bordered table-striped">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Round #1</th>
+                            <th>Round #2</th>
+                            <th>Round #3</th>
+                            <th>Round #4</th>
+                            <th>Round #5</th>
+                            <th>Round #6</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+                 <button class="btn btn-outline-success" id="btnAddEnd"><i class="bi bi-plus-circle"></i> Add New End</button>
+                </div>
+
+                <div id="success"></div>
+                <div class="row mb-3">
+                   <div class="col">
+                      <button id="btnAddScore" class="btn btn-outline-success btn-lg" type="submit">Add New Score</button>
+                   </div>
+                </div>
+            <!--</form>-->
+        </div>
+    </section>
+            <script>
+                jQuery(document).ready(function () {
+                    jQuery("#newScoreTable").SetEditable();
+
+                    jQuery("#btnAddEnd").click(function() {
+                        rowAddNewAndEdit("newScoreTable");
+                    });
+
+                    jQuery("#btnAddScore").click(function() {
+                        var json = TableToJson("newScoreTable");
+                        console.log(json); //TODO: add logic for storing new score
+                    });
+                });
+            </script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+        return $form;
+    }
+    add_shortcode('archery_logbook_new_score', 'archery_logbook_new_score_shortcode');
 }
