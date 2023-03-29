@@ -2,14 +2,31 @@
 function archery_logbook_shortcodes_init()
 {
 
+    /** Enclosing main shortcode that shows the main container form.
+     *  All other shortcodes must be placed inside this one.
+     */
+    function archery_logbook_main_shortcode($atts = [], $content = null)
+    {
+        $form = '<head>
+            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css">
+            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap-icons.css">
+            </head>
+            <section id="archery_logbook_section">'
+            . do_shortcode($content) .
+            '</section>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+        return $form;
+    }
+    add_shortcode('archery_logbook_main', 'archery_logbook_main_shortcode');
+
+
     /**
      * Shortcode that shows a form for a new club
 	 */
     function archery_logbook_new_club_shortcode($atts = [], $content = null)
     {
-        $form = '<head><link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css"></head>
-        <section id="archery_logbook_section">
-            <div class="container">
+        $form = '<div class="container">
                 <form id="newArcheryClubForm">
                     <h3>ADD NEW ARCHERY CLUB</h3>
                     <div class="row mb-3">
@@ -49,10 +66,7 @@ function archery_logbook_shortcodes_init()
                        </div>
                     </div>
                 </form>
-            </div>
-        </section>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            </div>';
         return $form;
     }
     add_shortcode('archery_logbook_new_club', 'archery_logbook_new_club_shortcode');
@@ -63,10 +77,7 @@ function archery_logbook_shortcodes_init()
 	 */
     function archery_logbook_new_archer_shortcode($atts = [], $content = null)
     {
-        $form = '<head><link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css"></head>
-        <section id="archery_logbook_section">
-            <div class="container">
-            <form id="newArcherForm">
+        $form = '<form id="newArcherForm">
                 <h3>ADD NEW ARCHER</h3>
                 <div class="row">
                      <div class="col-md mb-3">
@@ -122,10 +133,7 @@ function archery_logbook_shortcodes_init()
                    </div>
                 </div>
             </form>
-            </div>
-        </section>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            </div>';
         return $form;
     }
     add_shortcode('archery_logbook_new_archer', 'archery_logbook_new_archer_shortcode');
@@ -135,10 +143,10 @@ function archery_logbook_shortcodes_init()
 	 */
     function archery_logbook_new_bow_shortcode($atts = [], $content = null)
     {
-        $newBow = '<head><link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css"></head>
-        <section id="archery_logbook_section">
-            <div class="container">
+        $user_id = get_current_user_id();
+        $newBow = '<div class="container">
             <form id="newBowForm">
+               <input type="hidden" id="archerId" value="' . $user_id . '"/>
                <h3>ADD NEW BOW</h3>
                <div class="row mb-3">
                    <div class="col-md">
@@ -224,10 +232,7 @@ function archery_logbook_shortcodes_init()
                    </div>
                 </div>
             </form>
-            </div>
-        </section>
-                <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-                <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            </div>';
         return $newBow;
     }
     add_shortcode('archery_logbook_new_bow', 'archery_logbook_new_bow_shortcode');
@@ -238,10 +243,10 @@ function archery_logbook_shortcodes_init()
 	 */
     function archery_logbook_new_distance_settings_shortcode($atts = [], $content = null)
     {
-        $form = '<head><link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css"></head>
-        <section id="archery_logbook_section">
-        <div class="container">
+        $user_id = get_current_user_id();
+        $form = '<div class="container">
             <form id="newDistanceSettingsForm">
+                <input type="hidden" id="archerId" value="' . $user_id . '"/>
                 <h3>ADD NEW DISTANCE SETTINGS</h3>
                 <div id="bowListDiv" class="row mb-3">
                     //bow list here generated by js
@@ -275,14 +280,11 @@ function archery_logbook_shortcodes_init()
                 </div>
             </form>
         </div>
-    </section>
             <script>
                 jQuery(document).ready(function () {
-                    jQuery.fn.getBowsAsDropdown(1, jQuery("div#bowListDiv"));
+                    jQuery.fn.getBowsAsDropdown(' . $user_id . ', jQuery("div#bowListDiv"));
                 });
-            </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            </script>';
         return $form;
     }
     add_shortcode('archery_logbook_new_distance_settings', 'archery_logbook_new_distance_settings_shortcode');
@@ -293,15 +295,44 @@ function archery_logbook_shortcodes_init()
 	 */
     function archery_logbook_new_score_shortcode($atts = [], $content = null)
     {
-        $form = '<head>
-            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css">
-            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap-icons.css">
-        </head>
-        <section id="archery_logbook_section">
-        <div class="container">
+        $user_id = get_current_user_id();
+        $form = '<div class="container">
             <!--<form id="newScoreForm">-->
                 <h3>ADD NEW SCORE</h3>
-                <div id="scoreDiv" class="row mb-3">
+                <div class="row mb-3">
+                    <div class="col-md" id="scoreBowListDiv">
+                        //bow list here generated by js
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input id="scoreMatch" class="form-control" required type="text" placeholder="Match" />
+                            <label for="scoreMatch">Match</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input id="scoreCountry" class="form-control" type="text" placeholder="Country" />
+                            <label for="scoreCountry">Country</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input id="scoreCity" class="form-control" type="text" placeholder="City" />
+                            <label for="scoreCity">City</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input id="scoreComment" class="form-control" type="text" placeholder="Comment" />
+                            <label for="scoreComment">Comment</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="scoreDiv" class="row mb-3 table-responsive">
                 <table id="newScoreTable" class="table table-bordered table-striped">
                     <thead class="table-success">
                         <tr>
@@ -322,14 +353,15 @@ function archery_logbook_shortcodes_init()
                 <div id="success"></div>
                 <div class="row mb-3">
                    <div class="col">
-                      <button id="btnAddScore" class="btn btn-outline-success btn-lg" type="submit">Add New Score</button>
+                      <button id="btnAddScore" class="btn btn-outline-success btn-lg" type="submit">Submit New Score</button>
                    </div>
                 </div>
             <!--</form>-->
         </div>
-    </section>
             <script>
                 jQuery(document).ready(function () {
+                    jQuery.fn.getBowsAsDropdown(' . $user_id . ', jQuery("div#scoreBowListDiv"));
+
                     jQuery("#newScoreTable").SetEditable();
 
                     jQuery("#btnAddEnd").click(function() {
@@ -338,15 +370,35 @@ function archery_logbook_shortcodes_init()
 
                     jQuery("#btnAddScore").click(function() {
                         var json = TableToJson("newScoreTable");
-                        console.log(json); //TODO: add logic for storing new score
+                        var bowId = jQuery("select#bowList").val();
+                        var match = jQuery("input#scoreMatch").val();
+                        var country = jQuery("input#scoreCountry").val();
+                        var city = jQuery("input#scoreCity").val();
+                        var comment = jQuery("input#scoreComment").val();
+                        jQuery.fn.postNewScore(' . $user_id .', bowId, match, json, country, city, comment);
                     });
                 });
             </script>
             <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_new_score', 'archery_logbook_new_score_shortcode');
+
+    /**
+     * Shortcode that shows a history of scores
+	 */
+    function archery_logbook_scores_history_shortcode($atts = [], $content = null)
+    {
+        $user_id = get_current_user_id();
+        $form = '<script>
+            jQuery(document).ready(function () {
+                    jQuery.fn.getScoresAsTables(' . $user_id . ',jQuery("#scoresHistoryDiv"));
+            });
+            </script>
+            <h3>MY SCORES HISTORY</h3>
+            <div id="scoresHistoryDiv" class="container"></div>';
+        return $form;
+    }
+    add_shortcode('archery_logbook_scores_history', 'archery_logbook_scores_history_shortcode');
 }

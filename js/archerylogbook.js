@@ -70,7 +70,8 @@
         var riserModel = jQuery("input#riserModel").val();
         var limbsModel = jQuery("input#limbsModel").val();
         var compoundModel = jQuery("input#compoundModel").val();
-        var traditionaldModel = jQuery("input#traditionalModel").val();
+        var traditionalModel = jQuery("input#traditionalModel").val();
+        var archerId = jQuery("input#archerId").val();
 
 
 		//prepare json data
@@ -96,7 +97,7 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': requestJson,
-                'path': '/archers/1/bows/' //TODO: archerId
+                'path': '/archers/' + archerId + '/bows/'
             },
             cache: false,
             success: function(data) {
@@ -173,7 +174,6 @@
             success: function(data) {
                 console.log("Archery Logbook API getBows response: " + JSON.stringify(data));
 
-
                 var select = jQuery('<select>')
                     .addClass('form-select')
                     .attr({'id': 'bowList'})
@@ -186,6 +186,64 @@
                     .append(select)
                     .append('<label for="bowList">Bow name</label>');
                 parentDiv.html(div);
+                return true;
+            },
+            error: function() {
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                return false;
+            },
+        });
+    }
+
+    jQuery.fn.postNewScore = function(archerId, bowId, match, scoreTableJson, country, city, comment) {
+        console.log("Parsing json: \n" +  scoreTableJson);
+        var scoreJson = {
+            "bowId": bowId,
+            "match": match,
+            "country": country,
+            "city": city,
+            "comment": comment,
+            "ends": []
+        };
+        var ends = [];
+        Object.entries(JSON.parse(scoreTableJson)).forEach( row => {
+            const [key, value] = row;
+            console.log(`${key}: ${value}`);
+            if (key != "0") { //ignoring headers
+                var end = {
+                    "endNumber": key,
+                    "rounds" : []
+                };
+                value.forEach( (column, idx) => {
+                    console.log(idx + ': ' + column + '   lenght: ' + column.trim().length);
+                    if (column.trim()) {
+                        var round = {
+                            "roundNumber": (idx + 1),
+                            "roundScore": column
+                        };
+                        end.rounds.push(round);
+                    }
+                });
+                console.log(end);
+                scoreJson.ends.push(end);
+            }
+        });
+
+        console.log("Sending json to Archery Logbook API postScore: \n" + JSON.stringify(scoreJson));
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': JSON.stringify(scoreJson),
+                'path': '/archers/' + archerId + '/scores/'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API postScore response: " + JSON.stringify(data));
                 return true;
             },
             error: function() {
@@ -209,6 +267,7 @@
             success: function(data) {
                 console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
 
+                var history = jQuery('<div>').addClass('container');
                 jQuery.each(data, function (s, score) {
                     var details = jQuery('<details>');
                     var scoreSummary = jQuery('<summary><table class="table table-sm table-striped-columns">' +
@@ -271,9 +330,10 @@
                         .append(scoreDetailsBody);
 
                     details.append(scoreDetails);
+                    history.append(details);
 
-                    parentDiv.html(details);
                 });// end of scores
+                parentDiv.html(history);
 
                 return true;
             },
