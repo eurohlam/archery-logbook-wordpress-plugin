@@ -128,11 +128,15 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 			$url = get_option($this->url_option);
 			$request = stripcslashes($_POST['request']);
 			$path = $_POST['path'];
+			$method = "POST";
+			if (!empty($_POST['method'])) {
+				$method = $_POST['method'];
+			}
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
 				$archeryLogbookRequest = $request; //$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
-				$result = $archeryLogbookInt->send_request($url . $path, "POST", $archeryLogbookRequest);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
 
 				$wpdb->insert(
 		 			WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,

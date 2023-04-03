@@ -401,4 +401,22 @@ function archery_logbook_shortcodes_init()
         return $form;
     }
     add_shortcode('archery_logbook_scores_history', 'archery_logbook_scores_history_shortcode');
+
+
+    /**
+     * Shortcode that shows a list of bows for archer
+     */
+    function archery_logbook_bows_shortcode($atts = [], $content = null)
+    {
+        $user_id = get_current_user_id();
+        $form = '<script>
+            jQuery(document).ready(function () {
+                    jQuery.fn.getBowsWithDetails(' . $user_id . ',jQuery("#bowsDetailsDiv"));
+            });
+            </script>
+            <h3>MY BOWS</h3>
+            <div id="bowsDetailsDiv" class="container"></div>';
+        return $form;
+    }
+    add_shortcode('archery_logbook_bows', 'archery_logbook_bows_shortcode');
 }

@@ -26,7 +26,7 @@
 
 
         var requestJson = JSON.stringify(archerData);
-        console.log("Archery Logbook API request: " + requestJson);
+        console.log("Archery Logbook API newArcher request: \n" + requestJson);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>");
 
         jQuery.ajax({
@@ -87,7 +87,7 @@
 
 
         var requestJson = JSON.stringify(bowData);
-        console.log("Archery Logbook API request: " + requestJson);
+        console.log("Archery Logbook API newBow request: \n" + requestJson);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>");
 
         jQuery.ajax({
@@ -115,6 +115,56 @@
     }); //newBowForm submit
 
 
+    jQuery("#newDistanceSettingsForm").submit(function(event) {
+        // Prevent spam click and default submit behaviour
+        jQuery("#btnAddDistanceSettings").attr("disabled", true);
+        event.preventDefault();
+
+        var archerId = jQuery("input#archerId").val();
+
+        //bow parameters
+        var bowId = jQuery("select#bowList").val();
+        var distance = jQuery("input#distance").val();
+        var sight = jQuery("input#sight").val();
+        var isTested = jQuery("input#isTested").is(":checked");
+
+
+		//prepare json data
+        var settingsData = {};
+        settingsData.distance = distance;
+        settingsData.sight = sight;
+        settingsData.isTested = isTested;
+
+
+        var requestJson = JSON.stringify(settingsData);
+        console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>");
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': requestJson,
+                'method': 'PUT',
+                'path': '/archers/' + archerId + '/bows/' + bowId + "/"
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                // Enable button
+                jQuery("#btnAddBow").attr("disabled", false);
+            },
+            error: function() {
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>");
+                // Enable button
+                jQuery("#btnAddBow").attr("disabled", false);
+            },
+        });
+    }); //newDistanceSettingsForm submit
+
     jQuery.fn.getClubs = function(parentDiv) {
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -136,7 +186,7 @@
                 return false;
             },
         });
-    }
+    } //getClubs
 
     jQuery.fn.getArchers = function(parentDiv) {
         jQuery.ajax({
@@ -159,7 +209,90 @@
                 return false;
             },
         });
-    }
+    } //getArchers
+
+    jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_get_data',
+                'path': '/archers/' + archerId + '/bows'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
+
+                var accordionDiv = jQuery('<div>')
+                    .addClass('accordion')
+                    .attr({'id': 'bowsDetails'});
+
+                jQuery.each(data, function (i, bow) {
+                    var bowHeadingId = 'bowHeading' + bow.id;
+                    var bowCollapseId = 'bowCollapse' + bow.id;
+                    var accordionItem = jQuery('<div>')
+                        .addClass('accordion-item')
+                        .append('<h2 class="accordion-header>" id="' + bowHeadingId + '">' +
+                           '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#' + bowCollapseId + '" aria-expanded="false" aria-controls="' + bowCollapseId +'">' +
+                               bow.name + " : " + bow.type + " : " + bow.poundage +
+                            '</button>' +
+                           '</h2>');
+                    var accordionItemBody = '<div id="' + bowCollapseId + '" class="accordion-collapse collapse" aria-labelledby="' + bowHeadingId + '" data-bs-parent="#bowsDetails">' +
+                        '<div class="accordion-body">' +
+                           '<p><strong>Type: </strong>' + bow.type + '</p>' +
+                           '<p><strong>Poundage: </strong>' + bow.poundage + '</p>' +
+                           '<p><strong>Level: </strong>' + bow.level + '</p>';
+                    if (bow.type === 'RECURVE') {
+                        accordionItemBody = accordionItemBody +
+                           '<p><strong>Riser model: </strong>' + bow.riserModel + '</p>' +
+                           '<p><strong>Limbs model: </strong>' + bow.limbsModel + '</p>';
+                    }
+                    if (bow.type === 'COMPOUND') {
+                        accordionItemBody = accordionItemBody +
+                           '<p><strong>Compound model: </strong>' + bow.compoundModel + '</p>';
+                    }
+                    if (bow.type === 'TRADITIONAL') {
+                        accordionItemBody = accordionItemBody +
+                           '<p><strong>Traditional model: </strong>' + bow.traditionalModel + '</p>';
+                    }
+                    if (Array.isArray(bow.distanceSettingsList) && bow.distanceSettingsList.length > 0) {
+                        var settingsTable = '<table class="table table-sm table-striped-columns">' +
+                            '<thead class="table-success"><tr>' +
+                            '<th scope="col">Distance</th>' +
+                            '<th scope="col">Sight</th>' +
+                            '<th scope="col">Is tested?</th>' +
+                            '</tr></thead>' +
+                            '<tbody class="table-group-divider">';
+                        jQuery.each(bow.distanceSettingsList, function (y, settings) {
+                            settingsTable = settingsTable + '<tr>' +
+                                '<td>' + settings.distance + '</td>' +
+                                '<td>' + settings.sight + '</td>' +
+                                '<td>' + settings.tested + '</td>' +
+                                '</tr>';
+                        });
+
+                        settingsTable = settingsTable + '</tbody></table>';
+                        accordionItemBody = accordionItemBody + settingsTable;
+                    }
+
+                    accordionItemBody = accordionItemBody + '</div></div>';
+
+                    accordionItem.append(jQuery(accordionItemBody));
+                    accordionDiv.append(accordionItem);
+                });
+
+
+                parentDiv.html(accordionDiv);
+                return true;
+            },
+            error: function() {
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                return false;
+            },
+        });
+    } //getBowsWithDetails
 
     jQuery.fn.getBowsAsDropdown = function(archerId, parentDiv) {
         jQuery.ajax({
@@ -194,7 +327,7 @@
                 return false;
             },
         });
-    }
+    } //getBowsAsDropdown
 
     jQuery.fn.postNewScore = function(archerId, bowId, match, scoreTableJson, country, city, comment) {
         console.log("Parsing json: \n" +  scoreTableJson);
@@ -216,7 +349,6 @@
                     "rounds" : []
                 };
                 value.forEach( (column, idx) => {
-                    console.log(idx + ': ' + column + '   lenght: ' + column.trim().length);
                     if (column.trim()) {
                         var round = {
                             "roundNumber": (idx + 1),
@@ -225,7 +357,6 @@
                         end.rounds.push(round);
                     }
                 });
-                console.log(end);
                 scoreJson.ends.push(end);
             }
         });
@@ -252,7 +383,7 @@
                 return false;
             },
         });
-    }
+    } //postNewScore
 
     jQuery.fn.getScoresAsTables = function(archerId, parentDiv) {
         jQuery.ajax({
@@ -343,7 +474,7 @@
                 return false;
             },
         });
-    }
+    } //getScoresAsTables
 
     function showAlert(type, text) {
         if (type == 'error') {
