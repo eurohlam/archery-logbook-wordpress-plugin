@@ -59,7 +59,7 @@ function archery_logbook_shortcodes_init()
                             </div>
                         </div>
                     </div>
-                    <div id="success"></div>
+                    <div id="clubAlertDiv"></div>
                     <div class="row mb-3">
                        <div class="form-group col">
                           <button id="btnAddClub" class="btn btn-outline-success btn-lg" type="submit">Add Club</button>
@@ -126,7 +126,7 @@ function archery_logbook_shortcodes_init()
                         </div>
                      </div>
                 </div>
-                <div id="success"></div>
+                <div id="archerAlertDiv"></div>
                 <div class="row mb-3">
                    <div class="form-group col">
                       <button id="btnAddArcher" class="btn btn-outline-success btn-lg" type="submit">Add Archer</button>
@@ -225,7 +225,7 @@ function archery_logbook_shortcodes_init()
                     </div>
                 </div></div>
                 </div>
-                <div id="success"></div>
+                <div id="newBowAlertDiv"></div>
                 <div class="row mb-3">
                    <div class="col">
                       <button id="btnAddBow" class="btn btn-outline-success btn-lg" type="submit">Add Bow</button>
@@ -272,7 +272,7 @@ function archery_logbook_shortcodes_init()
                         </div>
                      </div>
                 </div>
-                <div id="success"></div>
+                <div id="newDistanceAlertDiv"></div>
                 <div class="row mb-3">
                    <div class="col">
                       <button id="btnAddDistanceSettings" class="btn btn-outline-success btn-lg" type="submit">Add Distance Settings</button>
@@ -350,7 +350,7 @@ function archery_logbook_shortcodes_init()
                  <button class="btn btn-outline-success" id="btnAddEnd"><i class="bi bi-plus-circle"></i> Add New End</button>
                 </div>
 
-                <div id="success"></div>
+                <div id="alertDiv"></div>
                 <div class="row mb-3">
                    <div class="col">
                       <button id="btnAddScore" class="btn btn-outline-success btn-lg" type="submit">Submit New Score</button>

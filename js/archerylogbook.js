@@ -27,7 +27,7 @@
 
         var requestJson = JSON.stringify(archerData);
         console.log("Archery Logbook API newArcher request: \n" + requestJson);
-        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>");
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#archerAlertDiv'));
 
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -41,13 +41,14 @@
             cache: false,
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
+                showAlert("success", "<strong>New archer has been added</strong>", jQuery('div#archerAlertDiv'));
                 // Enable button
                 jQuery("#btnAddArcher").attr("disabled", false);
 
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>");
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#archerAlertDiv'));
                 // Enable button
                 jQuery("#btnAddArcher").attr("disabled", false);
             },
@@ -88,7 +89,7 @@
 
         var requestJson = JSON.stringify(bowData);
         console.log("Archery Logbook API newBow request: \n" + requestJson);
-        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>");
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newBowAlertDiv'));
 
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -102,12 +103,13 @@
             cache: false,
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
+                showAlert("success", "<strong>New bow has been added</strong>", jQuery('div#newBowAlertDiv'));
                 // Enable button
                 jQuery("#btnAddBow").attr("disabled", false);
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>");
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#newBowAlertDiv'));
                 // Enable button
                 jQuery("#btnAddBow").attr("disabled", false);
             },
@@ -138,7 +140,7 @@
 
         var requestJson = JSON.stringify(settingsData);
         console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
-        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>");
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newDistanceAlertDiv'));
 
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -153,12 +155,14 @@
             cache: false,
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
+                showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
+
                 // Enable button
                 jQuery("#btnAddBow").attr("disabled", false);
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>");
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#newDistanceAlertDiv'));
                 // Enable button
                 jQuery("#btnAddBow").attr("disabled", false);
             },
@@ -182,7 +186,9 @@
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                var clubAlertDiv = jQuery('<div id="clubAlertDiv"></div>');
+                parentDiv.append(clubAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", clubAlertDiv);
                 return false;
             },
         });
@@ -205,9 +211,11 @@
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                var archerAlertDiv = jQuery('<div id="archerAlertDiv"></div>');
+                parentDiv.append(archerAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", archerAlertDiv);
                 return false;
-            },
+            }
         });
     } //getArchers
 
@@ -288,9 +296,11 @@
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                var bowAlertDiv = jQuery('<div id="bowAlertDiv"></div>');
+                parentDiv.append(bowAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", bowAlertDiv);
                 return false;
-            },
+            }
         });
     } //getBowsWithDetails
 
@@ -323,9 +333,11 @@
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                var bowAlertDiv = jQuery('<div id="bowDropdownAlertDiv"></div>');
+                parentDiv.append(bowAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", bowAlertDiv);
                 return false;
-            },
+            }
         });
     } //getBowsAsDropdown
 
@@ -379,9 +391,11 @@
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                var scoreAlertDiv = jQuery('<div id="newScoreAlertDiv"></div>');
+                parentDiv.append(scoreAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
                 return false;
-            },
+            }
         });
     } //postNewScore
 
@@ -470,23 +484,27 @@
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>");
+                var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
+                parentDiv.append(scoreAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
                 return false;
-            },
+            }
         });
     } //getScoresAsTables
 
-    function showAlert(type, text) {
+    function showAlert(type, text, parentDiv) {
         if (type == 'error') {
-            jQuery('#success').html("<div class='alert alert-danger'>");
-            jQuery('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
-            jQuery('#success > .alert-danger').append(text);
-            jQuery('#success > .alert-danger').append('</div>');
+            parentDiv.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                text +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>'
+            );
         } else {
-            jQuery('#success').html("<div class='alert alert-success'>");
-            jQuery('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
-            jQuery('#success > .alert-success').append(text);
-            jQuery('#success > .alert-success').append('</div>');
+            parentDiv.html('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                text +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>'
+            );
         }
     } //showAlert
 
