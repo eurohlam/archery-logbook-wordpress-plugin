@@ -350,7 +350,7 @@ function archery_logbook_shortcodes_init()
                  <button class="btn btn-outline-success" id="btnAddEnd"><i class="bi bi-plus-circle"></i> Add New End</button>
                 </div>
 
-                <div id="alertDiv"></div>
+                <div id="newScoreAlertDiv"></div>
                 <div class="row mb-3">
                    <div class="col">
                       <button id="btnAddScore" class="btn btn-outline-success btn-lg" type="submit">Submit New Score</button>

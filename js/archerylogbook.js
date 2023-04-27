@@ -322,7 +322,7 @@
                     .attr({'id': 'bowList'})
                     .append('<option selected>Select the bow</option>');
                 jQuery.each(data, function (i, bow) {
-                    select.append('<option value="' + bow.id + '">' + bow.name + '</option>');
+                    select.append('<option value="' + bow.id + '">' + bow.name + ' : ' + bow.type + '</option>');
                 });
                 var div = jQuery('<div>')
                     .addClass('form-floating')
@@ -387,13 +387,12 @@
             cache: false,
             success: function(data) {
                 console.log("Archery Logbook API postScore response: " + JSON.stringify(data));
+                showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newScoreAlertDiv'));
                 return true;
             },
             error: function() {
                 // Fail message
-                var scoreAlertDiv = jQuery('<div id="newScoreAlertDiv"></div>');
-                parentDiv.append(scoreAlertDiv);
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newScoreAlertDiv'));
                 return false;
             }
         });
@@ -412,7 +411,7 @@
             success: function(data) {
                 console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
 
-                var history = jQuery('<div>').addClass('container');
+                var history = jQuery('<div>').addClass('container table-responsive');
                 jQuery.each(data, function (s, score) {
                     var details = jQuery('<details>');
                     var scoreSummary = jQuery('<summary><table class="table table-sm table-striped-columns">' +
