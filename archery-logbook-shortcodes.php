@@ -152,7 +152,7 @@ function archery_logbook_shortcodes_init()
                    <div class="col-md">
                       <div class="form-floating">
                         <input id="bowName" class="form-control" required type="text" placeholder="Bow name"/>
-                        <label for="bowName">Bow name</label>
+                        <label for="bowName">Bow name<span style="color:red">*</span></label>
                       </div>
                    </div>
                 </div>
@@ -165,13 +165,13 @@ function archery_logbook_shortcodes_init()
                               <option value="INTERMEDIATE">Intermediate</option>
                               <option value="ADVANCED">Advanced</option>
                             </select>
-                            <label for="bowLevel">Bow level</label>
+                            <label for="bowLevel">Bow level<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="poundage" class="form-control" required type="text" pattern="^[0-9]{2}-[0-9]{2}$" title= "Format: [ddd] or [dd]-[dd]" placeholder="Poundage"/>
-                            <label for="poundage">Poundage</label>
+                            <label for="poundage">Poundage<span style="color:red">*</span></label>
                         </div>
                     </div>
                  </div>
@@ -258,11 +258,11 @@ function archery_logbook_shortcodes_init()
                             <div class="card-body">
                                  <div class="form-floating mb-3">
                                     <input id="distance" class="form-control" required type="number" placeholder="Distance" />
-                                    <label for="distance">Distance</label>
+                                    <label for="distance">Distance<span style="color:red">*</span></label>
                                  </div>
                                  <div class="form-floating mb-3">
                                     <input id="sight" class="form-control" required type="text" placeholder="Sight"/>
-                                    <label for="sight">Sight</label>
+                                    <label for="sight">Sight<span style="color:red">*</span></label>
                                  </div>
                                  <div class="mb-3">
                                     <input id="isTested" class="form-check-input" type="checkbox" placeholder="Is tested?"/>
@@ -306,7 +306,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md">
                         <div class="form-floating">
                             <input id="scoreMatch" class="form-control" required type="text" placeholder="Match" />
-                            <label for="scoreMatch">Match</label>
+                            <label for="scoreMatch">Match<span style="color:red">*</span></label>
                         </div>
                     </div>
                 </div>

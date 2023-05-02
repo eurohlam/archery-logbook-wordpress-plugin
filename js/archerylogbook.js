@@ -327,7 +327,7 @@
                 var div = jQuery('<div>')
                     .addClass('form-floating')
                     .append(select)
-                    .append('<label for="bowList">Bow name</label>');
+                    .append('<label for="bowList">Bow name<span style="color:red">*</span></label>');
                 parentDiv.html(div);
                 return true;
             },
@@ -414,10 +414,11 @@
                 var history = jQuery('<div>').addClass('container table-responsive');
                 jQuery.each(data, function (s, score) {
                     var details = jQuery('<details>');
-                    var scoreSummary = jQuery('<summary><table class="table table-sm table-striped-columns">' +
+                    /*var scoreSummary = jQuery('<summary><table class="table table-sm table-striped-columns">' +
                                 '<caption>Score summary</caption>' +
                                 '<thead class="table-success"><tr>' +
                                 '<th scope="col">Match</th>' +
+                                '<th scope="col">Bow</th>' +
                                 '<th scope="col">Country</th>' +
                                 '<th scope="col">City</th>' +
                                 '<th scope="col">Date</th>' +
@@ -428,6 +429,7 @@
                                 '</tr></thead>' +
                                 '<tbody class="table-group-divider"><tr>' +
                                 '<th scope="row">' + score.match + '</th>' +
+                                '<td>' + score.bow.name + ' : ' + score.bow.type + '</td>' +
                                 '<td>' + score.country + '</td>' +
                                 '<td>' + score.city + '</td>' +
                                 '<td>' + new Date(score.scoreDate).toLocaleString() + '</td>' +
@@ -435,7 +437,24 @@
                                 '<td>' + score.sum + '</td>' +
                                 '<td>' + score.avg + '</td>' +
                                 '<td>' + score.comment + '</td>' +
-                                '</tr></tbody></table></summary>');
+                                '</tr></tbody></table></summary>');*/
+
+
+                    var scoreSummary = jQuery('<summary><caption>Score summary</caption>' +
+                                    '<div class="card border-success">' +
+                                    '<div class="card-header text-bg-success">'+
+                                        '<h5 class="card-title">' + score.match + ' meters on ' + new Date(score.scoreDate).toLocaleString() + '</h5>' +
+                                    '</div>' +
+                                          '<ul class="list-group list-group-flush">' +
+                                            '<li class="list-group-item"><strong>Bow: </strong>' + score.bow.name + ' : ' + score.bow.type + '</li>' +
+                                            '<li class="list-group-item"><strong>Number of ends: </strong>' + score.endsCount  + '</li>' +
+                                            '<li class="list-group-item"><strong>Sum: </strong>' + score.sum + '</li>' +
+                                            '<li class="list-group-item"><strong>Avg: </strong>' + score.avg + '</li>' +
+                                            '<li class="list-group-item"><strong>Country: </strong>' + score.country + '</li>' +
+                                            '<li class="list-group-item"><strong>City: </strong>' + score.city + '</li>' +
+                                          '</ul>' +
+                                          '<div class="card-body">' + score.comment + '</div>' +
+                                        '</div></summary></br>');
                     details.append(scoreSummary);
 
                     var scoreDetails = jQuery('<table>')
