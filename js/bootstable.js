@@ -13,16 +13,16 @@ Bootstable
 var params = null;  		//Parameters
 var colsEdi =null;
 var newColHtml = '<div class="btn-group pull-right">'+
-'<button id="bEdit" type="button" class="btn btn-sm btn-default" onclick="butRowEdit(this);">' +
+'<button id="bEdit" type="button" class="btn btn-default" onclick="butRowEdit(this);">' +
 '<span class="bi bi-pencil" > </span>'+
 '</button>'+
-'<button id="bElim" type="button" class="btn btn-sm btn-default" onclick="butRowDelete(this);">' +
+'<button id="bElim" type="button" class="btn btn-default" onclick="butRowDelete(this);">' +
 '<span class="bi bi-trash" > </span>'+
 '</button>'+
-'<button id="bAcep" type="button" class="btn btn-sm btn-default" style="display:none;" onclick="butRowAcep(this);">' +
+'<button id="bAcep" type="button" class="btn btn-default" style="display:none;" onclick="butRowAcep(this);">' +
 '<span class="bi bi-check2-square" > </span>'+
 '</button>'+
-'<button id="bCanc" type="button" class="btn btn-sm btn-default" style="display:none;" onclick="butRowCancel(this);">' +
+'<button id="bCanc" type="button" class="btn btn-default" style="display:none;" onclick="butRowCancel(this);">' +
 '<span class="bi bi-x-circle" > </span>'+
 '</button>'+
   '</div>';

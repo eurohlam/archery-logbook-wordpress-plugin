@@ -232,40 +232,37 @@
             success: function(data) {
                 console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
 
-                var accordionDiv = jQuery('<div>')
-                    .addClass('accordion')
-                    .attr({'id': 'bowsDetails'});
-
+                var bows = jQuery('<div>').addClass('container table-responsive');
                 jQuery.each(data, function (i, bow) {
-                    var bowHeadingId = 'bowHeading' + bow.id;
-                    var bowCollapseId = 'bowCollapse' + bow.id;
-                    var accordionItem = jQuery('<div>')
-                        .addClass('accordion-item')
-                        .append('<h2 class="accordion-header>" id="' + bowHeadingId + '">' +
-                           '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#' + bowCollapseId + '" aria-expanded="false" aria-controls="' + bowCollapseId +'">' +
-                               bow.name + " : " + bow.type + " : " + bow.poundage +
-                            '</button>' +
-                           '</h2>');
-                    var accordionItemBody = '<div id="' + bowCollapseId + '" class="accordion-collapse collapse" aria-labelledby="' + bowHeadingId + '" data-bs-parent="#bowsDetails">' +
-                        '<div class="accordion-body">' +
-                           '<p><strong>Type: </strong>' + bow.type + '</p>' +
-                           '<p><strong>Poundage: </strong>' + bow.poundage + '</p>' +
-                           '<p><strong>Level: </strong>' + bow.level + '</p>';
+                    var details = jQuery('<details>');
+                    var bowSummary = '<summary><caption>Bow</caption>' +
+                                    '<div class="card border-success">' +
+                                    '<div class="card-header text-bg-success">'+
+                                        '<h5 class="card-title">' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h5>' +
+                                    '</div>' +
+                                          '<ul class="list-group list-group-flush">' +
+                                            '<li class="list-group-item"><strong>Type: </strong>' + bow.type + '</li>' +
+                                            '<li class="list-group-item"><strong>Poundage: </strong>' + bow.poundage  + '</li>' +
+                                            '<li class="list-group-item"><strong>Level: </strong>' + bow.level + '</li>';
                     if (bow.type === 'RECURVE') {
-                        accordionItemBody = accordionItemBody +
-                           '<p><strong>Riser model: </strong>' + bow.riserModel + '</p>' +
-                           '<p><strong>Limbs model: </strong>' + bow.limbsModel + '</p>';
+                        bowSummary = bowSummary +
+                                            '<li class="list-group-item"><strong>Riser model: </strong>' + bow.riserModel + '</li>' +
+                                            '<li class="list-group-item"><strong>Limbs model: </strong>' + bow.limbsModel + '</li>';
                     }
                     if (bow.type === 'COMPOUND') {
-                        accordionItemBody = accordionItemBody +
-                           '<p><strong>Compound model: </strong>' + bow.compoundModel + '</p>';
+                        bowSummary = bowSummary +
+                                            '<li class="list-group-item"><strong>Compound model: </strong>' + bow.compoundModel + '</li>';
                     }
                     if (bow.type === 'TRADITIONAL') {
-                        accordionItemBody = accordionItemBody +
-                           '<p><strong>Traditional model: </strong>' + bow.traditionalModel + '</p>';
+                        bowSummary = bowSummary +
+                                            '<li class="list-group-item"><strong>Traditional model: </strong>' + bow.traditionalModel + '</li>';
                     }
+                    bowSummary = bowSummary + '</ul>' +
+                                        '</div></summary></br>';
+                    details.append(jQuery(bowSummary));
                     if (Array.isArray(bow.distanceSettingsList) && bow.distanceSettingsList.length > 0) {
                         var settingsTable = '<table class="table table-sm table-striped-columns">' +
+                            '<caption>Distance settings</caption>' +
                             '<thead class="table-success"><tr>' +
                             '<th scope="col">Distance</th>' +
                             '<th scope="col">Sight</th>' +
@@ -279,19 +276,15 @@
                                 '<td>' + settings.tested + '</td>' +
                                 '</tr>';
                         });
-
                         settingsTable = settingsTable + '</tbody></table>';
-                        accordionItemBody = accordionItemBody + settingsTable;
+
+                        details.append(jQuery(settingsTable));
+
                     }
-
-                    accordionItemBody = accordionItemBody + '</div></div>';
-
-                    accordionItem.append(jQuery(accordionItemBody));
-                    accordionDiv.append(accordionItem);
+                    bows.append(details);
                 });
 
-
-                parentDiv.html(accordionDiv);
+                parentDiv.html(bows);
                 return true;
             },
             error: function() {
