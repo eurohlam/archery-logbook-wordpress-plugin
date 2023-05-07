@@ -73,7 +73,7 @@ class Archery_Logbook_Integration {
             curl_setopt($curl, CURLOPT_HTTPGET, true);
             break;
         case "PUT":
-            curl_setopt($curl, CURLOPT_PUT, true);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT'); //(CURLOPT_PUT, true) does not work for some reason. Probably beacuse of older version of PHP
             curl_setopt($curl, CURLOPT_POSTFIELDS, $requestParams);
             break;
         case "DELETE":
