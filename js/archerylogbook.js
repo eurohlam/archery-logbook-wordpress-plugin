@@ -112,7 +112,7 @@
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#newBowAlertDiv'));
                 // Enable button
                 jQuery("#btnAddBow").attr("disabled", false);
-            },
+            }
         });
     }); //newBowForm submit
 
@@ -130,13 +130,19 @@
         var sight = jQuery("input#sight").val();
         var isTested = jQuery("input#isTested").is(":checked");
 
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newDistanceAlertDiv'));
 
-		//prepare json data
+        jQuery.fn.submitDistanceSettings(archerId, bowId, distance, sight, isTested);
+
+        jQuery("#btnAddDistanceSettings").attr("disabled", false);
+    }); //newDistanceSettingsForm submit
+
+    jQuery.fn.submitDistanceSettings = function(archerId, bowId, distance, sight, isTested) {
+        //prepare json data
         var settingsData = {};
         settingsData.distance = distance;
         settingsData.sight = sight;
         settingsData.isTested = isTested;
-
 
         var requestJson = JSON.stringify(settingsData);
         console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
@@ -156,18 +162,14 @@
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
-
-                // Enable button
-                jQuery("#btnAddBow").attr("disabled", false);
             },
             error: function() {
+                console.log("Error happened");
                 // Fail message
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#newDistanceAlertDiv'));
-                // Enable button
-                jQuery("#btnAddBow").attr("disabled", false);
-            },
+            }
         });
-    }); //newDistanceSettingsForm submit
+    }; //submitDistanceSettings
 
     jQuery.fn.getClubs = function(parentDiv) {
         jQuery.ajax({
@@ -182,15 +184,13 @@
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
                 parentDiv.html("<p>" + JSON.stringify(data) + "</p>");
-                return true;
             },
             error: function() {
                 // Fail message
                 var clubAlertDiv = jQuery('<div id="clubAlertDiv"></div>');
                 parentDiv.append(clubAlertDiv);
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", clubAlertDiv);
-                return false;
-            },
+            }
         });
     } //getClubs
 
@@ -207,15 +207,13 @@
             success: function(data) {
                 console.log("Archery Logbook API getArchers response: " + JSON.stringify(data));
                 parentDiv.html("<p>" + JSON.stringify(data) + "</p>");
-                return true;
             },
             error: function() {
                 // Fail message
                 var archerAlertDiv = jQuery('<div id="archerAlertDiv"></div>');
                 parentDiv.append(archerAlertDiv);
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", archerAlertDiv);
-                return false;
-            }
+            }    
         });
     } //getArchers
 
@@ -234,7 +232,8 @@
 
                 var bows = jQuery('<div>').addClass('container table-responsive');
                 jQuery.each(data, function (i, bow) {
-                    var details = jQuery('<details>');
+                    var details = jQuery('<details>').addClass('mb-3');
+
                     var bowSummary = '<summary><caption>Bow</caption>' +
                                     '<div class="card border-success">' +
                                     '<div class="card-header text-bg-success">'+
@@ -281,18 +280,73 @@
                         details.append(jQuery(settingsTable));
 
                     }
+
+                    var distanceSetingsModal = '<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bowModal' + bow.id + '">' +
+                      'Add distance settings</button>' +
+                    '<!-- Modal -->' +
+                    '<div class="modal fade" id="bowModal' + bow.id + '" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">' +
+                    '  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">' +
+                    '    <div class="modal-content">' +
+                    '      <div class="modal-header">' +
+                    '        <h1 class="modal-title fs-5" id="staticBackdropLabel">ADD NEW DISTANCE SETTINGS</h1>' +
+                    '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                    '      </div>' +
+                    '      <form id="newDistanceSettingsForm' + bow.id + '">' +
+                    '      <div class="modal-body">' +
+                    '          <input id="bowId" type="hidden" value="' + bow.id + '"/>' +
+                    '              <h3>' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h3>' +
+                    '              <div class="row mb-3">' +
+                    '                  <div class="col">' +
+                    '                      <div class="card">' +
+                    '                          <div class="card-header">Distance settings</div>' +
+                    '                          <div class="card-body">' +
+                    '                              <div class="form-floating mb-3">' +
+                    '                                  <input id="distance' + bow.id + '" class="form-control" required type="number" placeholder="Distance" />' +
+                    '                                  <label for="distance' + bow.id + '">Distance<span style="color:red">*</span></label>' +
+                    '                              </div>' +
+                    '                              <div class="form-floating mb-3">' +
+                    '                                  <input id="sight' + bow.id + '" class="form-control" required type="text" placeholder="Sight" />' +
+                    '                                  <label for="sight' + bow.id + '">Sight<span style="color:red">*</span></label>' +
+                    '                              </div>' +
+                    '                              <div class="mb-3">' +
+                    '                                  <input id="isTested' + bow.id + '" class="form-check-input" type="checkbox" placeholder="Is tested?" />' +
+                    '                                  <label for="isTested' + bow.id + '">Is tested?</label>' +
+                    '                              </div>' +
+                    '                          </div>' +
+                    '                      </div>' +
+                    '                  </div>' +
+                    '              </div>' +
+                    '      </div>' +
+                    '      <div class="modal-footer">' +
+                    '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
+                    '        <button type="submit" id="btnSubmitDistanceSettings' + bow.id + '" class="btn btn-success" data-bs-dismiss="modal">Submit Distance Settings</button>' +
+                    '      </div>' +
+                    '     </form>' +
+                    '    </div>' +
+                    '  </div>' +
+                    '</div>' +
+                    '<script>jQuery(document).ready(function(){	' +
+                    '    jQuery("#newDistanceSettingsForm' + bow.id +'").submit(function(event){' +
+                    '        jQuery("#btnSubmitDistanceSettings' + bow.id + '").attr("disabled", true);' +
+                    '        var distance = jQuery("input#distance' + bow.id + '").val();' +
+                    '        var sight = jQuery("input#sight' + bow.id + '").val();' +
+                    '        var isTested = jQuery("input#isTested' + bow.id + '").is(":checked");' +
+                    '        jQuery.fn.submitDistanceSettings(' + archerId + ', ' + bow.id + ', distance, sight, isTested);' +
+                    '        jQuery("#btnSubmitDistanceSettings' + bow.id + '").attr("disabled", false);' +
+                    '        return true;' +
+                    '    });' +
+                    '});</script>';
+                    details.append(jQuery(distanceSetingsModal));
                     bows.append(details);
                 });
 
                 parentDiv.html(bows);
-                return true;
             },
             error: function() {
                 // Fail message
                 var bowAlertDiv = jQuery('<div id="bowAlertDiv"></div>');
                 parentDiv.append(bowAlertDiv);
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", bowAlertDiv);
-                return false;
             }
         });
     } //getBowsWithDetails
@@ -322,14 +376,12 @@
                     .append(select)
                     .append('<label for="bowList">Bow name<span style="color:red">*</span></label>');
                 parentDiv.html(div);
-                return true;
             },
             error: function() {
                 // Fail message
                 var bowAlertDiv = jQuery('<div id="bowDropdownAlertDiv"></div>');
                 parentDiv.append(bowAlertDiv);
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", bowAlertDiv);
-                return false;
             }
         });
     } //getBowsAsDropdown
@@ -381,12 +433,10 @@
             success: function(data) {
                 console.log("Archery Logbook API postScore response: " + JSON.stringify(data));
                 showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newScoreAlertDiv'));
-                return true;
             },
             error: function() {
                 // Fail message
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newScoreAlertDiv'));
-                return false;
             }
         });
     } //postNewScore
@@ -406,32 +456,7 @@
 
                 var history = jQuery('<div>').addClass('container table-responsive');
                 jQuery.each(data, function (s, score) {
-                    var details = jQuery('<details>');
-                    /*var scoreSummary = jQuery('<summary><table class="table table-sm table-striped-columns">' +
-                                '<caption>Score summary</caption>' +
-                                '<thead class="table-success"><tr>' +
-                                '<th scope="col">Match</th>' +
-                                '<th scope="col">Bow</th>' +
-                                '<th scope="col">Country</th>' +
-                                '<th scope="col">City</th>' +
-                                '<th scope="col">Date</th>' +
-                                '<th scope="col">Number of ends</th>' +
-                                '<th scope="col">Sum</th>' +
-                                '<th scope="col">Avg</th>' +
-                                '<th scope="col">Comment</th>' +
-                                '</tr></thead>' +
-                                '<tbody class="table-group-divider"><tr>' +
-                                '<th scope="row">' + score.match + '</th>' +
-                                '<td>' + score.bow.name + ' : ' + score.bow.type + '</td>' +
-                                '<td>' + score.country + '</td>' +
-                                '<td>' + score.city + '</td>' +
-                                '<td>' + new Date(score.scoreDate).toLocaleString() + '</td>' +
-                                '<td>' + score.endsCount + '</td>' +
-                                '<td>' + score.sum + '</td>' +
-                                '<td>' + score.avg + '</td>' +
-                                '<td>' + score.comment + '</td>' +
-                                '</tr></tbody></table></summary>');*/
-
+                    var details = jQuery('<details>').addClass('mb-3');
 
                     var scoreSummary = jQuery('<summary><caption>Score summary</caption>' +
                                     '<div class="card border-success">' +
@@ -490,15 +515,12 @@
 
                 });// end of scores
                 parentDiv.html(history);
-
-                return true;
             },
             error: function() {
                 // Fail message
                 var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
                 parentDiv.append(scoreAlertDiv);
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
-                return false;
             }
         });
     } //getScoresAsTables
