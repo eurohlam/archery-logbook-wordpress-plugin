@@ -415,7 +415,7 @@ function archery_logbook_shortcodes_init()
             });
             </script>
             <!--<h3>MY BOWS</h3>-->
-            <div id="bowsDetailsDiv" class="container"></div>';
+            <div id="bowsDetailsDiv"></div>';
         return $form;
     }
     add_shortcode('archery_logbook_bows', 'archery_logbook_bows_shortcode');

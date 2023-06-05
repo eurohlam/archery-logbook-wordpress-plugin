@@ -135,6 +135,7 @@
         jQuery.fn.submitDistanceSettings(archerId, bowId, distance, sight, isTested);
 
         jQuery("#btnAddDistanceSettings").attr("disabled", false);
+        return false;
     }); //newDistanceSettingsForm submit
 
     jQuery.fn.submitDistanceSettings = function(archerId, bowId, distance, sight, isTested) {
@@ -162,6 +163,7 @@
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
+                window.location.reload();
             },
             error: function() {
                 console.log("Error happened");
@@ -213,7 +215,7 @@
                 var archerAlertDiv = jQuery('<div id="archerAlertDiv"></div>');
                 parentDiv.append(archerAlertDiv);
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", archerAlertDiv);
-            }    
+            }
         });
     } //getArchers
 
@@ -230,7 +232,7 @@
             success: function(data) {
                 console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
 
-                var bows = jQuery('<div>').addClass('container table-responsive');
+                var bows = jQuery('<div>').addClass('container');
                 jQuery.each(data, function (i, bow) {
                     var details = jQuery('<details>').addClass('mb-3');
 
@@ -238,6 +240,7 @@
                                     '<div class="card border-success">' +
                                     '<div class="card-header text-bg-success">'+
                                         '<h5 class="card-title">' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h5>' +
+                                        '<button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editBowModal' + bow.id + '">Edit</button>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
                                             '<li class="list-group-item"><strong>Type: </strong>' + bow.type + '</li>' +
@@ -257,7 +260,75 @@
                                             '<li class="list-group-item"><strong>Traditional model: </strong>' + bow.traditionalModel + '</li>';
                     }
                     bowSummary = bowSummary + '</ul>' +
-                                        '</div></summary></br>';
+                                        '</div>' +
+                                        '<!-- Edit Bow Modal -->' +
+                                        '<div class="modal fade" id="editBowModal' + bow.id + '" tabindex="-1" aria-labelledby="modelLabel' + bow.id + '" aria-hidden="true">' +
+                                        '  <div class="modal-dialog modal-dialog-centered">' +
+                                        '    <div class="modal-content">' +
+                                        '      <div class="modal-header">' +
+                                        '        <h1 class="modal-title fs-5" id="modelLabel' + bow.id + '">EDIT BOW</h1>' +
+                                        '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                                        '      </div>' +
+                                        '      <form id="editBowForm' + bow.id + '">' +
+                                        '      <div class="modal-body">' +
+                                        '          <h3>' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h3>' +
+                                        '          <div class="card">' +
+                                        '             <div class="card-header">Bow parameters</div>' +
+                                        '             <div class="card-body">' +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="bowName' + bow.id + '" class="form-control" type="text" placeholder="Bow Name" value="' + bow.name + '"/>' +
+                                        '                   <label for="bowName' + bow.id + '">Bow name</label>' +
+                                        '                </div>' +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="poundage' + bow.id + '" class="form-control" type="text" placeholder="Poundage" value="' + bow.poundage + '"/>' +
+                                        '                   <label for="poundage' + bow.id + '">Poundage</label>' +
+                                        '                </div>' +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <select id="bowLevel" class="form-select">' +
+                                        '                       <option value="BEGINNER"' + (bow.level == "BEGINNER" ? ' selected ' : '') + '>Beginner</option>' +
+                                        '                       <option value="INTERMEDIATE"'+ (bow.level == "INTERMEDIATE" ? ' selected ' : '') + '>Intermediate</option>' +
+                                        '                       <option value="ADVANCED"'+ (bow.level == "ADVANCED" ? ' selected ' : '') + '>Advanced</option>' +
+                                        '                   </select>' +
+                                        '                   <label for="bowLevel' + bow.id + '">Bow level</label>' +
+                                        '                </div>';
+                    if (bow.type == "RECURVE") {
+                        bowSummary = bowSummary +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="riserModel' + bow.id + '" class="form-control" type="text" placeholder="Riser model" value="' + bow.riserModel + '"/>' +
+                                        '                   <label for="riserModel' + bow.id + '">Riser model</label>' +
+                                        '                </div>' +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="limbsModel' + bow.id + '" class="form-control" type="text" placeholder="Limbs model" value="' + bow.limbsModel + '"/>' +
+                                        '                   <label for="limbsModel' + bow.id + '">Limbs model</label>' +
+                                        '                </div>';
+                    } else if (bow.type == "COMPOUND") {
+                        bowSummary = bowSummary +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="compoundModel' + bow.id + '" class="form-control" type="text" placeholder="Compound bow model" value="' + bow.compoundModel + '"/>' +
+                                        '                   <label for="compoundModel' + bow.id + '">Compound bow model</label>' +
+                                        '                </div>';
+                    } else if (bow.type == "TRADITIONAL") {
+                        bowSummary = bowSummary +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="traditionalModel' + bow.id + '" class="form-control" type="text" placeholder="Traditional bow model" value="' + bow.traditionalModel + '"/>' +
+                                        '                   <label for="traditionalModel' + bow.id + '">Traditional bow model</label>' +
+                                        '                </div>';
+                    };
+                    bowSummary = bowSummary +
+                                        '             </div>' +
+                                        '          </div>' +
+                                        '      </div>' +
+                                        '      <div id="newDistanceAlertDiv"></div>' +
+                                        '      <div class="modal-footer">' +
+                                        '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
+                                        '        <button type="submit" id="btnUpdateBow' + bow.id + '" class="btn btn-success" data-bs-dismiss="modal">Update bow</button>' +
+                                        '      </div>' +
+                                        '     </form>' +
+                                        '    </div>' +
+                                        '  </div>' +
+                                        '</div>' +
+                                        '<!-- End of Edit Bow Modal -->' +
+                                        '</summary></br>';
                     details.append(jQuery(bowSummary));
                     if (Array.isArray(bow.distanceSettingsList) && bow.distanceSettingsList.length > 0) {
                         var settingsTable = '<table class="table table-sm table-striped-columns">' +
@@ -283,40 +354,36 @@
 
                     var distanceSetingsModal = '<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bowModal' + bow.id + '">' +
                       'Add distance settings</button>' +
-                    '<!-- Modal -->' +
-                    '<div class="modal fade" id="bowModal' + bow.id + '" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">' +
-                    '  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">' +
+                    '<!-- Distance Settings Modal -->' +
+                    '<div class="modal fade" id="bowModal' + bow.id + '" tabindex="-1" aria-labelledby="modelLabel' + bow.id + '" aria-hidden="true">' +
+                    '  <div class="modal-dialog modal-dialog-centered">' +
                     '    <div class="modal-content">' +
                     '      <div class="modal-header">' +
-                    '        <h1 class="modal-title fs-5" id="staticBackdropLabel">ADD NEW DISTANCE SETTINGS</h1>' +
+                    '        <h1 class="modal-title fs-5" id="modelLabel' + bow.id + '">ADD NEW DISTANCE SETTINGS</h1>' +
                     '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
                     '      </div>' +
                     '      <form id="newDistanceSettingsForm' + bow.id + '">' +
                     '      <div class="modal-body">' +
-                    '          <input id="bowId" type="hidden" value="' + bow.id + '"/>' +
-                    '              <h3>' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h3>' +
-                    '              <div class="row mb-3">' +
-                    '                  <div class="col">' +
-                    '                      <div class="card">' +
-                    '                          <div class="card-header">Distance settings</div>' +
-                    '                          <div class="card-body">' +
-                    '                              <div class="form-floating mb-3">' +
-                    '                                  <input id="distance' + bow.id + '" class="form-control" required type="number" placeholder="Distance" />' +
-                    '                                  <label for="distance' + bow.id + '">Distance<span style="color:red">*</span></label>' +
-                    '                              </div>' +
-                    '                              <div class="form-floating mb-3">' +
-                    '                                  <input id="sight' + bow.id + '" class="form-control" required type="text" placeholder="Sight" />' +
-                    '                                  <label for="sight' + bow.id + '">Sight<span style="color:red">*</span></label>' +
-                    '                              </div>' +
-                    '                              <div class="mb-3">' +
-                    '                                  <input id="isTested' + bow.id + '" class="form-check-input" type="checkbox" placeholder="Is tested?" />' +
-                    '                                  <label for="isTested' + bow.id + '">Is tested?</label>' +
-                    '                              </div>' +
-                    '                          </div>' +
-                    '                      </div>' +
-                    '                  </div>' +
-                    '              </div>' +
+                    '          <h3>' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h3>' +
+                    '          <div class="card">' +
+                    '             <div class="card-header">Distance settings</div>' +
+                    '             <div class="card-body">' +
+                    '                <div class="form-floating mb-3">' +
+                    '                   <input id="distance' + bow.id + '" class="form-control" required type="number" placeholder="Distance" />' +
+                    '                   <label for="distance' + bow.id + '">Distance<span style="color:red">*</span></label>' +
+                    '                </div>' +
+                    '                <div class="form-floating mb-3">' +
+                    '                   <input id="sight' + bow.id + '" class="form-control" required type="text" placeholder="Sight" />' +
+                    '                   <label for="sight' + bow.id + '">Sight<span style="color:red">*</span></label>' +
+                    '                </div>' +
+                    '                <div class="mb-3">' +
+                    '                   <input id="isTested' + bow.id + '" class="form-check-input" type="checkbox" placeholder="Is tested?" />' +
+                    '                   <label for="isTested' + bow.id + '">Is tested?</label>' +
+                    '                </div>' +
+                    '             </div>' +
+                    '          </div>' +
                     '      </div>' +
+                    '      <div id="newDistanceAlertDiv"></div>' +
                     '      <div class="modal-footer">' +
                     '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
                     '        <button type="submit" id="btnSubmitDistanceSettings' + bow.id + '" class="btn btn-success" data-bs-dismiss="modal">Submit Distance Settings</button>' +
@@ -325,6 +392,7 @@
                     '    </div>' +
                     '  </div>' +
                     '</div>' +
+                    '<!-- End of Distance Settings Modal -->' +
                     '<script>jQuery(document).ready(function(){	' +
                     '    jQuery("#newDistanceSettingsForm' + bow.id +'").submit(function(event){' +
                     '        jQuery("#btnSubmitDistanceSettings' + bow.id + '").attr("disabled", true);' +
@@ -333,7 +401,7 @@
                     '        var isTested = jQuery("input#isTested' + bow.id + '").is(":checked");' +
                     '        jQuery.fn.submitDistanceSettings(' + archerId + ', ' + bow.id + ', distance, sight, isTested);' +
                     '        jQuery("#btnSubmitDistanceSettings' + bow.id + '").attr("disabled", false);' +
-                    '        return true;' +
+                    '        return false;' +
                     '    });' +
                     '});</script>';
                     details.append(jQuery(distanceSetingsModal));
