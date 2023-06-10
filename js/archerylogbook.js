@@ -455,7 +455,8 @@
                 var select = jQuery('<select>')
                     .addClass('form-select')
                     .attr({'id': 'bowList'})
-                    .append('<option selected>Select the bow</option>');
+                    .attr({'required': 'true'})
+                    .append('<option value="" selected>Select the bow</option>');
                 jQuery.each(data, function (i, bow) {
                     select.append('<option value="' + bow.id + '">' + bow.name + ' : ' + bow.type + '</option>');
                 });

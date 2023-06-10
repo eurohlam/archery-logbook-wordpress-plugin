@@ -159,8 +159,8 @@ function archery_logbook_shortcodes_init()
                 <div class="row">
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <select id="bowLevel" class="form-select">
-                              <option selected>Select a bow level</option>
+                            <select id="bowLevel" class="form-select" required>
+                              <option value="" selected>Select a bow level</option>
                               <option value="BEGINNER">Beginner</option>
                               <option value="INTERMEDIATE">Intermediate</option>
                               <option value="ADVANCED">Advanced</option>
@@ -210,13 +210,13 @@ function archery_logbook_shortcodes_init()
                                      <div class="tab-pane fade" id="compoundTab" role="tabpanel">
                                           <div class="row form-floating">
                                               <input id="compoundModel" class="form-control" type="text" placeholder="Compound bow model"/>
-                                              <label for="compoundModel" >Compound bow model</label>
+                                              <label for="compoundModel">Bow model</label>
                                           </div>
                                       </div>
                                       <div class="tab-pane fade" id="traditionalTab" role="tabpanel">
                                            <div class="row form-floating">
                                                <input id="traditionalModel" class="form-control" type="text" placeholder="Traditional bow model"/>
-                                               <label for="traditionalModel">Traditional bow model</label>
+                                               <label for="traditionalModel">Bow model</label>
                                            </div>
                                        </div>
                                    </div>
@@ -297,7 +297,7 @@ function archery_logbook_shortcodes_init()
     {
         $user_id = get_current_user_id();
         $form = '<div class="container">
-            <!--<form id="newScoreForm">-->
+            <form id="newScoreForm">
                 <!--<h3>ADD NEW SCORE</h3>-->
                 <div class="row">
                     <div class="col-md mb-3" id="scoreBowListDiv">
@@ -347,7 +347,7 @@ function archery_logbook_shortcodes_init()
                       <tbody>
                       </tbody>
                 </table>
-                 <button class="btn btn-outline-success" id="btnAddEnd"><i class="bi bi-plus-circle"></i> Add New End</button>
+                 <button class="btn btn-outline-success" id="btnAddEnd" type="button"><i class="bi bi-plus-circle"></i> Add New End</button>
                 </div>
 
                 <div id="newScoreAlertDiv"></div>
@@ -356,7 +356,7 @@ function archery_logbook_shortcodes_init()
                       <button id="btnAddScore" class="btn btn-outline-success btn-lg" type="submit">Submit New Score</button>
                    </div>
                 </div>
-            <!--</form>-->
+            </form>
         </div>
             <script>
                 jQuery(document).ready(function () {
@@ -368,7 +368,7 @@ function archery_logbook_shortcodes_init()
                         rowAddNewAndEdit("newScoreTable");
                     });
 
-                    jQuery("#btnAddScore").click(function() {
+                    jQuery("#newScoreForm").submit(function(event) {
                         var json = TableToJson("newScoreTable");
                         var bowId = jQuery("select#bowList").val();
                         var match = jQuery("input#scoreMatch").val();
