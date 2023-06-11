@@ -415,13 +415,13 @@
                     '<!-- End of Distance Settings Modal -->' +
                     '<script>jQuery(document).ready(function(){	' +
                     '    jQuery("#newDistanceSettingsForm' + bow.id +'").submit(function(event){' +
+                    '        event.preventDefault();' +
                     '        jQuery("#btnSubmitDistanceSettings' + bow.id + '").attr("disabled", true);' +
                     '        var distance = jQuery("input#distance' + bow.id + '").val();' +
                     '        var sight = jQuery("input#sight' + bow.id + '").val();' +
                     '        var isTested = jQuery("input#isTested' + bow.id + '").is(":checked");' +
                     '        jQuery.fn.submitDistanceSettings(' + archerId + ', ' + bow.id + ', distance, sight, isTested);' +
                     '        jQuery("#btnSubmitDistanceSettings' + bow.id + '").attr("disabled", false);' +
-                    '        return false;' +
                     '    });' +
                     '});</script>';
                     details.append(jQuery(distanceSetingsModal));
@@ -563,6 +563,7 @@
             success: function(data) {
                 console.log("Archery Logbook API postScore response: " + JSON.stringify(data));
                 showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newScoreAlertDiv'));
+                window.location.reload();
             },
             error: function() {
                 // Fail message

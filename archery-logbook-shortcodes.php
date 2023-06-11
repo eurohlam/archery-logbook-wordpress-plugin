@@ -369,6 +369,7 @@ function archery_logbook_shortcodes_init()
                     });
 
                     jQuery("#newScoreForm").submit(function(event) {
+                        event.preventDefault();
                         var json = TableToJson("newScoreTable");
                         var bowId = jQuery("select#bowList").val();
                         var match = jQuery("input#scoreMatch").val();
