@@ -656,6 +656,54 @@
         });
     } //getScoresAsTables
 
+    jQuery.fn.getScoresProgress = function(archerId, parentDiv) {
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_get_data',
+                'path': '/archers/' + archerId + '/scores'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
+                var scoreLabels = [];
+                var scoreData = [];
+                jQuery.each(data, function (s, score) {
+                    scoreLabels.push(new Date(score.scoreDate).toLocaleString());
+                    scoreData.push(score.avg);
+                });
+                new Chart(parentDiv, {
+                  type: 'line',
+                  data: {
+                    labels: scoreLabels,
+                    datasets: [{
+                        label: 'Avg score',
+                        data: scoreData,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true
+                      }
+                    }
+                  }
+                });
+            },
+            error: function() {
+                // Fail message
+                var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
+                parentDiv.append(scoreAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
+            }
+        });
+    } //getScoresProgress
+
     function showAlert(type, text, parentDiv) {
         if (type == 'error') {
             parentDiv.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
