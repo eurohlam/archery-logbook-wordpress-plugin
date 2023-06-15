@@ -668,22 +668,35 @@
             cache: false,
             success: function(data) {
                 console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
+
+                var canvasDiv = jQuery('<div>').addClass('container');
+                var avgCanvas = jQuery('<canvas id="avgScoreCanvas"></canvas>');
+                var bowCanvas = jQuery('<canvas id="avgScoreByBowCanvas"></canvas>');
+                canvasDiv.append('<h3>Common progress of average score</h3>').append(avgCanvas)
+                    .append('<br/><h3>Progress of average score by bow</h3>').append(bowCanvas);
+                parentDiv.html(canvasDiv);
+
                 var scoreLabels = [];
                 var scoreData = [];
+                var bows = [];
                 jQuery.each(data, function (s, score) {
-                    scoreLabels.push(new Date(score.scoreDate).toLocaleString());
+                    scoreLabels.push(new Date(score.scoreDate).toLocaleDateString());
                     scoreData.push(score.avg);
+                    if (!bows.includes(score.bow.id)) {
+                        bows.push(score.bow.id);
+                    }
                 });
-                new Chart(parentDiv, {
+                new Chart(avgCanvas, {
                   type: 'line',
                   data: {
-                    labels: scoreLabels,
+                    labels: scoreLabels.reverse(),
                     datasets: [{
                         label: 'Avg score',
-                        data: scoreData,
+                        data: scoreData.reverse(),
                         fill: false,
                         borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
+                        tension: 0.1,
+                        spanGaps: true
                     }]
                   },
                   options: {
@@ -694,6 +707,45 @@
                     }
                   }
                 });
+
+                if (bows.length > 1) {
+                    var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
+                    var bowDatasets = [];
+                    jQuery.each(bows, function(b, bowId){
+                        var dataset = {
+                            label: 'Avg ' + bowId,
+                            fill: false,
+                            borderColor:  colors[b],
+                            tension: 0.1,
+                            spanGaps: true
+                        };
+                        var bowData = [];
+                        jQuery.each(data, function (s, score) {
+                            if (bowId == score.bow.id) {
+                                dataset.label = 'Avg for ' + score.bow.name + ' : ' + score.bow.type;
+                                bowData.push(score.avg);
+                            } else {
+                                bowData.push(null);
+                            }
+                        });
+                        dataset.data = bowData.reverse();
+                        bowDatasets.push(dataset);
+                    });
+                    new Chart(bowCanvas, {
+                      type: 'line',
+                      data: {
+                        labels: scoreLabels,
+                        datasets: bowDatasets
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true
+                          }
+                        }
+                      }
+                    });
+                }
             },
             error: function() {
                 // Fail message

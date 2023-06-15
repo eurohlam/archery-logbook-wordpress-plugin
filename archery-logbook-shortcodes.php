@@ -426,13 +426,13 @@ function archery_logbook_shortcodes_init()
         $user_id = get_current_user_id();
         $form = '<script>
             jQuery(document).ready(function () {
-                    jQuery.fn.getScoresProgress(' . $user_id . ',jQuery("#scoresProgressCanvas"));
+                    jQuery.fn.getScoresProgress(' . $user_id . ',jQuery("#scoresProgressDiv"));
             });
             </script>
             <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
             <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
             <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/chart/chart.umd.js"></script>
-            <div id="scoresProgressDiv" class="container"><canvas id="scoresProgressCanvas"></canvas></div>';
+            <div id="scoresProgressDiv" class="container"></div>';
         return $form;
     }
     add_shortcode('archery_logbook_scores_progress', 'archery_logbook_scores_progress_shortcode');
