@@ -669,21 +669,35 @@
             success: function(data) {
                 console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
 
+                if (!data) {
+                    return;
+                }
+
                 var canvasDiv = jQuery('<div>').addClass('container');
-                var avgCanvas = jQuery('<canvas id="avgScoreCanvas"></canvas>');
-                var bowCanvas = jQuery('<canvas id="avgScoreByBowCanvas"></canvas>');
-                canvasDiv.append('<h3>Common progress of average score</h3>').append(avgCanvas)
-                    .append('<br/><h3>Progress of average score by bow</h3>').append(bowCanvas);
+                var avgCanvas = jQuery('<canvas id="avgScoreCanvas" height="420"></canvas>');
+                var avgDiv = jQuery('<div class="row mb-3"></div>');
+                avgDiv.append('<h3>Common progress of average score</h3>').append(avgCanvas);
+                var matchCanvas = jQuery('<canvas id="avgScoreByMatchCanvas" height="420"></canvas>');
+                var matchDiv = jQuery('<div class="row mb-3"></div>');
+                matchDiv.append('<h3>Progress of average score by match</h3>').append(matchCanvas);
+                var bowCanvas = jQuery('<canvas id="avgScoreByBowCanvas" height="420"></canvas>');
+                var bowDiv = jQuery('<div class="row mb-3"></div>');
+                bowDiv.append('<h3>Progress of average score by bow</h3>').append(bowCanvas);
+                canvasDiv.append(avgDiv).append(matchDiv).append(bowDiv);
                 parentDiv.html(canvasDiv);
 
                 var scoreLabels = [];
                 var scoreData = [];
                 var bows = [];
+                var matches = [];
                 jQuery.each(data, function (s, score) {
                     scoreLabels.push(new Date(score.scoreDate).toLocaleDateString());
                     scoreData.push(score.avg);
                     if (!bows.includes(score.bow.id)) {
                         bows.push(score.bow.id);
+                    }
+                    if (!matches.includes(score.match)) {
+                        matches.push(score.match);
                     }
                 });
                 new Chart(avgCanvas, {
@@ -702,13 +716,54 @@
                   options: {
                     scales: {
                       y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        max: 10
                       }
                     }
                   }
                 });
 
-                if (bows.length > 1) {
+                if (matches.length > 0) {
+                    var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
+                    var matchDatasets = [];
+                    jQuery.each(matches, function(m, match){
+                        var dataset = {
+                            label: match,
+                            fill: false,
+                            borderColor:  colors[m],
+                            tension: 0.1,
+                            spanGaps: true
+                        };
+                        var matchData = [];
+                        jQuery.each(data, function (s, score) {
+                            if (match == score.match) {
+                                dataset.label = score.match + " m";
+                                matchData.push(score.avg);
+                            } else {
+                                matchData.push(null);
+                            }
+                        });
+                        dataset.data = matchData.reverse();
+                        matchDatasets.push(dataset);
+                    });
+                    new Chart(matchCanvas, {
+                      type: 'line',
+                      data: {
+                        labels: scoreLabels,
+                        datasets: matchDatasets
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            max: 10
+                          }
+                        }
+                      }
+                    });
+                }
+
+                if (bows.length > 0) {
                     var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
                     var bowDatasets = [];
                     jQuery.each(bows, function(b, bowId){
@@ -722,7 +777,7 @@
                         var bowData = [];
                         jQuery.each(data, function (s, score) {
                             if (bowId == score.bow.id) {
-                                dataset.label = 'Avg for ' + score.bow.name + ' : ' + score.bow.type;
+                                dataset.label = score.bow.name + ' : ' + score.bow.type;
                                 bowData.push(score.avg);
                             } else {
                                 bowData.push(null);
@@ -740,7 +795,8 @@
                       options: {
                         scales: {
                           y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            max: 10
                           }
                         }
                       }
