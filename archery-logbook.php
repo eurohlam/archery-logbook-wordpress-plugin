@@ -145,6 +145,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
 				$archeryLogbookRequest = $archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
 				$result = $archeryLogbookInt->send_request($url . $path, "GET", $archeryLogbookRequest);
+				$response = $result['response'];
+				$error = $result['error'];
 
 				$wpdb->insert(
 		 			WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
@@ -156,12 +158,18 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					)
 				);
 
-				echo $result;
+				if (!$error) {
+					error_log('Sending json success');
+					echo $response;
+					wp_die();
+				} else {
+					error_log('Sending json error');
+					wp_send_json_error($error, 500);
+				}
 			} else {
 				error_log('Archery Logbook Integration plugin error: empty one or several required parameters - accessKey, secret, url or path. Please check settings of Archery Logbook Integration plugin');
 				echo '{"Archery Logbook Integration plugin error": "empty one or several required parameters - accessKey, secret, url or path"}';
 			}
-			wp_die();
 		}
 
 		/**
@@ -184,6 +192,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
 				$archeryLogbookRequest = $request; //$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
 				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+				$response = $result['response'];
+				$error = $result['error'];
 
 				$wpdb->insert(
 		 			WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
@@ -195,7 +205,11 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					)
 				);
 
-				//echo $result;
+				if (!$error) {
+					wp_send_json_success($response);
+				} else {
+					wp_send_json_error($error, 500);
+				}
 			} else {
 				error_log('Archery Logbook Integration plugin error: empty one or several required parameters - accessKey, secret, url or path. Please check settings of Archery Logbook Integration plugin');
 				echo '{"Archery Logbook Integration plugin error": "empty one or several required parameters - accessKey, secret, url or path"}';

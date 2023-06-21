@@ -84,19 +84,24 @@ class Archery_Logbook_Integration {
       }
         //curl_setopt($ch, CURLOPT_USERPWD, $user . ':' . $secret);
       $result = null;
+      $error = null;
       try {
           $result = curl_exec($curl);
           if (!$result) {
               $errno = curl_errno($curl);
               $error = curl_error($curl);
-              error_log($error);
+              if ($errno != 0) {
+                  error_log('Backend Error: code=' . $errno . ' ErrorMessage: ' . $error);
+              }
           }
 
           curl_close($curl);
       } catch (HttpException $ex) {
-            error_log($ex);
+            error_log('HTTP Error: ' . $ex);
       }
-      return $result;
+      return array(
+          'response' => $result,
+          'error' => $error);
   }
 
 }
