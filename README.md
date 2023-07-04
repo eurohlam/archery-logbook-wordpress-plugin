@@ -15,10 +15,12 @@ Archery Logbook helps archers to manage their scores, bows and overall progress.
 ## Shortcodes
 
 Shortcodes are implemented with using:
+
 * [Bootstrap 5.2](https://getbootstrap.com/docs/5.2)
 * [jQuery 3.3.1](https://api.jquery.com)
 * [Chart.js 4.3.0](https://www.chartjs.org/docs/latest/)
 * [Bootstable 1.1](https://github.com/t-edson/bootstable)
+
 All required dependencies are imported as part of the plugin.
 
 * [archery_logbook_main] - Enclosing main shortcode that shows the main container. All other shortcodes must be placed inside this one like in example below
