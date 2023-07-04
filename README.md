@@ -23,23 +23,25 @@ Shortcodes are implemented with using:
 
 All required dependencies are imported as part of the plugin.
 
-* [archery_logbook_main] - Enclosing main shortcode that shows the main container. All other shortcodes must be placed inside this one like in example below
+### Main shortcode
 
-    [archery_logbook_main]
-        [archery_logbook_new_archer]
-    [/archery_logbook_main]
+* `[archery_logbook_main]` - Enclosing main shortcode that shows the main container. All other shortcodes must be placed inside this one like in example below
+
+        [archery_logbook_main]
+           [archery_logbook_new_archer]
+        [/archery_logbook_main]
 
 
 ### Shortcodes for adding new entities
 
-* [archery_logbook_new_club] - shortcode that shows a form for adding a new archery club
-* [archery_logbook_new_archer] - shortcode that shows a form for adding a new archer
-* [archery_logbook_new_bow] - shortcode that shows a form for adding a new bow
-* [archery_logbook_new_distance_settings] - shortcode that shows a form for adding a new distance settings for certain bow
-* [archery_logbook_new_score] - shortcode that shows a form for adding a new score
+* `[archery_logbook_new_club]` - shortcode that shows a form for adding a new archery club
+* `[archery_logbook_new_archer]` - shortcode that shows a form for adding a new archer
+* `[archery_logbook_new_bow]` - shortcode that shows a form for adding a new bow
+* `[archery_logbook_new_distance_settings]` - shortcode that shows a form for adding a new distance settings for certain bow
+* `[archery_logbook_new_score]` - shortcode that shows a form for adding a new score
 
 ### Shortcodes for representing data
 
-* [archery_logbook_bows] - shortcode that shows a list of bows that belongs to current archer
-* [archery_logbook_scores_history] - shortcode that shows a history of scores for current archer
-* [archery_logbook_scores_progress] - shortcode that shows line charts for average score progress
+* `[archery_logbook_bows]` - shortcode that shows a list of bows that belongs to current archer
+* `[archery_logbook_scores_history]` - shortcode that shows a history of scores for current archer
+* `[archery_logbook_scores_progress]` - shortcode that shows line charts for average score progress
