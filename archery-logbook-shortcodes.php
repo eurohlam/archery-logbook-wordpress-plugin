@@ -167,7 +167,7 @@ function archery_logbook_shortcodes_init()
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input id="poundage" class="form-control" required type="text" pattern="^[0-9]{2}-[0-9]{2}$" title= "Format: [ddd] or [dd]-[dd]" placeholder="Poundage"/>
+                            <input id="poundage" class="form-control" required type="text" pattern="\d{1,3}|\d{2}-\d{2}" title= "Format: [ddd] or [dd]-[dd]" placeholder="Poundage"/>
                             <label for="poundage">Poundage<span style="color:red">*</span></label>
                         </div>
                     </div>
