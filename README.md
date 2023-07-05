@@ -9,8 +9,8 @@ The plugin provides a set of shortcodes that can be used in customized pages.
 
 ## Project
 
-This plugin is a part of a free project [Archery Logbook](https://roundkick.nz/).  
-Archery Logbook helps archers to manage their scores, bows and overall progress.
+This plugin is a part of a free project [Archer's Log Book](https://roundkick.nz/).  
+Archer's Log Book helps archers to manage their scores, bows and overall progress.
 
 ## Shortcodes
 
