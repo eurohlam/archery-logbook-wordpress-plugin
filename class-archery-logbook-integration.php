@@ -77,7 +77,7 @@ class Archery_Logbook_Integration {
             curl_setopt($curl, CURLOPT_POSTFIELDS, $requestParams);
             break;
         case "DELETE":
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             break;
         default:
             break;

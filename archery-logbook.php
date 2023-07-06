@@ -79,21 +79,14 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 			add_action('wp_ajax_archery_logbook_get_data', array( $this,'archery_logbook_get_data'));
 			add_action('init', 'archery_logbook_shortcodes_init');
 			add_action('user_register', array( $this,'archery_logbook_new_archer'));
+			add_action('profile_update', array( $this,'archery_logbook_update_archer'));
+			add_action('delete_user', array( $this,'archery_logbook_delete_archer'));
 		}
 
 		/**
 		* Send POST request to add new archer to Archery Logbook API
 		*/
 		function archery_logbook_new_archer( $user_id ) {
-			error_log('New archer triggered');
-			error_log('UserId=' . $user_id);
-			error_log('First name= ' . $_POST['first_name']);
-			error_log('Last name= ' . $_POST['last_name']);
-			error_log('Email= ' . $_POST['user_email']);
-			error_log('Club= ' . $_POST['archery_club']);
-			error_log('Country= ' . $_POST['billing_country']);
-			error_log('City= ' . $_POST['billing_city']);
-
 			global $wpdb;
 
 			$accessKey = get_option($this->accessKey_option);
@@ -101,7 +94,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 			$url = get_option($this->url_option);
 			$request = '{"id": "' . $user_id . '",' .
 				'"firstName": "' . $_POST['first_name'] . '",' .
-				'"lastName": "' . $_POST['last_n ame'] . '",' .
+				'"lastName": "' . $_POST['last_name'] . '",' .
 				'"email": "' . $_POST['user_email'] . '",' .
 				'"country": "' . $_POST['billing_country'] . '",' .
 				'"city": "' . $_POST['billing_city'] . '",' .
@@ -120,6 +113,85 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					'time' => current_time( 'mysql' ),
 					'endpoint' => $path,
 					'request' => $request,
+					'response' => $result,
+					)
+				);
+
+			} else {
+				error_log('Archery Logbook Integration plugin error: empty one or several required parameters - accessKey, secret, url or path. Please check settings of Archery Logbook Integration plugin');
+			}
+		}
+
+		/**
+		* Send POST request to update existing archer to Archery Logbook API
+		*/
+		function archery_logbook_update_archer( $user_id ) {
+			global $wpdb;
+
+			$accessKey = get_option($this->accessKey_option);
+			$secret = get_option($this->secret_option);
+			$url = get_option($this->url_option);
+			$request = '{"id": "' . $user_id . '",' .
+				'"firstName": "' . $_POST['first_name'] . '",' .
+				'"lastName": "' . $_POST['last_name'] . '",' .
+				'"email": "' . $_POST['user_email'] . '",' .
+				'"country": "' . $_POST['billing_country'] . '",' .
+				'"city": "' . $_POST['billing_city'] . '",' .
+				'"clubName": "' . $_POST['archery_club'] . '"}';
+			$path = "/archers/" . $user_id . "/";
+			$method = "POST";
+
+			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
+				$archeryLogbookInt = new Archery_Logbook_Integration();
+				$archeryLogbookRequest = $request; //$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+				$response = $result['response'];
+				$error = $result['error'];
+
+				$wpdb->insert(
+					WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
+					array(
+					'time' => current_time( 'mysql' ),
+					'endpoint' => $path,
+					'request' => $request,
+					'response' => $result,
+					)
+				);
+
+				if ($error) {
+					error_log('Profile update error: ' . $error);
+				}
+
+			} else {
+				error_log('Archery Logbook Integration plugin error: empty one or several required parameters - accessKey, secret, url or path. Please check settings of Archery Logbook Integration plugin');
+			}
+		}
+
+		/**
+		* Send DELETE request to delete archer to Archery Logbook API
+		*/
+		function archery_logbook_delete_archer( $user_id ) {
+			error_log('Deleting an archer triggered for UserID = ' . $user_id);
+
+			global $wpdb;
+
+			$accessKey = get_option($this->accessKey_option);
+			$secret = get_option($this->secret_option);
+			$url = get_option($this->url_option);
+			$path = "/archers/" . $user_id;
+			$method = "DELETE";
+
+			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
+				$archeryLogbookInt = new Archery_Logbook_Integration();
+				$archeryLogbookRequest = 'delete archer';//$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+
+				$wpdb->insert(
+					WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
+					array(
+					'time' => current_time( 'mysql' ),
+					'endpoint' => $path,
+					'request' => 'delete archer: ' . $user_id,
 					'response' => $result,
 					)
 				);
@@ -159,11 +231,10 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				);
 
 				if (!$error) {
-					error_log('Sending json success');
 					echo $response;
 					wp_die();
 				} else {
-					error_log('Sending json error');
+					error_log('Sending json error: ' . $error);
 					wp_send_json_error($error, 500);
 				}
 			} else {
@@ -208,6 +279,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				if (!$error) {
 					wp_send_json_success($response);
 				} else {
+					error_log('Sending json error: ' . $error);
 					wp_send_json_error($error, 500);
 				}
 			} else {
