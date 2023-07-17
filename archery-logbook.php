@@ -104,8 +104,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
-				$archeryLogbookRequest = $request; //$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
-				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, $request);
 
 				$wpdb->insert(
 					WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
@@ -143,8 +143,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
-				$archeryLogbookRequest = $request; //$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
-				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, $request);
 				$response = $result['response'];
 				$error = $result['error'];
 
@@ -183,8 +183,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
-				$archeryLogbookRequest = 'delete archer';//$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
-				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, null);
 
 				$wpdb->insert(
 					WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
@@ -215,8 +215,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
-				$archeryLogbookRequest = $archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
-				$result = $archeryLogbookInt->send_request($url . $path, "GET", $archeryLogbookRequest);
+				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
+				$result = $archeryLogbookInt->send_request($url . $path, "GET", $requestHeaders, null);
 				$response = $result['response'];
 				$error = $result['error'];
 
@@ -261,8 +261,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
-				$archeryLogbookRequest = $request; //$archeryLogbookInt->prepare_archery_logbook_parameters($accessKey, $secret, $path, $request);
-				$result = $archeryLogbookInt->send_request($url . $path, $method, $archeryLogbookRequest);
+				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
+				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, $request);
 				$response = $result['response'];
 				$error = $result['error'];
 

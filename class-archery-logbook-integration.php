@@ -12,50 +12,33 @@ class Archery_Logbook_Integration {
       return ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
   }
 
-  public function prepare_archery_logbook_parameters($accessKey, $secret, $path, $data) {
+  public function prepare_http_headers($accessKey, $secret, $path) {
 
-      $nonce = $this->milliseconds();
+      $nonce = uniqid();
       $timestamp = $this->milliseconds();
 
-      $dataKeyName = 'data';
-
-      // Set up some dummy parameters. Sort alphabetically.
-      $parameterMap = array(
-          'key' => $accessKey,
-          'nonce' => $nonce,
-          'timestamp' => $timestamp,
-          $dataKeyName => $data
-      );
-      ksort($parameterMap);
-
       // Build the signature string from the parameters.
-      $signatureString = $path;
-      foreach ($parameterMap as $key => $value) {
-          if ($key === 'signature') {
-              continue;
-          }
-          $signatureString .= "$key=$value;";
-      }
+      $signatureString = $path . $accessKey . $nonce . $timestamp;
       // Create the HMAC SHA-256 Hash from the signature string.
-      $signatureHex = hash_hmac('sha256', $signatureString, $secret, false);
+      $signature = base64_encode(hash_hmac('sha256', $signatureString, $secret, true));
 
       $resultMap = array(
-          'key' => $accessKey,
-          'nonce' => $nonce,
-          'timestamp' => $timestamp,
-          $dataKeyName => $data,
-          'signature' => $signatureHex
+          'Content-type: application/json',
+          'key: '. $accessKey,
+          'nonce: ' . $nonce,
+          'timestamp: ' . $timestamp,
+          'signature: ' . $signature
       );
 
       return $resultMap;
   }
 
-  public function send_request($url, $method, $requestParams) {
+  public function send_request($url, $method, $headers, $data) {
       $curl = curl_init();
 
       $params = array(
               CURLOPT_RETURNTRANSFER => 1,
-              CURLOPT_HTTPHEADER => array('Content-type: application/json'),
+              CURLOPT_HTTPHEADER => $headers,
               CURLOPT_URL => $url,
               CURLOPT_POST => true,
               CURLOPT_SSL_VERIFYHOST => false,//to ignore self-signed cert
@@ -67,14 +50,14 @@ class Archery_Logbook_Integration {
       switch ($method) {
         case "POST":
             curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $requestParams);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
             break;
         case "GET":
             curl_setopt($curl, CURLOPT_HTTPGET, true);
             break;
         case "PUT":
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT'); //(CURLOPT_PUT, true) does not work for some reason. Probably beacuse of older version of PHP
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $requestParams);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
             break;
         case "DELETE":
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
