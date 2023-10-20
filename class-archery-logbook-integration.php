@@ -68,13 +68,15 @@ class Archery_Logbook_Integration {
         //curl_setopt($ch, CURLOPT_USERPWD, $user . ':' . $secret);
       $result = null;
       $error = null;
+      $httpcode = null;
       try {
           $result = curl_exec($curl);
-          if (!$result) {
+          $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+          if ($result) {
               $errno = curl_errno($curl);
               $error = curl_error($curl);
               if ($errno != 0) {
-                  error_log('Backend Error: code=' . $errno . ' ErrorMessage: ' . $error);
+                  error_log('Backend Error: errorCode=' . $errno . ' ErrorMessage: ' . $error);
               }
           }
 
@@ -84,6 +86,7 @@ class Archery_Logbook_Integration {
       }
       return array(
           'response' => $result,
+          'httpcode' => $httpcode,
           'error' => $error);
   }
 

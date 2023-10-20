@@ -572,14 +572,14 @@
         });
     } //postNewScore
 
-    jQuery.fn.getScoresAsTables = function(archerId, parentDiv) {
+    jQuery.fn.getScoresAsTables = function(archerId, parentDiv, page = 0, size = 20) {
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
             type: "POST",
             dataType: "JSON",
             data: {
                 'action': 'archery_logbook_get_data',
-                'path': '/archers/' + archerId + '/scores'
+                'path': '/archers/' + archerId + '/scores?page=' + page + "&size=" + size
             },
             cache: false,
             success: function(data) {
@@ -645,9 +645,53 @@
                     history.append(details);
 
                 });// end of scores
+
+                //TODO: pagination links calculation
+                var paginationNav = '<nav>' +
+                     ' <ul class="pagination">';
+                if (page <= 0) {
+                    paginationNav = paginationNav + '  <li class="page-item disabled">';
+                } else {
+                    paginationNav = paginationNav + '  <li class="page-item">';
+                };
+                paginationNav = paginationNav +
+                     '    <a class="page-link link-dark" aria-label="Previous" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page - 1) + ')">' +
+                     '      <span aria-hidden="true">&laquo;</span>' +
+                     '     </a>' +
+                     '  </li>';
+                if (page <= 0) {
+                    paginationNav = paginationNav +
+                    '  <li class="page-item active"><a class="page-link link-dark" href="#">' + (page + 1) + '</a></li>' +
+                    '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' + (page + 2) + '</a></li>' +
+                    '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 2) + ')">' + (page + 3) + '</a></li>' +
+                    '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 3) + ')">' + (page + 4) + '</a></li>' +
+                    '  <li class="page-item">' +
+                    '    <a class="page-link link-dark" aria-label="Next" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' +
+                    '       <span aria-hidden="true">&raquo;</span>' +
+                    '    </a>' +
+                    '   </li>' +
+                    ' </ul>' +
+                    '</nav>';
+                } else {
+                    paginationNav = paginationNav +
+                    '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page - 1) + ')">' + page + '</a></li>' +
+                    '  <li class="page-item active"><a class="page-link link-dark" href="#">' + (page + 1) + '</a></li>' +
+                    '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' + (page + 2) + '</a></li>' +
+                    '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 2) + ')">' + (page + 3) + '</a></li>' +
+                    '  <li class="page-item">' +
+                    '    <a class="page-link link-dark" aria-label="Next" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' +
+                    '       <span aria-hidden="true">&raquo;</span>' +
+                    '    </a>' +
+                    '   </li>' +
+                    ' </ul>' +
+                    '</nav>';
+                };
+                history.append(paginationNav);
                 parentDiv.html(history);
             },
-            error: function() {
+            error: function(jqXHR, exception, errorThrown) {
+                //TODO: API errors handling
+                console.log(jqXHR.status + '  ' + exception + ' ' + errorThrown + ' ' + jqXHR.responseText);
                 // Fail message
                 var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
                 parentDiv.append(scoreAlertDiv);

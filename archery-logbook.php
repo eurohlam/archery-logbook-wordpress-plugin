@@ -218,6 +218,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
 				$result = $archeryLogbookInt->send_request($url . $path, "GET", $requestHeaders, null);
 				$response = $result['response'];
+				$httpcode = $result['httpcode'];
 				$error = $result['error'];
 
 				$wpdb->insert(
@@ -230,11 +231,14 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					)
 				);
 
-				if (!$error) {
+				if ($httpcode != 200) {
+					error_log('API responded with error. HTTP Code: ' . $httpcode . '. Response: ' . $response);
+					wp_send_json_error($response, $httpcode);
+				} else if (!$error) {
 					echo $response;
 					wp_die();
 				} else {
-					error_log('Sending json error: ' . $error);
+					error_log('Server error happend. Sending json error: ' . $error);
 					wp_send_json_error($error, 500);
 				}
 			} else {
@@ -264,6 +268,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
 				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, $request);
 				$response = $result['response'];
+				$httpcode = $result['httpcode'];
 				$error = $result['error'];
 
 				$wpdb->insert(
@@ -276,10 +281,13 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					)
 				);
 
-				if (!$error) {
+				if ($httpcode != 200) {
+					error_log('API responded with error. HTTP Code: ' . $httpcode . '. Response: ' . $response);
+					wp_send_json_error($response, $httpcode);
+				} if (!$error) {
 					wp_send_json_success($response);
 				} else {
-					error_log('Sending json error: ' . $error);
+					error_log('Server error happend. Sending json error: ' . $error);
 					wp_send_json_error($error, 500);
 				}
 			} else {
