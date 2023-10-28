@@ -625,13 +625,25 @@
 
                     var scoreDetailsBody = jQuery('<tbody>').addClass('table-group-divider');
                     jQuery.each(score.ends, function(e, end) {
-                        var tr = jQuery('<tr>');
+                        var tr = jQuery('<tr align="center">');
                         tr.append('<th scope="row">' + end.endNumber + '</th>')
                           .append('<td>' + end.sum + '</td>')
                           .append('<td>' + end.avg + '</td>');
 
                         jQuery.each(end.rounds, function(r, round) {
-                            tr.append('<td>' + round.roundScore + '</td>')
+                            if (round.roundScore == "10") {
+                                tr.append('<td class="bg-warning text-success"><strong>' + round.roundScore + '</strong></td>')
+							} else if (round.roundScore == "9") {
+                                tr.append('<td class="bg-warning text-success">' + round.roundScore + '</td>')
+							} else if (round.roundScore == "8" || round.roundScore == "7") {
+                                tr.append('<td class="bg-danger text-white">' + round.roundScore + '</td>')
+							} else if (round.roundScore == "6" || round.roundScore == "5") {
+                                tr.append('<td class="bg-primary text-white">' + round.roundScore + '</td>')
+							} else if (round.roundScore == "4" || round.roundScore == "3") {
+                                tr.append('<td class="bg-dark text-white">' + round.roundScore + '</td>')
+							} else {
+                                tr.append('<td class="bg-white">' + round.roundScore + '</td>')
+							}
                         }); //end of rounds
 
                         scoreDetailsBody.append(tr);
