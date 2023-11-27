@@ -529,7 +529,6 @@
         var ends = [];
         Object.entries(JSON.parse(scoreTableJson)).forEach( row => {
             const [key, value] = row;
-            console.log(`${key}: ${value}`);
             if (key != "0") { //ignoring headers
                 var end = {
                     "endNumber": key,
@@ -544,10 +543,42 @@
                         end.rounds.push(round);
                     }
                 });
-                scoreJson.ends.push(end);
+                ends.push(end);
             }
         });
+        scoreJson.ends = ends;
 
+            //validate score data
+
+        if (ends.length == 0) {
+            showAlert("error", "At least one end must be added", jQuery('div#newScoreAlertDiv'));
+            return;
+        }
+        var invalidScores = [];
+        var invalidEnds = [];
+        ends.forEach( (end, idx) => {
+            if (end.rounds.length == 0) {
+                invalidEnds.push((idx+1));
+            } else {
+                end.rounds.forEach( (round, c) => {
+                    if (round.roundScore) {
+                        var score = Number.parseInt(round.roundScore);
+                        if (score < 0 || score > 10) {
+                            invalidScores.push(score);
+                        }
+                    }
+                });
+            }
+        });
+        if (invalidEnds.length > 0) {
+            showAlert("error", "Ends [ " + invalidEnds + " ] do not have any scores. At least one score must be added", jQuery('div#newScoreAlertDiv'));
+            return;
+        } else if (invalidScores.length > 0) {
+            showAlert("error", "Invalid scores have been added. Please, fix the following values and resubmit: [ " + invalidScores + " ]", jQuery('div#newScoreAlertDiv'));
+            return;
+        }
+
+        //calling API
         console.log("Sending json to Archery Logbook API postScore: \n" + JSON.stringify(scoreJson));
 
         jQuery.ajax({
@@ -663,34 +694,35 @@
                     var paginationNav = '<nav>' +
                          ' <ul class="pagination">';
                     if (data.isFirstPage) {
-                        paginationNav = paginationNav + '  <li class="page-item disabled">' +
-                        '    <a class="page-link link-dark" aria-label="Previous" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page - 1) + ')">' +
+                        paginationNav = paginationNav +
+                        '  <li class="page-item disabled">' +
+                        '    <a class="page-link link-dark" aria-label="Previous">' +
                         '      <span aria-hidden="true">&laquo;</span>' +
                         '     </a>' +
                         '  </li>' +
-                        '  <li class="page-item active"><a class="page-link link-dark" href="#">' + (page + 1) + '</a></li>';
+                        '  <li class="page-item active"><a class="page-link link-dark bg-success" href="#">' + (page + 1) + '</a></li>';
                     } else {
                         paginationNav = paginationNav + '  <li class="page-item">' +
-                        '    <a class="page-link link-dark" aria-label="Previous" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page - 1) + ')">' +
+                        '    <a class="page-link link-dark" aria-label="Previous" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page - 1) + ')">' +
                         '      <span aria-hidden="true">&laquo;</span>' +
                         '     </a>' +
                         '  </li>';
                         for (let i = (page >= 4 ? page - 4 : 0); i < page; i++) {
                             paginationNav = paginationNav +
-                            '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
+                            '  <li class="page-item"><a class="page-link link-dark" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
                         };
                         paginationNav = paginationNav +
-                        '  <li class="page-item active"><a class="page-link link-dark" href="#">' + (page + 1) + '</a></li>';
+                        '  <li class="page-item active"><a class="page-link link-dark bg-success" href="#">' + (page + 1) + '</a></li>';
                     };
                     for (let i = (page + 1); (i <= 4) && (i < data.totalPages); i++) {
                         paginationNav = paginationNav +
-                        '  <li class="page-item"><a class="page-link link-dark" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
+                        '  <li class="page-item"><a class="page-link link-dark" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
                     };
 
                     if (data.isLastPage) {
                         paginationNav = paginationNav +
                         '  <li class="page-item disabled">' +
-                        '    <a class="page-link link-dark" aria-label="Next" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' +
+                        '    <a class="page-link link-dark" aria-label="Next">' +
                         '       <span aria-hidden="true">&raquo;</span>' +
                         '    </a>' +
                         '   </li>' +
@@ -699,7 +731,7 @@
                     } else {
                         paginationNav = paginationNav +
                         '  <li class="page-item">' +
-                        '    <a class="page-link link-dark" aria-label="Next" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' +
+                        '    <a class="page-link link-dark" aria-label="Next" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' +
                         '       <span aria-hidden="true">&raquo;</span>' +
                         '    </a>' +
                         '   </li>' +
