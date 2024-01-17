@@ -45,7 +45,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 			$sql = "CREATE TABLE IF NOT EXISTS ". WP_Archery_Logbook_Int::DB_MESSAGE_TABLE." (
 			  id int(11) NOT NULL AUTO_INCREMENT,
 			  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-			  endpoint varchar(20) NOT NULL,
+			  endpoint varchar(200) NOT NULL,
+			  method varchar(10) NOT NULL,
 			  request longtext NOT NULL,
 			  response longtext,
 			  PRIMARY KEY (id)
@@ -106,14 +107,18 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
 				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
 				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, $request);
+				$response = $result['response'];
+				$httpcode = $result['httpcode'];
+				$error = $result['error'];
 
 				$wpdb->insert(
 					WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
 					array(
 					'time' => current_time( 'mysql' ),
 					'endpoint' => $path,
+					'method' => $method,
 					'request' => $request,
-					'response' => $result,
+					'response' => $httpcode . ' ' . $response . ' ' . $error
 					)
 				);
 
@@ -146,6 +151,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
 				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, $request);
 				$response = $result['response'];
+				$httpcode = $result['httpcode'];
 				$error = $result['error'];
 
 				$wpdb->insert(
@@ -153,8 +159,9 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					array(
 					'time' => current_time( 'mysql' ),
 					'endpoint' => $path,
+					'method' => $method,
 					'request' => $request,
-					'response' => $result,
+					'response' => $httpcode . ' ' . $response . ' ' . $error
 					)
 				);
 
@@ -185,14 +192,18 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
 				$requestHeaders = $archeryLogbookInt->prepare_http_headers($accessKey, $secret, $path);
 				$result = $archeryLogbookInt->send_request($url . $path, $method, $requestHeaders, null);
+				$response = $result['response'];
+				$httpcode = $result['httpcode'];
+				$error = $result['error'];
 
 				$wpdb->insert(
 					WP_Archery_Logbook_Int::DB_MESSAGE_TABLE,
 					array(
 					'time' => current_time( 'mysql' ),
 					'endpoint' => $path,
+					'method' => $method,
 					'request' => 'delete archer: ' . $user_id,
-					'response' => $result,
+					'response' => $httpcode . ' ' . $response . ' ' . $error
 					)
 				);
 
@@ -226,8 +237,9 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					array(
 					'time' => current_time( 'mysql' ),
 					'endpoint' => $path,
-					'request' => json_encode($archeryLogbookRequest),
-					'response' => $result
+					'method' => "GET",
+					'request' => $path,
+					'response' => $httpcode . ' ' . $error
 					)
 				);
 
@@ -276,8 +288,9 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 					array(
 					'time' => current_time( 'mysql' ),
 					'endpoint' => $path,
+					'method' => $method,
 					'request' => $request,
-					'response' => $result
+					'response' => $httpcode . ' ' . $response . ' ' . $error
 					)
 				);
 

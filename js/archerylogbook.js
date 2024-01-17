@@ -244,7 +244,10 @@
                                     '<div class="card border-success">' +
                                     '<div class="card-header text-bg-success">'+
                                         '<h5 class="card-title">' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h5>' +
-                                        '<button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editBowModal' + bow.id + '">Edit</button>' +
+                                        '<div class="btn-toolbar justify-content-between">' +
+                                           '<button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editBowModal' + bow.id + '"><span class="bi bi-pencil-square"> Edit</span></button>' +
+                                           '<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBowModal' + bow.id + '"><span class="bi bi-trash"> Delete</span></button>' +
+                                        '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
                                             '<li class="list-group-item"><strong>Type: </strong>' + bow.type + '</li>' +
@@ -269,8 +272,8 @@
                                         '<div class="modal fade" id="editBowModal' + bow.id + '" tabindex="-1" aria-labelledby="modelLabel' + bow.id + '" aria-hidden="true">' +
                                         '  <div class="modal-dialog modal-dialog-centered">' +
                                         '    <div class="modal-content">' +
-                                        '      <div class="modal-header">' +
-                                        '        <h1 class="modal-title fs-5" id="modelLabel' + bow.id + '">EDIT BOW</h1>' +
+                                        '      <div class="modal-header bg-warning">' +
+                                        '        <h1 class="modal-title fs-5" id="modelLabel' + bow.id + '"><span class="bi bi-exclamation-triangle"> EDIT BOW</span></h1>' +
                                         '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
                                         '      </div>' +
                                         '      <form id="editBowForm' + bow.id + '">' +
@@ -332,6 +335,30 @@
                                         '  </div>' +
                                         '</div>' +
                                         '<!-- End of Edit Bow Modal -->' +
+                                        '<!-- Delete Bow Modal -->' +
+                                        '<div class="modal fade" id="deleteBowModal' + bow.id + '" tabindex="-1" aria-labelledby="modelLabel' + bow.id + '" aria-hidden="true">' +
+                                        '  <div class="modal-dialog modal-dialog-centered">' +
+                                        '    <div class="modal-content">' +
+                                        '      <div class="modal-header bg-danger text-white">' +
+                                        '        <h1 class="modal-title fs-5" id="modelLabel' + bow.id + '"><span class="bi bi-exclamation-octagon"> DELETE BOW</span></h1>' +
+                                        '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                                        '      </div>' +
+                                        '      <form id="deleteBowForm' + bow.id + '">' +
+                                        '      <div class="modal-body text-danger-emphasis text-center">' +
+                                        '          <p>You are about to delete the bow: </p>' +
+                                        '          <h4>' + bow.name + " : " + bow.type + " : " + bow.poundage + '</h4>' +
+                                        '          <p>Do you confirm the deletion?</p>' +
+                                        '      </div>' +
+                                        '      <div id="deleteBowAlertDiv"></div>' +
+                                        '      <div class="modal-footer">' +
+                                        '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
+                                        '        <button type="submit" id="btnDeleteBow' + bow.id + '" class="btn btn-success" data-bs-dismiss="modal">Delete bow</button>' +
+                                        '      </div>' +
+                                        '     </form>' +
+                                        '    </div>' +
+                                        '  </div>' +
+                                        '</div>' +
+                                        '<!-- End of Delete Bow Modal -->' +
                                         '<script>jQuery(document).ready(function(){	' +
                                         '    jQuery("#editBowForm' + bow.id +'").submit(function(event){' +
                                         '        jQuery("#btnUpdateBow' + bow.id + '").attr("disabled", true);' +
@@ -345,6 +372,12 @@
                                         '        var traditionalModel = jQuery("input#traditionalModel' + bow.id + '").val();' +
                                         '        jQuery.fn.updateBow(' + archerId + ', ' + bow.id + ', bowName, bowType, bowLevel, poundage, riserModel, limbsModel, compoundModel, traditionalModel);' +
                                         '        jQuery("#btnUpdateBow' + bow.id + '").attr("disabled", false);' +
+                                        '        return false;' +
+                                        '    });' +
+                                        '    jQuery("#deleteBowForm' + bow.id +'").submit(function(event){' +
+                                        '        jQuery("#btnDeleteBow' + bow.id + '").attr("disabled", true);' +
+                                        '        jQuery.fn.deleteBow(' + archerId + ', ' + bow.id + ');' +
+                                        '        jQuery("#btnDeleteBow' + bow.id + '").attr("disabled", false);' +
                                         '        return false;' +
                                         '    });' +
                                         '});</script>' +
@@ -516,6 +549,34 @@
         });
     } //updateBow
 
+    jQuery.fn.deleteBow = function(archerId, bowId) {
+        console.log("Archery Logbook API deleteBow: " + bowId);
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#deleteBowAlertDiv'));
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': '',
+                'method': 'DELETE',
+                'path': '/archers/' + archerId + '/bows/' + bowId
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                showAlert("success", "<strong>The bow has been deleted</strong>", jQuery('div#deleteBowAlertDiv'));
+                window.location.reload();
+            },
+            error: function() {
+                console.log("Error happened");
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#deleteBowAlertDiv'));
+            }
+        });
+    } //deleteBow
+
     jQuery.fn.postNewScore = function(archerId, bowId, match, scoreTableJson, country, city, comment) {
         console.log("Parsing json: \n" +  scoreTableJson);
         var scoreJson = {
@@ -624,6 +685,9 @@
                                     '<div class="card border-success">' +
                                     '<div class="card-header text-bg-success">'+
                                         '<h5 class="card-title">' + score.match + ' meters on ' + new Date(score.scoreDate).toLocaleString() + '</h5>' +
+                                        '<div class="btn-toolbar justify-content-end">' +
+                                           '<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteScoreModal' + score.id + '"><span class="bi bi-trash"> Delete</span></button>' +
+                                        '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
                                             '<li class="list-group-item"><strong>Bow: </strong>' + score.bow.name + ' : ' + score.bow.type + '</li>' +
@@ -634,7 +698,40 @@
                                             '<li class="list-group-item"><strong>City: </strong>' + score.city + '</li>' +
                                           '</ul>' +
                                           '<div class="card-body">' + score.comment + '</div>' +
-                                        '</div></summary></br>');
+                                        '</div>' +
+                                        '<!-- Delete Score Modal -->' +
+                                        '<div class="modal fade" id="deleteScoreModal' + score.id + '" tabindex="-1" aria-labelledby="modelLabel' + score.id + '" aria-hidden="true">' +
+                                        '  <div class="modal-dialog modal-dialog-centered">' +
+                                        '    <div class="modal-content">' +
+                                        '      <div class="modal-header bg-danger text-white">' +
+                                        '        <h1 class="modal-title fs-5" id="modelLabel' + score.id + '"><span class="bi bi-exclamation-octagon"> DELETE SCORE</span></h1>' +
+                                        '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                                        '      </div>' +
+                                        '      <form id="deleteScoreForm' + score.id + '">' +
+                                        '      <div class="modal-body text-danger-emphasis text-center">' +
+                                        '          <p>You are about to delete the score: </p>' +
+                                        '          <h4>' + score.match + ' meters on ' + new Date(score.scoreDate).toLocaleString() + '</h4>' +
+                                        '          <p>Do you confirm the deletion?</p>' +
+                                        '      </div>' +
+                                        '      <div id="deleteScoreAlertDiv"></div>' +
+                                        '      <div class="modal-footer">' +
+                                        '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
+                                        '        <button type="submit" id="btnDeleteScore' + score.id + '" class="btn btn-success" data-bs-dismiss="modal">Delete score</button>' +
+                                        '      </div>' +
+                                        '     </form>' +
+                                        '    </div>' +
+                                        '  </div>' +
+                                        '</div>' +
+                                        '<!-- End of Delete Score Modal -->' +
+                                        '<script>jQuery(document).ready(function(){	' +
+                                        '    jQuery("#deleteScoreForm' + score.id +'").submit(function(event){' +
+                                        '        jQuery("#btnDeleteScore' + score.id + '").attr("disabled", true);' +
+                                        '        jQuery.fn.deleteScore(' + archerId + ', ' + score.id + ');' +
+                                        '        jQuery("#btnDeleteScore' + score.id + '").attr("disabled", false);' +
+                                        '        return false;' +
+                                        '    });' +
+                                        '});</script>' +
+                                        '</summary></br>');
                     details.append(scoreSummary);
 
                     var scoreDetails = jQuery('<table>')
@@ -738,6 +835,7 @@
                         ' </ul>' +
                         '</nav>';
                     };
+
                     history.append(paginationNav);
                 }
                 parentDiv.html(history);
@@ -752,6 +850,34 @@
             }
         });
     } //getScoresAsTables
+
+    jQuery.fn.deleteScore = function(archerId, scoreId) {
+        console.log("Archery Logbook API deleteScore: " + scoreId);
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#deleteScoreAlertDiv'));
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': '',
+                'method': 'DELETE',
+                'path': '/archers/' + archerId + '/scores/' + scoreId
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                showAlert("success", "<strong>The score has been deleted</strong>", jQuery('div#deleteScoreAlertDiv'));
+                window.location.reload();
+            },
+            error: function() {
+                console.log("Error happened");
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#deleteScoreAlertDiv'));
+            }
+        });
+    } //deleteScore
 
     jQuery.fn.getScoresProgress = function(archerId, parentDiv) {
         jQuery.ajax({
