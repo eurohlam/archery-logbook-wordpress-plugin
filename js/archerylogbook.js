@@ -677,7 +677,7 @@
             success: function(data, status, xhr) {
                 console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
 
-                var history = jQuery('<div>').addClass('container table-responsive');
+                var history = jQuery('<div>').addClass('container');
                 jQuery.each(data.scores, function (s, score) {
                     var details = jQuery('<details>').addClass('mb-3');
 
@@ -781,7 +781,9 @@
                         .append(scoreDetailsHeader)
                         .append(scoreDetailsBody);
 
-                    details.append(scoreDetails);
+    				var scoreDetailsDiv = jQuery('<div>').addClass('table-responsive');
+    				scoreDetailsDiv.append(scoreDetails);
+                    details.append(scoreDetailsDiv);
                     history.append(details);
 
                 });// end of scores
