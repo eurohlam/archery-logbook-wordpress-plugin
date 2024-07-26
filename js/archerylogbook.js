@@ -596,7 +596,7 @@
                     "rounds" : []
                 };
                 value.forEach( (column, idx) => {
-                    if (column.trim()) {
+                    if (column.trim() && (idx < 6)) {
                         var round = {
                             "roundNumber": (idx + 1),
                             "roundScore": column
@@ -622,7 +622,7 @@
                 invalidEnds.push((idx+1));
             } else {
                 end.rounds.forEach( (round, c) => {
-                    if (round.roundScore) {
+                    if (round.roundScore && (c < 6)) {
                         var score = Number.parseInt(round.roundScore);
                         if (score < 0 || score > 10) {
                             invalidScores.push(score);

@@ -337,6 +337,7 @@ function archery_logbook_shortcodes_init()
                             <th>Round #4</th>
                             <th>Round #5</th>
                             <th>Round #6</th>
+                            <th>Sum</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -357,7 +358,26 @@ function archery_logbook_shortcodes_init()
                 jQuery(document).ready(function () {
                     jQuery.fn.getBowsAsDropdown(' . $user_id . ', jQuery("div#scoreBowListDiv"));
 
-                    jQuery("#newScoreTable").SetEditable();
+                    jQuery("#newScoreTable").SetEditable({
+                        columnsEd: "0,1,2,3,4,5",
+                        onEdit: function(row){
+                            var cols = $(row).find("td");
+                            var sum = 0;
+                            var colIdx = 0;
+                            cols.each(function() {
+                                if ((colIdx < 6) && $(this).html()) {
+                                    console.log("col: " + colIdx + " val: " + $(this).html());
+                                    sum = sum + parseInt($(this).html());
+                                }
+                                if (colIdx == 6) {
+                                    $(this).attr("name", "sum");
+                                    $(this).html("<strong>" + sum + "</strong>");
+                                }
+                                colIdx++;
+                            });
+                            console.log("sum: " + sum);
+                        }
+                    });
 
                     jQuery("#btnAddEnd").click(function() {
                         rowAddNewAndEdit("newScoreTable");

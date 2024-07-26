@@ -42,6 +42,7 @@ var newColHtml = '<div class="btn-group pull-right">'+
   '</button>'+
     '</div>';
 var colEdicHtml = '<td name="buttons">'+newColHtml+'</td>';
+
 $.fn.SetEditable = function (options) {
   var defaults = {
       columnsEd: null,         //Index to editable columns. If null all td editables. Ex.: "1,2,3,4,5"
@@ -73,6 +74,7 @@ $.fn.SetEditable = function (options) {
       colsEdi = params.columnsEd.split(',');
   }
 };
+
 function IterarCamposEdit($cols, action) {
 //Iterate through editable fields in a row
   var n = 0;
@@ -83,7 +85,7 @@ function IterarCamposEdit($cols, action) {
       action($(this));
   });
 
-  function IsEditable(idx) {
+function IsEditable(idx) {
   //Indicates if the passed column is set to be editable
       if (colsEdi==null) {  //no se definió
           return true;  //todas son editable
@@ -95,6 +97,7 @@ function IterarCamposEdit($cols, action) {
       }
   }
 }
+
 function ModoEdicion($row) {
   if ($row.attr('id')=='editing') {
       return true;
@@ -102,6 +105,7 @@ function ModoEdicion($row) {
       return false;
   }
 }
+
 //Set buttons state
 function SetButtonsNormal(but) {
   $(but).parent().find('#bAcep').hide();
@@ -111,6 +115,7 @@ function SetButtonsNormal(but) {
   var $row = $(but).parents('tr');  //accede a la fila
   $row.attr('id', '');  //quita marca
 }
+
 function SetButtonsEdit(but) {
   $(but).parent().find('#bAcep').show();
   $(but).parent().find('#bCanc').show();
@@ -119,6 +124,7 @@ function SetButtonsEdit(but) {
   var $row = $(but).parents('tr');  //accede a la fila
   $row.attr('id', 'editing');  //indica que está en edición
 }
+
 //Events functions
 function butRowAcep(but) {
 //Acepta los cambios de la edición
@@ -133,6 +139,7 @@ function butRowAcep(but) {
   SetButtonsNormal(but);
   params.onEdit($row);
 }
+
 function butRowCancel(but) {
 //Rechaza los cambios de la edición
   var $row = $(but).parents('tr');  //accede a la fila
@@ -145,6 +152,7 @@ function butRowCancel(but) {
   });
   SetButtonsNormal(but);
 }
+
 function butRowEdit(but) {
   //Start the edition mode for a row.
   var $row = $(but).parents('tr');  //accede a la fila
@@ -166,12 +174,14 @@ function butRowEdit(but) {
   });
   SetButtonsEdit(but);
 }
+
 function butRowDelete(but) {  //Elimina la fila actual
   var $row = $(but).parents('tr');  //accede a la fila
   params.onBeforeDelete($row);
   $row.remove();
   params.onDelete();
 }
+
 //Functions that can be called directly
 function rowAddNew(tabId, initValues=[]) {
   /* Add a new row to a editable table.
@@ -219,12 +229,14 @@ function rowAddNew(tabId, initValues=[]) {
   }*/
   params.onAdd();
 }
+
 function rowAddNewAndEdit(tabId, initValues=[]) {
 /* Add a new row an set edition mode */
   rowAddNew(tabId, initValues);
   var $lastRow = $('#'+tabId + ' tr:last');
   butRowEdit($lastRow.find('#bEdit'));  //Pass a button reference
 }
+
 function TableToCSV(tabId, separator) {  //Convert table to CSV
   var datFil = '';
   var tmp = '';
@@ -250,6 +262,7 @@ function TableToCSV(tabId, separator) {  //Convert table to CSV
   });
   return tmp;
 }
+
 function TableToJson(tabId) {   //Convert table to JSON
   var json = '{';
   var otArr = [];
