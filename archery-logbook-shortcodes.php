@@ -183,12 +183,20 @@ function archery_logbook_shortcodes_init()
                                      <label for="radioRecurve">Recurve</label>
                                  </div>
                                  <div class="form-check">
+                                     <input type="radio" class="form-check-input" name="bowTypeGroup" value="BAREBOW" id="radioBarebow" autocomplete="off" data-bs-toggle="list" href="#recurveTab" role="tab">
+                                     <label for="radioBarebow">Barebow</label>
+                                 </div>
+                                 <div class="form-check">
                                      <input type="radio" class="form-check-input" name="bowTypeGroup" value="COMPOUND" id="radioCompound" autocomplete="off" data-bs-toggle="list" href="#compoundTab" role="tab">
                                      <label for="radioCompound">Compound</label>
                                  </div>
                                  <div class="form-check">
                                      <input type="radio" class="form-check-input" name="bowTypeGroup" value="TRADITIONAL" id="radioTraditional" autocomplete="off" data-bs-toggle="list" href="#traditionalTab" role="tab">
                                      <label for="radioTraditional">Traditional</label>
+                                 </div>
+                                 <div class="form-check">
+                                     <input type="radio" class="form-check-input" name="bowTypeGroup" value="LONGBOW" id="radioLongbow" autocomplete="off" data-bs-toggle="list" href="#longbowTab" role="tab">
+                                     <label for="radioLongbow">Longbow</label>
                                  </div>
                               </div>
                               <div class="col">
@@ -216,6 +224,12 @@ function archery_logbook_shortcodes_init()
                                                <label for="traditionalModel">Bow model</label>
                                            </div>
                                        </div>
+                                       <div class="tab-pane fade" id="longbowTab" role="tabpanel">
+                                            <div class="row form-floating">
+                                                <input id="longbowModel" class="form-control" type="text" placeholder="Longbow model"/>
+                                                <label for="longbowModel">Bow model</label>
+                                            </div>
+                                        </div>
                                    </div>
                              </div>
                          </div>

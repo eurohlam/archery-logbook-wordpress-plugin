@@ -72,6 +72,7 @@
         var limbsModel = jQuery("input#limbsModel").val();
         var compoundModel = jQuery("input#compoundModel").val();
         var traditionalModel = jQuery("input#traditionalModel").val();
+        var longbowModel = jQuery("input#longbowModel").val();
         var archerId = jQuery("input#archerId").val();
 
 
@@ -85,6 +86,7 @@
         bowData.limbsModel = limbsModel;
         bowData.compoundModel = compoundModel;
         bowData.traditionalModel = traditionalModel;
+        bowData.longbowModel = longbowModel;
 
 
         var requestJson = JSON.stringify(bowData);
@@ -253,7 +255,7 @@
                                             '<li class="list-group-item"><strong>Type: </strong>' + bow.type + '</li>' +
                                             '<li class="list-group-item"><strong>Poundage: </strong>' + bow.poundage  + '</li>' +
                                             '<li class="list-group-item"><strong>Level: </strong>' + bow.level + '</li>';
-                    if (bow.type === 'RECURVE') {
+                    if ((bow.type === 'RECURVE') || (bow.type == 'BAREBOW')) {
                         bowSummary = bowSummary +
                                             '<li class="list-group-item"><strong>Riser model: </strong>' + bow.riserModel + '</li>' +
                                             '<li class="list-group-item"><strong>Limbs model: </strong>' + bow.limbsModel + '</li>';
@@ -265,6 +267,10 @@
                     if (bow.type === 'TRADITIONAL') {
                         bowSummary = bowSummary +
                                             '<li class="list-group-item"><strong>Traditional model: </strong>' + bow.traditionalModel + '</li>';
+                    }
+                    if (bow.type === 'LONGBOW') {
+                        bowSummary = bowSummary +
+                                            '<li class="list-group-item"><strong>Longbow model: </strong>' + bow.longbowModel + '</li>';
                     }
                     bowSummary = bowSummary + '</ul>' +
                                         '</div>' +
@@ -298,7 +304,7 @@
                                         '                   </select>' +
                                         '                   <label for="bowLevel' + bow.id + '">Bow level</label>' +
                                         '                </div>';
-                    if (bow.type == "RECURVE") {
+                    if ((bow.type == "RECURVE") || (bow.type == "BAREBOW")) {
                         bowSummary = bowSummary +
                                         '                <div class="form-floating mb-3">' +
                                         '                   <input id="riserModel' + bow.id + '" class="form-control" type="text" placeholder="Riser model" value="' + bow.riserModel + '"/>' +
@@ -319,6 +325,12 @@
                                         '                <div class="form-floating mb-3">' +
                                         '                   <input id="traditionalModel' + bow.id + '" class="form-control" type="text" placeholder="Traditional bow model" value="' + bow.traditionalModel + '"/>' +
                                         '                   <label for="traditionalModel' + bow.id + '">Traditional bow model</label>' +
+                                        '                </div>';
+                    } else if (bow.type == "LONGBOW") {
+                        bowSummary = bowSummary +
+                                        '                <div class="form-floating mb-3">' +
+                                        '                   <input id="longbowModel' + bow.id + '" class="form-control" type="text" placeholder="Longbow model" value="' + bow.longbowModel + '"/>' +
+                                        '                   <label for="longbowModel' + bow.id + '">Longbow model</label>' +
                                         '                </div>';
                     };
                     bowSummary = bowSummary +
@@ -370,7 +382,8 @@
                                         '        var riserModel = jQuery("input#riserModel' + bow.id + '").val();' +
                                         '        var compoundModel = jQuery("input#compoundModel' + bow.id + '").val();' +
                                         '        var traditionalModel = jQuery("input#traditionalModel' + bow.id + '").val();' +
-                                        '        jQuery.fn.updateBow(' + archerId + ', ' + bow.id + ', bowName, bowType, bowLevel, poundage, riserModel, limbsModel, compoundModel, traditionalModel);' +
+                                        '        var longbowModel = jQuery("input#longbowModel' + bow.id + '").val();' +
+                                        '        jQuery.fn.updateBow(' + archerId + ', ' + bow.id + ', bowName, bowType, bowLevel, poundage, riserModel, limbsModel, compoundModel, traditionalModel, longbowModel);' +
                                         '        jQuery("#btnUpdateBow' + bow.id + '").attr("disabled", false);' +
                                         '        return false;' +
                                         '    });' +
@@ -508,7 +521,7 @@
         });
     } //getBowsAsDropdown
 
-    jQuery.fn.updateBow = function(archerId, bowId, bowName, bowType, bowLevel, poundage, riserModel, limbsModel, compoundModel, traditionalModel) {
+    jQuery.fn.updateBow = function(archerId, bowId, bowName, bowType, bowLevel, poundage, riserModel, limbsModel, compoundModel, traditionalModel, longbowModel) {
         //prepare json data
         var bowData = {};
         bowData.id = bowId;
@@ -520,6 +533,7 @@
         bowData.limbsModel = limbsModel;
         bowData.compoundModel = compoundModel;
         bowData.traditionalModel = traditionalModel;
+        bowData.longbowModel = longbowModel;
 
         var requestJson = JSON.stringify(bowData);
         console.log("Archery Logbook API updateBow request: \n" + requestJson);
