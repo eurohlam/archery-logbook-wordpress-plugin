@@ -591,11 +591,12 @@
         });
     } //deleteBow
 
-    jQuery.fn.postNewScore = function(archerId, bowId, match, scoreTableJson, country, city, comment) {
+    jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTableJson, country, city, comment) {
         console.log("Parsing json: \n" +  scoreTableJson);
-        var scoreJson = {
+        var roundJson = {
             "bowId": bowId,
-            "match": match,
+            "distance": distance,
+            "targetFace": targetFace,
             "country": country,
             "city": city,
             "comment": comment,
@@ -607,37 +608,37 @@
             if (key != "0") { //ignoring headers
                 var end = {
                     "endNumber": key,
-                    "rounds" : []
+                    "shots" : []
                 };
                 value.forEach( (column, idx) => {
                     if (column.trim() && (idx < 6)) {
-                        var round = {
-                            "roundNumber": (idx + 1),
-                            "roundScore": column
+                        var shot = {
+                            "shotNumber": (idx + 1),
+                            "shotScore": column
                         };
-                        end.rounds.push(round);
+                        end.shots.push(shot);
                     }
                 });
                 ends.push(end);
             }
         });
-        scoreJson.ends = ends;
+        roundJson.ends = ends;
 
-            //validate score data
+        //validate score data
 
         if (ends.length == 0) {
-            showAlert("error", "At least one end must be added", jQuery('div#newScoreAlertDiv'));
+            showAlert("error", "At least one end must be added", jQuery('div#newRoundAlertDiv'));
             return;
         }
         var invalidScores = [];
         var invalidEnds = [];
         ends.forEach( (end, idx) => {
-            if (end.rounds.length == 0) {
+            if (end.shots.length == 0) {
                 invalidEnds.push((idx+1));
             } else {
-                end.rounds.forEach( (round, c) => {
-                    if (round.roundScore && (c < 6)) {
-                        var score = Number.parseInt(round.roundScore);
+                end.shots.forEach( (shot, c) => {
+                    if (shot.shotScore && (c < 6)) {
+                        var score = Number.parseInt(shot.shotScore);
                         if (score < 0 || score > 10) {
                             invalidScores.push(score);
                         }
@@ -646,15 +647,15 @@
             }
         });
         if (invalidEnds.length > 0) {
-            showAlert("error", "Ends [ " + invalidEnds + " ] do not have any scores. At least one score must be added", jQuery('div#newScoreAlertDiv'));
+            showAlert("error", "Ends [ " + invalidEnds + " ] do not have any scores. At least one score must be added", jQuery('div#newRoundAlertDiv'));
             return;
         } else if (invalidScores.length > 0) {
-            showAlert("error", "Invalid scores have been added. Please, fix the following values and resubmit: [ " + invalidScores + " ]", jQuery('div#newScoreAlertDiv'));
+            showAlert("error", "Invalid scores have been added. Please, fix the following values and resubmit: [ " + invalidScores + " ]", jQuery('div#newRoundAlertDiv'));
             return;
         }
 
         //calling API
-        console.log("Sending json to Archery Logbook API postScore: \n" + JSON.stringify(scoreJson));
+        console.log("Sending json to Archery Logbook API postRound: \n" + JSON.stringify(roundJson));
 
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -662,145 +663,145 @@
             dataType: "JSON",
             data: {
                 'action': 'archery_logbook_send_request',
-                'request': JSON.stringify(scoreJson),
-                'path': '/archers/' + archerId + '/scores/'
+                'request': JSON.stringify(roundJson),
+                'path': '/archers/' + archerId + '/rounds/'
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API postScore response: " + JSON.stringify(data));
-                showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newScoreAlertDiv'));
+                console.log("Archery Logbook API postRound response: " + JSON.stringify(data));
+                showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newRoundAlertDiv'));
                 window.location.reload();
             },
             error: function() {
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newScoreAlertDiv'));
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newRoundAlertDiv'));
             }
         });
-    } //postNewScore
+    } //postNewRound
 
-    jQuery.fn.getScoresAsTables = function(archerId, parentDiv, page = 0, size = 5) {
+    jQuery.fn.getRoundsAsTables = function(archerId, parentDiv, page = 0, size = 5) {
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
             type: "POST",
             dataType: "JSON",
             data: {
                 'action': 'archery_logbook_get_data',
-                'path': '/archers/' + archerId + '/scores?page=' + page + "&size=" + size
+                'path': '/archers/' + archerId + '/rounds?page=' + page + "&size=" + size
             },
             cache: false,
             success: function(data, status, xhr) {
-                console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
+                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
                 var history = jQuery('<div>').addClass('container');
-                jQuery.each(data.scores, function (s, score) {
+                jQuery.each(data.rounds, function (s, round) {
                     var details = jQuery('<details>').addClass('mb-3');
 
-                    var scoreSummary = jQuery('<summary><caption>Score summary</caption>' +
+                    var roundSummary = jQuery('<summary><caption>Round summary</caption>' +
                                     '<div class="card border-success">' +
                                     '<div class="card-header text-bg-success">'+
-                                        '<h5 class="card-title">' + score.match + ' meters on ' + new Date(score.scoreDate).toLocaleString() + '</h5>' +
+                                        '<h5 class="card-title">' + round.distance + ' meters on ' + new Date(round.roundDate).toLocaleString() + '</h5>' +
                                         '<div class="btn-toolbar justify-content-end">' +
-                                           '<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteScoreModal' + score.id + '"><span class="bi bi-trash"> Delete</span></button>' +
+                                           '<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRoundModal' + round.id + '"><span class="bi bi-trash"> Delete</span></button>' +
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><strong>Bow: </strong>' + score.bow.name + ' : ' + score.bow.type + '</li>' +
-                                            '<li class="list-group-item"><strong>Number of ends: </strong>' + score.endsCount  + '</li>' +
-                                            '<li class="list-group-item"><strong>Sum: </strong>' + score.sum + '</li>' +
-                                            '<li class="list-group-item"><strong>Avg: </strong>' + score.avg + '</li>' +
-                                            '<li class="list-group-item"><strong>Country: </strong>' + score.country + '</li>' +
-                                            '<li class="list-group-item"><strong>City: </strong>' + score.city + '</li>' +
+                                            '<li class="list-group-item"><strong>Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
+                                            '<li class="list-group-item"><strong>Number of arrows: </strong>' + round.shotsCount  + '</li>' +
+                                            '<li class="list-group-item"><strong>Sum: </strong>' + round.sum + '</li>' +
+                                            '<li class="list-group-item"><strong>Avg: </strong>' + round.avg + '</li>' +
+                                            '<li class="list-group-item"><strong>Country: </strong>' + round.country + '</li>' +
+                                            '<li class="list-group-item"><strong>City: </strong>' + round.city + '</li>' +
                                           '</ul>' +
-                                          '<div class="card-body">' + score.comment + '</div>' +
+                                          '<div class="card-body">' + round.comment + '</div>' +
                                         '</div>' +
-                                        '<!-- Delete Score Modal -->' +
-                                        '<div class="modal fade" id="deleteScoreModal' + score.id + '" tabindex="-1" aria-labelledby="modelLabel' + score.id + '" aria-hidden="true">' +
+                                        '<!-- Delete Round Modal -->' +
+                                        '<div class="modal fade" id="deleteRoundModal' + round.id + '" tabindex="-1" aria-labelledby="modelLabel' + round.id + '" aria-hidden="true">' +
                                         '  <div class="modal-dialog modal-dialog-centered">' +
                                         '    <div class="modal-content">' +
                                         '      <div class="modal-header bg-danger text-white">' +
-                                        '        <h1 class="modal-title fs-5" id="modelLabel' + score.id + '"><span class="bi bi-exclamation-octagon"> DELETE SCORE</span></h1>' +
+                                        '        <h1 class="modal-title fs-5" id="modelLabel' + round.id + '"><span class="bi bi-exclamation-octagon"> DELETE ROUND</span></h1>' +
                                         '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
                                         '      </div>' +
-                                        '      <form id="deleteScoreForm' + score.id + '">' +
+                                        '      <form id="deleteRoundForm' + round.id + '">' +
                                         '      <div class="modal-body text-danger-emphasis text-center">' +
-                                        '          <p>You are about to delete the score: </p>' +
-                                        '          <h4>' + score.match + ' meters on ' + new Date(score.scoreDate).toLocaleString() + '</h4>' +
+                                        '          <p>You are about to delete the round: </p>' +
+                                        '          <h4>' + round.distance + ' meters on ' + new Date(round.roundDate).toLocaleString() + '</h4>' +
                                         '          <p>Do you confirm the deletion?</p>' +
                                         '      </div>' +
-                                        '      <div id="deleteScoreAlertDiv"></div>' +
+                                        '      <div id="deleteRoundAlertDiv"></div>' +
                                         '      <div class="modal-footer">' +
                                         '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
-                                        '        <button type="submit" id="btnDeleteScore' + score.id + '" class="btn btn-success" data-bs-dismiss="modal">Delete score</button>' +
+                                        '        <button type="submit" id="btnDeleteRound' + round.id + '" class="btn btn-success" data-bs-dismiss="modal">Delete round</button>' +
                                         '      </div>' +
                                         '     </form>' +
                                         '    </div>' +
                                         '  </div>' +
                                         '</div>' +
-                                        '<!-- End of Delete Score Modal -->' +
+                                        '<!-- End of Delete Round Modal -->' +
                                         '<script>jQuery(document).ready(function(){	' +
-                                        '    jQuery("#deleteScoreForm' + score.id +'").submit(function(event){' +
-                                        '        jQuery("#btnDeleteScore' + score.id + '").attr("disabled", true);' +
-                                        '        jQuery.fn.deleteScore(' + archerId + ', ' + score.id + ');' +
-                                        '        jQuery("#btnDeleteScore' + score.id + '").attr("disabled", false);' +
+                                        '    jQuery("#deleteRoundForm' + round.id +'").submit(function(event){' +
+                                        '        jQuery("#btnDeleteRound' + round.id + '").attr("disabled", true);' +
+                                        '        jQuery.fn.deleteRound(' + archerId + ', ' + round.id + ');' +
+                                        '        jQuery("#btnDeleteRound' + round.id + '").attr("disabled", false);' +
                                         '        return false;' +
                                         '    });' +
                                         '});</script>' +
                                         '</summary></br>');
-                    details.append(scoreSummary);
+                    details.append(roundSummary);
 
-                    var scoreDetails = jQuery('<table>')
+                    var roundDetails = jQuery('<table>')
                         .addClass('table')
                         .addClass('table-striped')
                         .addClass('table-bordered')
-                        .append('<caption>Score details</caption>');
+                        .append('<caption>Round details</caption>');
 
-                    var scoreDetailsHeader = jQuery('<thead>').addClass('table-success');
-                    var scoreDetailsHeaderTr = jQuery('<tr>')
+                    var roundDetailsHeader = jQuery('<thead>').addClass('table-success');
+                    var roundDetailsHeaderTr = jQuery('<tr>')
                                 .append('<th scope="col">End #</th>')
                                 .append('<th scope="col">Sum</th>')
                                 .append('<th scope="col">Avg</th>');
 
-                    for (let r = 0; r < score.ends[0].rounds.length; r++) {
-                        scoreDetailsHeaderTr.append('<th scope="col">Round #' + (r + 1) + ' score</th>');
+                    for (let r = 0; r < round.ends[0].shots.length; r++) {
+                        roundDetailsHeaderTr.append('<th scope="col">Arrow #' + (r + 1) + '</th>');
                     };
-                    scoreDetailsHeader.append(scoreDetailsHeaderTr);
+                    roundDetailsHeader.append(roundDetailsHeaderTr);
 
-                    var scoreDetailsBody = jQuery('<tbody>').addClass('table-group-divider');
-                    jQuery.each(score.ends, function(e, end) {
+                    var roundDetailsBody = jQuery('<tbody>').addClass('table-group-divider');
+                    jQuery.each(round.ends, function(e, end) {
                         var tr = jQuery('<tr align="center">');
                         tr.append('<th scope="row">' + end.endNumber + '</th>')
                           .append('<td>' + end.sum + '</td>')
                           .append('<td>' + end.avg + '</td>');
 
-                        jQuery.each(end.rounds, function(r, round) {
-                            if (round.roundScore == "10") {
-                                tr.append('<td class="bg-warning text-success"><strong>' + round.roundScore + '</strong></td>')
-							} else if (round.roundScore == "9") {
-                                tr.append('<td class="bg-warning text-success">' + round.roundScore + '</td>')
-							} else if (round.roundScore == "8" || round.roundScore == "7") {
-                                tr.append('<td class="bg-danger text-white">' + round.roundScore + '</td>')
-							} else if (round.roundScore == "6" || round.roundScore == "5") {
-                                tr.append('<td class="bg-primary text-white">' + round.roundScore + '</td>')
-							} else if (round.roundScore == "4" || round.roundScore == "3") {
-                                tr.append('<td class="bg-dark text-white">' + round.roundScore + '</td>')
+                        jQuery.each(end.shots, function(r, shot) {
+                            if (shot.shotScore == "10") {
+                                tr.append('<td class="bg-warning text-success"><strong>' + shot.shotScore + '</strong></td>')
+							} else if (shot.shotScore == "9") {
+                                tr.append('<td class="bg-warning text-success">' + shot.shotScore + '</td>')
+							} else if (shot.shotScore == "8" || shot.shotScore == "7") {
+                                tr.append('<td class="bg-danger text-white">' + shot.shotScore + '</td>')
+							} else if (shot.shotScore == "6" || shot.shotScore == "5") {
+                                tr.append('<td class="bg-primary text-white">' + shot.shotScore + '</td>')
+							} else if (shot.shotScore == "4" || shot.shotScore == "3") {
+                                tr.append('<td class="bg-dark text-white">' + shot.shotScore + '</td>')
 							} else {
-                                tr.append('<td class="bg-white">' + round.roundScore + '</td>')
+                                tr.append('<td class="bg-white">' + shot.shotScore + '</td>')
 							}
-                        }); //end of rounds
+                        }); //end of shots
 
-                        scoreDetailsBody.append(tr);
+                        roundDetailsBody.append(tr);
 
                     }); //end of ends
-                    scoreDetails
-                        .append(scoreDetailsHeader)
-                        .append(scoreDetailsBody);
+                    roundDetails
+                        .append(roundDetailsHeader)
+                        .append(roundDetailsBody);
 
-    				var scoreDetailsDiv = jQuery('<div>').addClass('table-responsive');
-    				scoreDetailsDiv.append(scoreDetails);
-                    details.append(scoreDetailsDiv);
+    				var roundDetailsDiv = jQuery('<div>').addClass('table-responsive');
+    				roundDetailsDiv.append(roundDetails);
+                    details.append(roundDetailsDiv);
                     history.append(details);
 
-                });// end of scores
+                });// end of rounds
 
 
                 if (data.totalPages > 1) {
@@ -816,20 +817,20 @@
                         '  <li class="page-item active"><a class="page-link link-dark bg-success" href="#">' + (page + 1) + '</a></li>';
                     } else {
                         paginationNav = paginationNav + '  <li class="page-item">' +
-                        '    <a class="page-link link-dark" aria-label="Previous" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page - 1) + ')">' +
+                        '    <a class="page-link link-dark" aria-label="Previous" href="#" onClick="jQuery.fn.getRoundsAsTables(' + archerId + ',jQuery(\'#roundsHistoryDiv\'),' + (page - 1) + ')">' +
                         '      <span aria-hidden="true">&laquo;</span>' +
                         '     </a>' +
                         '  </li>';
                         for (let i = (page >= 4 ? page - 4 : 0); i < page; i++) {
                             paginationNav = paginationNav +
-                            '  <li class="page-item"><a class="page-link link-dark" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
+                            '  <li class="page-item"><a class="page-link link-dark" href="#" onClick="jQuery.fn.getRoundsAsTables(' + archerId + ',jQuery(\'#roundsHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
                         };
                         paginationNav = paginationNav +
                         '  <li class="page-item active"><a class="page-link link-dark bg-success" href="#">' + (page + 1) + '</a></li>';
                     };
                     for (let i = (page + 1); (i <= 4) && (i < data.totalPages); i++) {
                         paginationNav = paginationNav +
-                        '  <li class="page-item"><a class="page-link link-dark" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
+                        '  <li class="page-item"><a class="page-link link-dark" href="#" onClick="jQuery.fn.getRoundsAsTables(' + archerId + ',jQuery(\'#roundsHistoryDiv\'),' + i + ')">' + (i + 1) + '</a></li>';
                     };
 
                     if (data.isLastPage) {
@@ -844,7 +845,7 @@
                     } else {
                         paginationNav = paginationNav +
                         '  <li class="page-item">' +
-                        '    <a class="page-link link-dark" aria-label="Next" href="#" onClick="jQuery.fn.getScoresAsTables(' + archerId + ',jQuery(\'#scoresHistoryDiv\'),' + (page + 1) + ')">' +
+                        '    <a class="page-link link-dark" aria-label="Next" href="#" onClick="jQuery.fn.getRoundsAsTables(' + archerId + ',jQuery(\'#roundsHistoryDiv\'),' + (page + 1) + ')">' +
                         '       <span aria-hidden="true">&raquo;</span>' +
                         '    </a>' +
                         '   </li>' +
@@ -860,16 +861,16 @@
                 //TODO: API errors handling
                 console.log(jqXHR.status + '  ' + exception + ' ' + errorThrown + ' ' + jqXHR.responseText);
                 // Fail message
-                var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
-                parentDiv.append(scoreAlertDiv);
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
+                var roundAlertDiv = jQuery('<div id="roundAlertDiv"></div>');
+                parentDiv.append(roundAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", roundAlertDiv);
             }
         });
-    } //getScoresAsTables
+    } //getRoundsAsTables
 
-    jQuery.fn.deleteScore = function(archerId, scoreId) {
-        console.log("Archery Logbook API deleteScore: " + scoreId);
-        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#deleteScoreAlertDiv'));
+    jQuery.fn.deleteRound = function(archerId, roundId) {
+        console.log("Archery Logbook API deleteRound: " + scoreId);
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#deleteRoundAlertDiv'));
 
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -879,21 +880,21 @@
                 'action': 'archery_logbook_send_request',
                 'request': '',
                 'method': 'DELETE',
-                'path': '/archers/' + archerId + '/scores/' + scoreId
+                'path': '/archers/' + archerId + '/rounds/' + roundId
             },
             cache: false,
             success: function(data) {
                 console.log("Archery Logbook API response: " + JSON.stringify(data));
-                showAlert("success", "<strong>The score has been deleted</strong>", jQuery('div#deleteScoreAlertDiv'));
+                showAlert("success", "<strong>The score has been deleted</strong>", jQuery('div#deleteRoundAlertDiv'));
                 window.location.reload();
             },
             error: function() {
                 console.log("Error happened");
                 // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#deleteScoreAlertDiv'));
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#deleteRoundAlertDiv'));
             }
         });
-    } //deleteScore
+    } //deleteRound
 
     jQuery.fn.getScoresProgress = function(archerId, parentDiv) {
         jQuery.ajax({
@@ -902,11 +903,11 @@
             dataType: "JSON",
             data: {
                 'action': 'archery_logbook_get_data',
-                'path': '/archers/' + archerId + '/scores?page=0&size=50'
+                'path': '/archers/' + archerId + '/rounds?page=0&size=50'
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getScores response: " + JSON.stringify(data));
+                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
                 if (!data) {
                     return;
@@ -929,14 +930,14 @@
                 var scoreData = [];
                 var bows = [];
                 var matches = [];
-                jQuery.each(data.scores, function (s, score) {
-                    scoreLabels.push(new Date(score.scoreDate).toLocaleDateString());
-                    scoreData.push(score.avg);
-                    if (!bows.includes(score.bow.id)) {
-                        bows.push(score.bow.id);
+                jQuery.each(data.rounds, function (s, round) {
+                    scoreLabels.push(new Date(round.roundDate).toLocaleDateString());
+                    scoreData.push(round.avg);
+                    if (!bows.includes(round.bow.id)) {
+                        bows.push(round.bow.id);
                     }
-                    if (!matches.includes(score.match)) {
-                        matches.push(score.match);
+                    if (!matches.includes(round.distance)) {
+                        matches.push(round.distance);
                     }
                 });
                 new Chart(avgCanvas, {
@@ -974,10 +975,10 @@
                             spanGaps: true
                         };
                         var matchData = [];
-                        jQuery.each(data.scores, function (s, score) {
-                            if (match == score.match) {
-                                dataset.label = score.match + " m";
-                                matchData.push(score.avg);
+                        jQuery.each(data.rounds, function (s, round) {
+                            if (match == round.distance) {
+                                dataset.label = round.distance + " m";
+                                matchData.push(round.avg);
                             } else {
                                 matchData.push(null);
                             }
@@ -1014,10 +1015,10 @@
                             spanGaps: true
                         };
                         var bowData = [];
-                        jQuery.each(data.scores, function (s, score) {
-                            if (bowId == score.bow.id) {
-                                dataset.label = score.bow.name + ' : ' + score.bow.type;
-                                bowData.push(score.avg);
+                        jQuery.each(data.rounds, function (s, round) {
+                            if (bowId == round.bow.id) {
+                                dataset.label = round.bow.name + ' : ' + round.bow.type;
+                                bowData.push(round.avg);
                             } else {
                                 bowData.push(null);
                             }
