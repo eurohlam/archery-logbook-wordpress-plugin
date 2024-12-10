@@ -869,7 +869,7 @@
     } //getRoundsAsTables
 
     jQuery.fn.deleteRound = function(archerId, roundId) {
-        console.log("Archery Logbook API deleteRound: " + scoreId);
+        console.log("Archery Logbook API deleteRound: " + roundId);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#deleteRoundAlertDiv'));
 
         jQuery.ajax({
