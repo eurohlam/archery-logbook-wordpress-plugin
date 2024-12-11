@@ -322,8 +322,15 @@ function archery_logbook_shortcodes_init()
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input id="roundTargetFace" class="form-control" required type="text" placeholder="Target Face" />
-                            <label for="roundTargetFace">Target Face<span style="color:red">*</span></label>
+                            <select id="roundTargetFace" class="form-select" required>
+                              <option value="" selected>Select a target face</option>
+                              <option value="122cm">122 cm</option>
+                              <option value="80cm">80 cm</option>
+                              <option value="60cm">60 cm</option>
+                              <option value="40cm">40 cm</option>
+                              <option value="Multi-spot">Multi-spot</option>
+                            </select>
+                            <label for="roundTargetFace">Target face<span style="color:red">*</span></label>
                         </div>
                     </div>
                 </div>
@@ -410,7 +417,7 @@ function archery_logbook_shortcodes_init()
                         var json = TableToJson("newRoundTable");
                         var bowId = jQuery("select#bowList").val();
                         var distance = jQuery("input#roundDistance").val();
-                        var targetFace = jQuery("input#roundTargetFace").val();
+                        var targetFace = jQuery("select#roundTargetFace").val();
                         var country = jQuery("input#roundCountry").val();
                         var city = jQuery("input#roundCity").val();
                         var comment = jQuery("input#roundComment").val();

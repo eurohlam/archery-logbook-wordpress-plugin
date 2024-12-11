@@ -707,6 +707,7 @@
                                           '<ul class="list-group list-group-flush">' +
                                             '<li class="list-group-item"><strong>Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
                                             '<li class="list-group-item"><strong>Number of arrows: </strong>' + round.shotsCount  + '</li>' +
+                                            '<li class="list-group-item"><strong>Target face: </strong>' + round.targetFace  + '</li>' +
                                             '<li class="list-group-item"><strong>Sum: </strong>' + round.sum + '</li>' +
                                             '<li class="list-group-item"><strong>Avg: </strong>' + round.avg + '</li>' +
                                             '<li class="list-group-item"><strong>Country: </strong>' + round.country + '</li>' +
