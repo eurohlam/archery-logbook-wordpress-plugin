@@ -38,10 +38,10 @@ All required dependencies are imported as part of the plugin.
 * `[archery_logbook_new_archer]` - shortcode that shows a form for adding a new archer
 * `[archery_logbook_new_bow]` - shortcode that shows a form for adding a new bow
 * `[archery_logbook_new_distance_settings]` - shortcode that shows a form for adding a new distance settings for certain bow
-* `[archery_logbook_new_score]` - shortcode that shows a form for adding a new score
+* `[archery_logbook_new_round]` - shortcode that shows a form for adding a new round
 
 ### Shortcodes for representing data
 
 * `[archery_logbook_bows]` - shortcode that shows a list of bows that belongs to current archer
-* `[archery_logbook_scores_history]` - shortcode that shows a history of scores for current archer
+* `[archery_logbook_rounds_history]` - shortcode that shows a history of rounds for current archer
 * `[archery_logbook_scores_progress]` - shortcode that shows line charts for average score progress
