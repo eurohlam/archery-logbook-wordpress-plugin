@@ -693,7 +693,7 @@
                 console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
                 var history = jQuery('<div>').addClass('container');
-                jQuery.each(data.rounds, function (s, round) {
+                jQuery.each(data.items, function (s, round) {
                     var details = jQuery('<details>').addClass('mb-3');
 
                     var roundSummary = jQuery('<summary><caption>Round summary</caption>' +
@@ -931,7 +931,7 @@
                 var scoreData = [];
                 var bows = [];
                 var matches = [];
-                jQuery.each(data.rounds, function (s, round) {
+                jQuery.each(data.items, function (s, round) {
                     scoreLabels.push(new Date(round.roundDate).toLocaleDateString());
                     scoreData.push(round.avg);
                     if (!bows.includes(round.bow.id)) {
@@ -976,7 +976,7 @@
                             spanGaps: true
                         };
                         var matchData = [];
-                        jQuery.each(data.rounds, function (s, round) {
+                        jQuery.each(data.items, function (s, round) {
                             if (match == round.distance) {
                                 dataset.label = round.distance + " m";
                                 matchData.push(round.avg);
@@ -1016,7 +1016,7 @@
                             spanGaps: true
                         };
                         var bowData = [];
-                        jQuery.each(data.rounds, function (s, round) {
+                        jQuery.each(data.items, function (s, round) {
                             if (bowId == round.bow.id) {
                                 dataset.label = round.bow.name + ' : ' + round.bow.type;
                                 bowData.push(round.avg);
