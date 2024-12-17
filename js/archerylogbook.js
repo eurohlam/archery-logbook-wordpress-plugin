@@ -1034,42 +1034,6 @@
         });
     } //getScoresProgress
 
-    jQuery.fn.postNewCompetition = function(archerId, competitionType, competitionCountry, competitionCity, comment) {
-        console.log("Parsing json: \n" +  scoreTableJson);
-        var competitionJson = {
-            "competitionType": competitionType,
-            "competitionCountry": competitionCountry,
-            "competitionCity": competitionCity,
-            "comment": comment,
-            "rounds": []
-        };
-
-
-        //calling API
-        console.log("Sending json to Archery Logbook API postCompetition: \n" + JSON.stringify(competitionJson));
-
-        jQuery.ajax({
-            url: "/wp-admin/admin-ajax.php",
-            type: "POST",
-            dataType: "JSON",
-            data: {
-                'action': 'archery_logbook_send_request',
-                'request': JSON.stringify(competitionJson),
-                'path': '/archers/' + archerId + '/competitions/'
-            },
-            cache: false,
-            success: function(data) {
-                console.log("Archery Logbook API postCompetition response: " + JSON.stringify(data));
-                showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newCompetitionAlertDiv'));
-                window.location.reload();
-            },
-            error: function() {
-                // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newCompetitionAlertDiv'));
-            }
-        });
-    } //postNewCompetition
-
     function showAlert(type, text, parentDiv) {
         if (type == 'error') {
             parentDiv.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -1145,7 +1109,7 @@
         '                </div>' +
         '            </div>' +
         '        </div>' +
-        '        <div id="roundDiv" class="row mb-3 table-responsive">' +
+        '        <div id="roundDiv' + roundNumber + '" class="row mb-3 table-responsive">' +
         '            <table id="newRoundTable' + roundNumber + '" class="table table-bordered table-striped">' +
         '            <thead class="table-success">' +
         '                <tr>' +
@@ -1161,12 +1125,84 @@
         '              <tbody>' +
         '              </tbody>' +
         '              </table>' +
-        '         <button class="btn btn-outline-success" id="btnAddEnd" type="button"><i class="bi bi-plus-circle"></i> Add New End</button>' +
+        '         <button class="btn btn-outline-success" id="btnAddEnd' + roundNumber + '" type="button"><i class="bi bi-plus-circle"></i> Add New End</button>' +
         '        </div>' +
         '    </div>' +
-        '</div>';
-        parentDiv.html(roundCard);
-    }
+        '</div>' +
+        '<script>' +
+        '  jQuery(document).ready(function () {' +
+        '    jQuery("#newRoundTable' + roundNumber + '").SetEditable({' +
+        '        columnsEd: "0,1,2,3,4,5",' +
+        '        onEdit: function(row){' +
+        '            var cols = $(row).find("td");' +
+        '            var sum = 0;' +
+        '            var colIdx = 0;' +
+        '            cols.each(function() {' +
+        '                if ((colIdx < 6) && $(this).html()) {' +
+        '                    sum = sum + parseInt($(this).html());' +
+        '                }' +
+        '                if (colIdx == 6) {' +
+        '                    $(this).attr("name", "sum");' +
+        '                    $(this).html("<strong>" + sum + "</strong>");' +
+        '                }' +
+        '                colIdx++;' +
+        '            });' +
+        '        }' +
+        '    });' +
+        '     jQuery("#btnAddEnd' + roundNumber + '").click(function() {' +
+        '        rowAddNewAndEdit("newRoundTable' + roundNumber + '");' +
+        '     });' +
+        '  })' +
+        '</script>';
+        parentDiv.append(roundCard);
+    } //addNewRoundTableForCompetition
 
+    jQuery.fn.postNewCompetition = function(archerId, competitionType, bowId, competitionCountry, competitionCity, competitionComment, roundsJson) {
+        console.log("Rounds json: \n" +  roundsJson);
+        var competitionJson = {
+            "competitionType": competitionType,
+            "competitionCountry": competitionCountry,
+            "competitionCity": competitionCity,
+            "comment": competitionComment,
+            "rounds": []
+        };
+
+        roundsJson.forEach((round, i) => {
+            var roundJson = {
+                "bowId": bowId,
+                "distance": round.distance,
+                "targetFace": round.targetFace,
+                "country": competitionCountry,
+                "city": competitionCity,
+                "comment": round.comment,
+                "ends": tableJsonToEndsJson(round.scores)
+            }
+            competitionJson.rounds.push(roundJson);
+        });
+
+        //calling API
+        console.log("Sending json to Archery Logbook API postCompetition: \n" + JSON.stringify(competitionJson));
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': JSON.stringify(competitionJson),
+                'path': '/archers/' + archerId + '/competitions/'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API postCompetition response: " + JSON.stringify(data));
+                showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newCompetitionAlertDiv'));
+                window.location.reload();
+            },
+            error: function() {
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newCompetitionAlertDiv'));
+            }
+        });
+    } //postNewCompetition
 
 }) ( jQuery );

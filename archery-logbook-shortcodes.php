@@ -395,7 +395,6 @@ function archery_logbook_shortcodes_init()
                             var colIdx = 0;
                             cols.each(function() {
                                 if ((colIdx < 6) && $(this).html()) {
-                                    console.log("col: " + colIdx + " val: " + $(this).html());
                                     sum = sum + parseInt($(this).html());
                                 }
                                 if (colIdx == 6) {
@@ -404,7 +403,6 @@ function archery_logbook_shortcodes_init()
                                 }
                                 colIdx++;
                             });
-                            console.log("sum: " + sum);
                         }
                     });
 
@@ -541,7 +539,10 @@ function archery_logbook_shortcodes_init()
                     </div>
                 </div>
 
-                <div id="roundsDiv"></div>
+                <div class="row mb-3">
+                    <div id="roundsDiv"></div>
+                    <button class="btn btn-outline-secondary btn-lg" id="btnAddRound" type="button"><i class="bi bi-plus-circle"></i> Add New Round</button>
+                </div>
 
                 <div id="newCompetitionAlertDiv"></div>
                 <div class="row mb-3">
@@ -554,31 +555,12 @@ function archery_logbook_shortcodes_init()
             <script>
                 jQuery(document).ready(function () {
                     jQuery.fn.getBowsAsDropdown(' . $user_id . ', jQuery("div#competitionBowListDiv"));
-                    jQuery.fn.addNewRoundTableForCompetition(1, jQuery("div#roundsDiv"))
+                    var roundNumber = 1;
+                    jQuery.fn.addNewRoundTableForCompetition(roundNumber, jQuery("div#roundsDiv"));
 
-                    jQuery("#newRoundTable").SetEditable({
-                        columnsEd: "0,1,2,3,4,5",
-                        onEdit: function(row){
-                            var cols = $(row).find("td");
-                            var sum = 0;
-                            var colIdx = 0;
-                            cols.each(function() {
-                                if ((colIdx < 6) && $(this).html()) {
-                                    console.log("col: " + colIdx + " val: " + $(this).html());
-                                    sum = sum + parseInt($(this).html());
-                                }
-                                if (colIdx == 6) {
-                                    $(this).attr("name", "sum");
-                                    $(this).html("<strong>" + sum + "</strong>");
-                                }
-                                colIdx++;
-                            });
-                            console.log("sum: " + sum);
-                        }
-                    });
-
-                    jQuery("#btnAddEnd").click(function() {
-                        rowAddNewAndEdit("newRoundTable");
+                    jQuery("#btnAddRound").click(function() {
+                        roundNumber++;
+                        jQuery.fn.addNewRoundTableForCompetition(roundNumber, jQuery("div#roundsDiv"));
                     });
 
                     jQuery("#newCompetitionForm").submit(function(event) {
@@ -589,11 +571,21 @@ function archery_logbook_shortcodes_init()
                         var city = jQuery("input#competitionCity").val();
                         var competitionComment = jQuery("input#competitionComment").val();
 
-                        var json = TableToJson("newRoundTable");
-                        var distance = jQuery("input#roundDistance").val();
-                        var targetFace = jQuery("select#roundTargetFace").val();
-                        var comment = jQuery("input#roundComment").val();
-                        jQuery.fn.postNewCompetition(' . $user_id .', competitionType, country, city, competitionComment);
+                        var rounds = [];
+                        for (let i=1; i<=roundNumber; i++) {
+                            var scores = TableToJson("newRoundTable" + i);
+                            var distance = jQuery("input#roundDistance" + i).val();
+                            var targetFace = jQuery("select#roundTargetFace" + i).val();
+                            var comment = jQuery("input#roundComment" +i).val();
+                            var round = {
+                                "distance": distance,
+                                "targetFace": targetFace,
+                                "comment": comment,
+                                "scores": scores
+                            };
+                            rounds.push(round);
+                        }
+                        jQuery.fn.postNewCompetition(' . $user_id .', competitionType, bowId, country, city, competitionComment, rounds);
                     });
                 });
             </script>
