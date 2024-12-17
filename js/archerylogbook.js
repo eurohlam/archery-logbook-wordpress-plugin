@@ -602,26 +602,7 @@
             "comment": comment,
             "ends": []
         };
-        var ends = [];
-        Object.entries(JSON.parse(scoreTableJson)).forEach( row => {
-            const [key, value] = row;
-            if (key != "0") { //ignoring headers
-                var end = {
-                    "endNumber": key,
-                    "shots" : []
-                };
-                value.forEach( (column, idx) => {
-                    if (column.trim() && (idx < 6)) {
-                        var shot = {
-                            "shotNumber": (idx + 1),
-                            "shotScore": column
-                        };
-                        end.shots.push(shot);
-                    }
-                });
-                ends.push(end);
-            }
-        });
+        var ends = tableJsonToEndsJson(scoreTableJson);
         roundJson.ends = ends;
 
         //validate score data
@@ -1053,6 +1034,42 @@
         });
     } //getScoresProgress
 
+    jQuery.fn.postNewCompetition = function(archerId, competitionType, competitionCountry, competitionCity, comment) {
+        console.log("Parsing json: \n" +  scoreTableJson);
+        var competitionJson = {
+            "competitionType": competitionType,
+            "competitionCountry": competitionCountry,
+            "competitionCity": competitionCity,
+            "comment": comment,
+            "rounds": []
+        };
+
+
+        //calling API
+        console.log("Sending json to Archery Logbook API postCompetition: \n" + JSON.stringify(competitionJson));
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': JSON.stringify(competitionJson),
+                'path': '/archers/' + archerId + '/competitions/'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API postCompetition response: " + JSON.stringify(data));
+                showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newCompetitionAlertDiv'));
+                window.location.reload();
+            },
+            error: function() {
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", jQuery('div#newCompetitionAlertDiv'));
+            }
+        });
+    } //postNewCompetition
+
     function showAlert(type, text, parentDiv) {
         if (type == 'error') {
             parentDiv.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -1068,6 +1085,88 @@
             );
         }
     } //showAlert
+
+    //converts json from bootstable.js#TableToJson into `ends` json in accordnace with archery-logbook API format
+    function tableJsonToEndsJson (scoreTableJson){
+        var ends = [];
+        Object.entries(JSON.parse(scoreTableJson)).forEach( row => {
+            const [key, value] = row;
+            if (key != "0") { //ignoring headers
+                var end = {
+                    "endNumber": key,
+                    "shots" : []
+                };
+                value.forEach( (column, idx) => {
+                    if (column.trim() && (idx < 6)) {
+                        var shot = {
+                            "shotNumber": (idx + 1),
+                            "shotScore": column
+                        };
+                        end.shots.push(shot);
+                    }
+                });
+                ends.push(end);
+            }
+        });
+        return ends;
+    } // tableJsonToEndsJson
+
+    jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
+        var roundCard =
+        '<div class="card row mb-3">' +
+        '    <div class="card-header"><h3>Round #' + roundNumber + '</h3></div>' +
+        '    <div class="card-body">' +
+        '        <div class="row">' +
+        '            <div class="col-md mb-3">' +
+        '                <div class="form-floating">' +
+        '                    <input id="roundDistance' + roundNumber + '" class="form-control" required type="text" placeholder="Distance" />' +
+        '                    <label for="roundDistance' + roundNumber + '">Distance<span style="color:red">*</span></label>' +
+        '                </div>' +
+        '            </div>' +
+        '            <div class="col-md mb-3">' +
+        '                <div class="form-floating">' +
+        '                    <select id="roundTargetFace' + roundNumber +'" class="form-select" required>' +
+        '                      <option value="" selected>Select a target face</option>' +
+        '                      <option value="122cm">122 cm</option>' +
+        '                      <option value="80cm">80 cm</option>' +
+        '                      <option value="60cm">60 cm</option>' +
+        '                      <option value="40cm">40 cm</option>' +
+        '                      <option value="Multi-spot">Multi-spot</option>' +
+        '                    </select>' +
+        '                    <label for="roundTargetFace' + roundNumber + '">Target face<span style="color:red">*</span></label>' +
+        '                </div>' +
+        '            </div>' +
+        '        </div>' +
+        '        <div class="row mb-3">' +
+        '            <div class="col-md">' +
+        '                <div class="form-floating">' +
+        '                    <input id="roundComment' + roundNumber + '" class="form-control" type="text" placeholder="Comment" />' +
+        '                    <label for="roundComment' + roundNumber + '">Round comment</label>' +
+        '                </div>' +
+        '            </div>' +
+        '        </div>' +
+        '        <div id="roundDiv" class="row mb-3 table-responsive">' +
+        '            <table id="newRoundTable' + roundNumber + '" class="table table-bordered table-striped">' +
+        '            <thead class="table-success">' +
+        '                <tr>' +
+        '                    <th>Shot #1</th>' +
+        '                    <th>Shot #2</th>' +
+        '                    <th>Shot #3</th>' +
+        '                    <th>Shot #4</th>' +
+        '                    <th>Shot #5</th>' +
+        '                    <th>Shot #6</th>' +
+        '                    <th>Sum</th>' +
+        '                </tr>' +
+        '              </thead>' +
+        '              <tbody>' +
+        '              </tbody>' +
+        '              </table>' +
+        '         <button class="btn btn-outline-success" id="btnAddEnd" type="button"><i class="bi bi-plus-circle"></i> Add New End</button>' +
+        '        </div>' +
+        '    </div>' +
+        '</div>';
+        parentDiv.html(roundCard);
+    }
 
 
 }) ( jQuery );
