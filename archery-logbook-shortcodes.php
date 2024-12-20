@@ -493,12 +493,13 @@ function archery_logbook_shortcodes_init()
         $user_id = get_current_user_id();
         $form = '<div class="container">
             <form id="newCompetitionForm">
-                <div class="row mb-3">
-                    <div class="col-md">
+                <div class="row">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select id="competitionType" class="form-select" required>
                                 <option value="" selected>Select a competition type</option>
                                 <option value="WA1440">WA1440</option>
+                                <option value="WA720">WA720</option>
                                 <option value="Canadian 1200">Canadian 1200</option>
                                 <option value="Short Canadian 1200">Short Canadian 1200</option>
                                 <option value="Canadian 900">Canadian 900</option>
@@ -508,6 +509,12 @@ function archery_logbook_shortcodes_init()
                                 <option value="Silver Fern">Silver Fern</option>
                             </select>
                           <label for="competitionType">Competition type<span style="color:red">*</span></label>
+                        </div>
+                    </div>
+                    <div class="col-md mb-3">
+                        <div class="form-floating">
+                            <input id="ageClass" class="form-control" type="text" placeholder="Age class" />
+                            <label for="ageClass">Age class</label>
                         </div>
                     </div>
                 </div>
@@ -566,6 +573,7 @@ function archery_logbook_shortcodes_init()
                     jQuery("#newCompetitionForm").submit(function(event) {
                         event.preventDefault();
                         var competitionType = jQuery("select#competitionType").val();
+                        var ageClass = jQuery("input#ageClass").val();
                         var bowId = jQuery("select#bowList").val();
                         var country = jQuery("input#competitionCountry").val();
                         var city = jQuery("input#competitionCity").val();
@@ -585,7 +593,7 @@ function archery_logbook_shortcodes_init()
                             };
                             rounds.push(round);
                         }
-                        jQuery.fn.postNewCompetition(' . $user_id .', competitionType, bowId, country, city, competitionComment, rounds);
+                        jQuery.fn.postNewCompetition(' . $user_id .', competitionType, ageClass, bowId, country, city, competitionComment, rounds);
                     });
                 });
             </script>
@@ -594,5 +602,23 @@ function archery_logbook_shortcodes_init()
         return $form;
     }
     add_shortcode('archery_logbook_new_competition', 'archery_logbook_new_competition_shortcode');
+
+    /**
+     * Shortcode that shows a history of competitions
+	 */
+    function archery_logbook_competitions_history_shortcode($atts = [], $content = null)
+    {
+        $user_id = get_current_user_id();
+        $form = '<script>
+            jQuery(document).ready(function () {
+                    jQuery.fn.getCompetitionsAsTables(' . $user_id . ',jQuery("#competitionsHistoryDiv"));
+            });
+            </script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <div id="competitionsHistoryDiv" class="container"></div>';
+        return $form;
+    }
+    add_shortcode('archery_logbook_competitions_history', 'archery_logbook_competitions_history_shortcode');
 
 }
