@@ -3,7 +3,7 @@
  * Plugin Name: Archery Logbook Integration
  * Plugin URI: https://wordpress.org/plugins/
  * Description: Integration with Archery Logbook REST API
- * Version: 1.0.5
+ * Version: 1.0.7
  * Author: Roundkick.Studio, eurohlam
  * Author URI: https://roundkick.nz
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) exit;
 include_once 'class-archery-logbook-integration.php';
 include_once 'archery-logbook-shortcodes.php';
 
-define('ARCHERY_LOGBOOK_INT_VERSION', '1.0.5');
+define('ARCHERY_LOGBOOK_INT_VERSION', '1.0.7');
 
 if (!class_exists('WP_Archery_Logbook_Int')) {
 	class WP_Archery_Logbook_Int {

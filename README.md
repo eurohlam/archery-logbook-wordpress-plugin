@@ -6,6 +6,7 @@ archery-logbook-wordpress-plugin
 This is a Wordpress plugin that helps to build a user interface intended to interact with
 [Archery Logbook REST API](https://github.com/eurohlam/archery-logbook)
 The plugin provides a set of shortcodes that can be used in customized pages.
+API calls are implemented in accordance with [API specification](https://github.com/eurohlam/archery-logbook/blob/master/archery-logbook-api.yaml)
 
 ## Project
 
@@ -39,6 +40,7 @@ All required dependencies are imported as part of the plugin.
 * `[archery_logbook_new_bow]` - shortcode that shows a form for adding a new bow
 * `[archery_logbook_new_distance_settings]` - shortcode that shows a form for adding a new distance settings for certain bow
 * `[archery_logbook_new_round]` - shortcode that shows a form for adding a new round
+* `[archery_logbook_new_competition]` - shortcode that shows a form for adding a new competition
 
 ### Shortcodes for representing data
 
