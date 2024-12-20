@@ -47,3 +47,4 @@ All required dependencies are imported as part of the plugin.
 * `[archery_logbook_bows]` - shortcode that shows a list of bows that belongs to current archer
 * `[archery_logbook_rounds_history]` - shortcode that shows a history of rounds for current archer
 * `[archery_logbook_scores_progress]` - shortcode that shows line charts for average score progress
+* `[archery_logbook_competitions_history]` - shortcode that shows a history of competitions for current archer
