@@ -352,7 +352,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 							<tr valign="top">
 								<th scope="row">Archery Logbook API Secret Key</th>
 								<td>
-									<input type="text" class="regular-text" name="archery_logbook_secret" value="<?php echo get_option($this->secret_option) ?>" />
+									<input type="password" class="regular-text" name="archery_logbook_secret" value="<?php echo get_option($this->secret_option) ?>" />
 								</td>
 							</tr>
 						</table>
