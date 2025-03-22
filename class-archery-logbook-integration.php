@@ -59,6 +59,10 @@ class Archery_Logbook_Integration {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT'); //(CURLOPT_PUT, true) does not work for some reason. Probably beacuse of older version of PHP
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
             break;
+        case "PATCH":
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            break;
         case "DELETE":
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             break;

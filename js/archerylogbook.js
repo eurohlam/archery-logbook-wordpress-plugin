@@ -36,7 +36,7 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': requestJson,
-                'path': '/archers/'
+                'path': '/archers'
             },
             cache: false,
             success: function(data) {
@@ -100,7 +100,7 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': requestJson,
-                'path': '/archers/' + archerId + '/bows/'
+                'path': '/archers/' + archerId + '/bows'
             },
             cache: false,
             success: function(data) {
@@ -162,8 +162,8 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': requestJson,
-                'method': 'PUT',
-                'path': '/archers/' + archerId + '/bows/' + bowId + "/"
+                'method': 'PATCH',
+                'path': '/archers/' + archerId + '/bows/' + bowId
             },
             cache: false,
             success: function(data) {
@@ -546,8 +546,8 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': requestJson,
-                'method': 'POST',
-                'path': '/archers/' + archerId + '/bows/' + bowId + "/"
+                'method': 'PUT',
+                'path': '/archers/' + archerId + '/bows/' + bowId
             },
             cache: false,
             success: function(data) {
@@ -645,7 +645,7 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': JSON.stringify(roundJson),
-                'path': '/archers/' + archerId + '/rounds/'
+                'path': '/archers/' + archerId + '/rounds'
             },
             cache: false,
             success: function(data) {
@@ -1191,7 +1191,7 @@
             data: {
                 'action': 'archery_logbook_send_request',
                 'request': JSON.stringify(competitionJson),
-                'path': '/archers/' + archerId + '/competitions/'
+                'path': '/archers/' + archerId + '/competitions'
             },
             cache: false,
             success: function(data) {
