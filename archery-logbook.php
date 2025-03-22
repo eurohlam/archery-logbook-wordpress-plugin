@@ -3,7 +3,7 @@
  * Plugin Name: Archery Logbook Integration
  * Plugin URI: https://wordpress.org/plugins/
  * Description: Integration with Archery Logbook REST API
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Roundkick.Studio, eurohlam
  * Author URI: https://roundkick.nz
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) exit;
 include_once 'class-archery-logbook-integration.php';
 include_once 'archery-logbook-shortcodes.php';
 
-define('ARCHERY_LOGBOOK_INT_VERSION', '1.0.7');
+define('ARCHERY_LOGBOOK_INT_VERSION', '1.0.8');
 
 if (!class_exists('WP_Archery_Logbook_Int')) {
 	class WP_Archery_Logbook_Int {
@@ -100,7 +100,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				'"country": "' . $_POST['billing_country'] . '",' .
 				'"city": "' . $_POST['billing_city'] . '",' .
 				'"clubName": "' . $_POST['archery_club'] . '"}';
-			$path = "/archers/";
+			$path = "/archers";
 			$method = "POST";
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
@@ -143,8 +143,8 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 				'"country": "' . $_POST['billing_country'] . '",' .
 				'"city": "' . $_POST['billing_city'] . '",' .
 				'"clubName": "' . $_POST['archery_club'] . '"}';
-			$path = "/archers/" . $user_id . "/";
-			$method = "POST";
+			$path = "/archers/" . $user_id;
+			$method = "PUT";
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {
 				$archeryLogbookInt = new Archery_Logbook_Integration();
