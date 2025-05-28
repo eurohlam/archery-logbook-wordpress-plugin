@@ -41,10 +41,10 @@ class Archery_Logbook_Integration {
               CURLOPT_HTTPHEADER => $headers,
               CURLOPT_URL => $url,
               CURLOPT_POST => true,
-              CURLOPT_SSL_VERIFYHOST => false,//to ignore self-signed cert
+              CURLOPT_SSL_VERIFYHOST => 0,//to ignore self-signed cert
               CURLOPT_SSL_VERIFYPEER => false,//to ignore self-signed cert
               CURLOPT_VERBOSE => 1,
-              CURLOPT_TIMEOUT, 300
+              CURLOPT_TIMEOUT => 30
           );
       curl_setopt_array($curl, $params);
       switch ($method) {
