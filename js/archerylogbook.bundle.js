@@ -1,6 +1,48 @@
 (function(jQuery) {
 
-    jQuery("#newArcherForm").submit(function(event) {
+function showAlert(type, text, parentDiv) {
+    if (type === 'error') {
+        parentDiv.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+            text +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+            '</div>'
+        );
+    } else {
+        parentDiv.html('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+            text +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+            '</div>'
+        );
+    }
+} //showAlert
+
+//converts json from bootstable.js#TableToJson into `ends` json in accordance with archery-logbook API format
+function tableJsonToEndsJson (scoreTableJson){
+    var ends = [];
+    Object.entries(JSON.parse(scoreTableJson)).forEach( row => {
+        const [key, value] = row;
+        if (key !== "0") { //ignoring headers
+            var end = {
+                "endNumber": key,
+                "shots" : []
+            };
+            value.forEach( (column, idx) => {
+                if (column.trim() && (idx < 6)) {
+                    var shot = {
+                        "shotNumber": (idx + 1),
+                        "shotScore": column
+                    };
+                    end.shots.push(shot);
+                }
+            });
+            ends.push(end);
+        }
+    });
+    return ends;
+} // tableJsonToEndsJson
+
+
+jQuery("#newArcherForm").submit(function(event) {
 
         // Prevent spam click and default submit behaviour
         jQuery("#btnAddArcher").attr("disabled", true);
@@ -138,47 +180,9 @@
         jQuery("#btnAddDistanceSettings").attr("disabled", false);
         return false;
     }); //newDistanceSettingsForm submit
+ 
 
-
-
-    /*** jQuery Functions ***/
-
-    jQuery.fn.submitDistanceSettings = function(archerId, bowId, distance, sight, isTested) {
-        //prepare json data
-        var settingsData = {};
-        settingsData.distance = distance;
-        settingsData.sight = sight;
-        settingsData.isTested = isTested;
-
-        var requestJson = JSON.stringify(settingsData);
-        console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
-        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newDistanceAlertDiv'));
-
-        jQuery.ajax({
-            url: "/wp-admin/admin-ajax.php",
-            type: "POST",
-            dataType: "JSON",
-            data: {
-                'action': 'archery_logbook_send_request',
-                'request': requestJson,
-                'method': 'PATCH',
-                'path': '/archers/' + archerId + '/bows/' + bowId
-            },
-            cache: false,
-            success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
-                showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
-                window.location.reload();
-            },
-            error: function() {
-                console.log("Error happened");
-                // Fail message
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#newDistanceAlertDiv'));
-            }
-        });
-    } //submitDistanceSettings
-
-    jQuery.fn.getClubs = function(parentDiv) {
+jQuery.fn.getClubs = function(parentDiv) {
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
             type: "POST",
@@ -224,7 +228,8 @@
         });
     } //getArchers
 
-    jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
+
+jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
             type: "POST",
@@ -251,25 +256,25 @@
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><strong>Type: </strong>' + bow.type + '</li>' +
-                                            '<li class="list-group-item"><strong>Poundage: </strong>' + bow.poundage  + '</li>' +
-                                            '<li class="list-group-item"><strong>Level: </strong>' + bow.level + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong> Type: </strong>' + bow.type + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-backpack4"></i><strong> Poundage: </strong>' + bow.poundage  + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-bar-chart"></i><strong> Level: </strong>' + bow.level + '</li>';
                     if ((bow.type === "RECURVE") || (bow.type === "BAREBOW")) {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><strong>Riser model: </strong>' + bow.riserModel + '</li>' +
-                                            '<li class="list-group-item"><strong>Limbs model: </strong>' + bow.limbsModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Riser model: </strong>' + bow.riserModel + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Limbs model: </strong>' + bow.limbsModel + '</li>';
                     }
                     if (bow.type === "COMPOUND") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><strong>Compound model: </strong>' + bow.compoundModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Compound model: </strong>' + bow.compoundModel + '</li>';
                     }
                     if (bow.type === "TRADITIONAL") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><strong>Traditional model: </strong>' + bow.traditionalModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Traditional model: </strong>' + bow.traditionalModel + '</li>';
                     }
                     if (bow.type === "LONGBOW") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><strong>Longbow model: </strong>' + bow.longbowModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Longbow model: </strong>' + bow.longbowModel + '</li>';
                     }
                     bowSummary = bowSummary + '</ul>' +
                                         '</div>' +
@@ -519,7 +524,7 @@
             }
         });
     } //getBowsAsDropdown
-
+    
     jQuery.fn.updateBow = function(archerId, bowId, bowName, bowType, bowLevel, poundage, riserModel, limbsModel, compoundModel, traditionalModel, longbowModel) {
         //prepare json data
         var bowData = {};
@@ -560,7 +565,7 @@
                 showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#editBowAlertDiv'));
             }
         });
-    } //updateBow
+    } //updateBow    
 
     jQuery.fn.deleteBow = function(archerId, bowId) {
         console.log("Archery Logbook API deleteBow: " + bowId);
@@ -590,7 +595,45 @@
         });
     } //deleteBow
 
-    jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTableJson, country, city, comment) {
+
+    jQuery.fn.submitDistanceSettings = function(archerId, bowId, distance, sight, isTested) {
+        //prepare json data
+        var settingsData = {};
+        settingsData.distance = distance;
+        settingsData.sight = sight;
+        settingsData.isTested = isTested;
+
+        var requestJson = JSON.stringify(settingsData);
+        console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
+        showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newDistanceAlertDiv'));
+
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_send_request',
+                'request': requestJson,
+                'method': 'PATCH',
+                'path': '/archers/' + archerId + '/bows/' + bowId
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
+                window.location.reload();
+            },
+            error: function() {
+                console.log("Error happened");
+                // Fail message
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later</strong>", jQuery('div#newDistanceAlertDiv'));
+            }
+        });
+    } //submitDistanceSettings
+
+
+
+jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTableJson, country, city, comment) {
         console.log("Parsing json: \n" +  scoreTableJson);
         var roundJson = {
             "bowId": bowId,
@@ -685,13 +728,12 @@
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><strong>Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
-                                            '<li class="list-group-item"><strong>Number of arrows: </strong>' + round.shotsCount  + '</li>' +
-                                            '<li class="list-group-item"><strong>Target face: </strong>' + round.targetFace  + '</li>' +
-                                            '<li class="list-group-item"><strong>Sum: </strong>' + round.sum + '</li>' +
-                                            '<li class="list-group-item"><strong>Avg: </strong>' + round.avg + '</li>' +
-                                            '<li class="list-group-item"><strong>Country: </strong>' + round.country + '</li>' +
-                                            '<li class="list-group-item"><strong>City: </strong>' + round.city + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong> Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-123"></i><strong> Number of arrows: </strong>' + round.shotsCount  + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-bullseye"></i><strong> Target face: </strong>' + round.targetFace  + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-calculator"></i><strong> Total score: </strong>' + round.sum + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong> Average score: </strong>' + round.avg + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-geo-alt"></i><strong> Location: </strong>' + round.city + ', ' + round.country + '</li>' +
                                           '</ul>' +
                                           '<div class="card-body">' + round.comment + '</div>' +
                                         '</div>' +
@@ -756,7 +798,7 @@
 
                         jQuery.each(end.shots, function(r, shot) {
                             if (shot.shotScore === 10) {
-                                tr.append('<td class="bg-warning text-success"><strong>' + shot.shotScore + '</strong></td>')
+                                tr.append('<td class="bg-warning text-success"><i class="bi bi-crosshair"></i><strong> ' + shot.shotScore + '</strong></td>')
 							} else if (shot.shotScore === 9) {
                                 tr.append('<td class="bg-warning text-success">' + shot.shotScore + '</td>')
 							} else if (shot.shotScore === 8 || shot.shotScore === 7) {
@@ -877,204 +919,9 @@
         });
     } //deleteRound
 
-    jQuery.fn.getScoresProgress = function(archerId, parentDiv) {
-        jQuery.ajax({
-            url: "/wp-admin/admin-ajax.php",
-            type: "POST",
-            dataType: "JSON",
-            data: {
-                'action': 'archery_logbook_get_data',
-                'path': '/archers/' + archerId + '/rounds?page=0&size=50'
-            },
-            cache: false,
-            success: function(data) {
-                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
-                if (!data) {
-                    return;
-                }
 
-                var canvasDiv = jQuery('<div>').addClass('container');
-                var avgCanvas = jQuery('<canvas id="avgScoreCanvas" height="420"></canvas>');
-                var avgDiv = jQuery('<div class="row mb-3"></div>');
-                avgDiv.append('<h3>Common progress of average score</h3>').append(avgCanvas);
-                var matchCanvas = jQuery('<canvas id="avgScoreByMatchCanvas" height="420"></canvas>');
-                var matchDiv = jQuery('<div class="row mb-3"></div>');
-                matchDiv.append('<h3>Progress of average score by match</h3>').append(matchCanvas);
-                var bowCanvas = jQuery('<canvas id="avgScoreByBowCanvas" height="420"></canvas>');
-                var bowDiv = jQuery('<div class="row mb-3"></div>');
-                bowDiv.append('<h3>Progress of average score by bow</h3>').append(bowCanvas);
-                canvasDiv.append(avgDiv).append(matchDiv).append(bowDiv);
-                parentDiv.html(canvasDiv);
-
-                var scoreLabels = [];
-                var scoreData = [];
-                var bows = [];
-                var matches = [];
-                jQuery.each(data.items, function (s, round) {
-                    scoreLabels.push(new Date(round.roundDate).toLocaleDateString());
-                    scoreData.push(round.avg);
-                    if (!bows.includes(round.bow.id)) {
-                        bows.push(round.bow.id);
-                    }
-                    if (!matches.includes(round.distance)) {
-                        matches.push(round.distance);
-                    }
-                });
-                new Chart(avgCanvas, {
-                  type: 'line',
-                  data: {
-                    labels: scoreLabels.reverse(),
-                    datasets: [{
-                        label: 'Avg score',
-                        data: scoreData.reverse(),
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1,
-                        spanGaps: true
-                    }]
-                  },
-                  options: {
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        max: 10
-                      }
-                    }
-                  }
-                });
-
-                if (matches.length > 0) {
-                    var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
-                    var matchDatasets = [];
-                    jQuery.each(matches, function(m, match){
-                        var dataset = {
-                            label: match,
-                            fill: false,
-                            borderColor:  colors[m],
-                            tension: 0.1,
-                            spanGaps: true
-                        };
-                        var matchData = [];
-                        jQuery.each(data.items, function (s, round) {
-                            if (match === round.distance) {
-                                dataset.label = round.distance + " m";
-                                matchData.push(round.avg);
-                            } else {
-                                matchData.push(null);
-                            }
-                        });
-                        dataset.data = matchData.reverse();
-                        matchDatasets.push(dataset);
-                    });
-                    new Chart(matchCanvas, {
-                      type: 'line',
-                      data: {
-                        labels: scoreLabels,
-                        datasets: matchDatasets
-                      },
-                      options: {
-                        scales: {
-                          y: {
-                            beginAtZero: true,
-                            max: 10
-                          }
-                        }
-                      }
-                    });
-                }
-
-                if (bows.length > 0) {
-                    var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
-                    var bowDatasets = [];
-                    jQuery.each(bows, function(b, bowId){
-                        var dataset = {
-                            label: 'Avg ' + bowId,
-                            fill: false,
-                            borderColor:  colors[b],
-                            tension: 0.1,
-                            spanGaps: true
-                        };
-                        var bowData = [];
-                        jQuery.each(data.items, function (s, round) {
-                            if (bowId == round.bow.id) {
-                                dataset.label = round.bow.name + ' : ' + round.bow.type;
-                                bowData.push(round.avg);
-                            } else {
-                                bowData.push(null);
-                            }
-                        });
-                        dataset.data = bowData.reverse();
-                        bowDatasets.push(dataset);
-                    });
-                    new Chart(bowCanvas, {
-                      type: 'line',
-                      data: {
-                        labels: scoreLabels,
-                        datasets: bowDatasets
-                      },
-                      options: {
-                        scales: {
-                          y: {
-                            beginAtZero: true,
-                            max: 10
-                          }
-                        }
-                      }
-                    });
-                }
-            },
-            error: function() {
-                // Fail message
-                var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
-                parentDiv.append(scoreAlertDiv);
-                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
-            }
-        });
-    } //getScoresProgress
-
-    function showAlert(type, text, parentDiv) {
-        if (type === 'error') {
-            parentDiv.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                text +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                '</div>'
-            );
-        } else {
-            parentDiv.html('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                text +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                '</div>'
-            );
-        }
-    } //showAlert
-
-    //converts json from bootstable.js#TableToJson into `ends` json in accordance with archery-logbook API format
-    function tableJsonToEndsJson (scoreTableJson){
-        var ends = [];
-        Object.entries(JSON.parse(scoreTableJson)).forEach( row => {
-            const [key, value] = row;
-            if (key !== "0") { //ignoring headers
-                var end = {
-                    "endNumber": key,
-                    "shots" : []
-                };
-                value.forEach( (column, idx) => {
-                    if (column.trim() && (idx < 6)) {
-                        var shot = {
-                            "shotNumber": (idx + 1),
-                            "shotScore": column
-                        };
-                        end.shots.push(shot);
-                    }
-                });
-                ends.push(end);
-            }
-        });
-        return ends;
-    } // tableJsonToEndsJson
-
-    jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
+jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
         var roundCard =
         '<div class="card row mb-3">' +
         '    <div class="card-header"><h3>Round #' + roundNumber + '</h3></div>' +
@@ -1396,4 +1243,163 @@
         });
     } //getCompetitionsAsTables
 
-}) ( jQuery );
+
+jQuery.fn.getScoresProgress = function(archerId, parentDiv) {
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_get_data',
+                'path': '/archers/' + archerId + '/rounds?page=0&size=50'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
+
+                if (!data) {
+                    return;
+                }
+
+                var canvasDiv = jQuery('<div>').addClass('container');
+                var avgCanvas = jQuery('<canvas id="avgScoreCanvas" height="420"></canvas>');
+                var avgDiv = jQuery('<div class="row mb-3"></div>');
+                avgDiv.append('<h3>Common progress of average score</h3>').append(avgCanvas);
+                var matchCanvas = jQuery('<canvas id="avgScoreByMatchCanvas" height="420"></canvas>');
+                var matchDiv = jQuery('<div class="row mb-3"></div>');
+                matchDiv.append('<h3>Progress of average score by match</h3>').append(matchCanvas);
+                var bowCanvas = jQuery('<canvas id="avgScoreByBowCanvas" height="420"></canvas>');
+                var bowDiv = jQuery('<div class="row mb-3"></div>');
+                bowDiv.append('<h3>Progress of average score by bow</h3>').append(bowCanvas);
+                canvasDiv.append(avgDiv).append(matchDiv).append(bowDiv);
+                parentDiv.html(canvasDiv);
+
+                var scoreLabels = [];
+                var scoreData = [];
+                var bows = [];
+                var matches = [];
+                jQuery.each(data.items, function (s, round) {
+                    scoreLabels.push(new Date(round.roundDate).toLocaleDateString());
+                    scoreData.push(round.avg);
+                    if (!bows.includes(round.bow.id)) {
+                        bows.push(round.bow.id);
+                    }
+                    if (!matches.includes(round.distance)) {
+                        matches.push(round.distance);
+                    }
+                });
+                new Chart(avgCanvas, {
+                  type: 'line',
+                  data: {
+                    labels: scoreLabels.reverse(),
+                    datasets: [{
+                        label: 'Avg score',
+                        data: scoreData.reverse(),
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        spanGaps: true
+                    }]
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 10
+                      }
+                    }
+                  }
+                });
+
+                if (matches.length > 0) {
+                    var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
+                    var matchDatasets = [];
+                    jQuery.each(matches, function(m, match){
+                        var dataset = {
+                            label: match,
+                            fill: false,
+                            borderColor:  colors[m],
+                            tension: 0.1,
+                            spanGaps: true
+                        };
+                        var matchData = [];
+                        jQuery.each(data.items, function (s, round) {
+                            if (match === round.distance) {
+                                dataset.label = round.distance + " m";
+                                matchData.push(round.avg);
+                            } else {
+                                matchData.push(null);
+                            }
+                        });
+                        dataset.data = matchData.reverse();
+                        matchDatasets.push(dataset);
+                    });
+                    new Chart(matchCanvas, {
+                      type: 'line',
+                      data: {
+                        labels: scoreLabels,
+                        datasets: matchDatasets
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            max: 10
+                          }
+                        }
+                      }
+                    });
+                }
+
+                if (bows.length > 0) {
+                    var colors = ['rgb(75, 192, 192)', 'rgb(192, 75, 192)','rgb(192, 192, 75)', 'rgb(240, 150, 150)', 'rgb(150, 240, 150)', 'rgb(150, 150, 240)'];
+                    var bowDatasets = [];
+                    jQuery.each(bows, function(b, bowId){
+                        var dataset = {
+                            label: 'Avg ' + bowId,
+                            fill: false,
+                            borderColor:  colors[b],
+                            tension: 0.1,
+                            spanGaps: true
+                        };
+                        var bowData = [];
+                        jQuery.each(data.items, function (s, round) {
+                            if (bowId == round.bow.id) {
+                                dataset.label = round.bow.name + ' : ' + round.bow.type;
+                                bowData.push(round.avg);
+                            } else {
+                                bowData.push(null);
+                            }
+                        });
+                        dataset.data = bowData.reverse();
+                        bowDatasets.push(dataset);
+                    });
+                    new Chart(bowCanvas, {
+                      type: 'line',
+                      data: {
+                        labels: scoreLabels,
+                        datasets: bowDatasets
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            max: 10
+                          }
+                        }
+                      }
+                    });
+                }
+            },
+            error: function() {
+                // Fail message
+                var scoreAlertDiv = jQuery('<div id="scoreAlertDiv"></div>');
+                parentDiv.append(scoreAlertDiv);
+                showAlert("error", "<strong>It seems that Archery Logbook API service is not responding. Please try again later!</strong>", scoreAlertDiv);
+            }
+        });
+    } //getScoresProgress
+
+
+
+})(jQuery);

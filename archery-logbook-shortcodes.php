@@ -15,7 +15,7 @@ function archery_logbook_shortcodes_init()
             . do_shortcode($content) .
             '</section>
             <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.bundle.min.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_main', 'archery_logbook_main_shortcode');
