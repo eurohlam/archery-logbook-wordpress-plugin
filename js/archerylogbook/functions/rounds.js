@@ -95,12 +95,12 @@
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong> Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-123"></i><strong> Number of arrows: </strong>' + round.shotsCount  + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-bullseye"></i><strong> Target face: </strong>' + round.targetFace  + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-calculator"></i><strong> Total score: </strong>' + round.sum + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong> Average score: </strong>' + round.avg + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-geo-alt"></i><strong> Location: </strong>' + round.city + ', ' + round.country + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong class="text-secondary"> Bow: </strong><strong class="text-dark">' + round.bow.name + ' : ' + round.bow.type + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-123"></i><strong class="text-secondary"> Number of arrows: </strong><strong class="text-dark">' + round.shotsCount  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-bullseye"></i><strong class="text-secondary"> Target face: </strong><strong class="text-dark">' + round.targetFace  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-calculator"></i><strong class="text-secondary"> Total score: </strong><strong class="text-dark">' + round.sum + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong class="text-secondary"> Average score: </strong><strong class="text-dark">' + round.avg + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-geo-alt"></i><strong class="text-secondary"> Location: </strong><strong class="text-dark">' + round.city + ', ' + round.country + '</strong></li>' +
                                           '</ul>' +
                                           '<div class="card-body">' + round.comment + '</div>' +
                                         '</div>' +

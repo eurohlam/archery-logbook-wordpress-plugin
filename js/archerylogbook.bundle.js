@@ -256,25 +256,25 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong> Type: </strong>' + bow.type + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-backpack4"></i><strong> Poundage: </strong>' + bow.poundage  + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-bar-chart"></i><strong> Level: </strong>' + bow.level + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong class="text-secondary"> Type: </strong><strong class="text-dark">' + bow.type + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-backpack4"></i><strong class="text-secondary"> Poundage: </strong><strong class="text-dark">' + bow.poundage  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-bar-chart"></i><strong class="text-secondary"> Level: </strong><strong class="text-dark">' + bow.level + '</strong></li>';
                     if ((bow.type === "RECURVE") || (bow.type === "BAREBOW")) {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Riser model: </strong>' + bow.riserModel + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Limbs model: </strong>' + bow.limbsModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Riser model: </strong><strong class="text-dark">' + bow.riserModel + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Limbs model: </strong><strong class="text-dark">' + bow.limbsModel + '</strong></li>';
                     }
                     if (bow.type === "COMPOUND") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Compound model: </strong>' + bow.compoundModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Compound model: </strong><strong class="text-dark">' + bow.compoundModel + '</strong></li>';
                     }
                     if (bow.type === "TRADITIONAL") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Traditional model: </strong>' + bow.traditionalModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Traditional model: </strong><strong class="text-dark">' + bow.traditionalModel + '</strong></li>';
                     }
                     if (bow.type === "LONGBOW") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Longbow model: </strong>' + bow.longbowModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Longbow model: </strong><strong class="text-dark">' + bow.longbowModel + '</strong></li>';
                     }
                     bowSummary = bowSummary + '</ul>' +
                                         '</div>' +
@@ -728,12 +728,12 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong> Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-123"></i><strong> Number of arrows: </strong>' + round.shotsCount  + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-bullseye"></i><strong> Target face: </strong>' + round.targetFace  + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-calculator"></i><strong> Total score: </strong>' + round.sum + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong> Average score: </strong>' + round.avg + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-geo-alt"></i><strong> Location: </strong>' + round.city + ', ' + round.country + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong class="text-secondary"> Bow: </strong><strong class="text-dark">' + round.bow.name + ' : ' + round.bow.type + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-123"></i><strong class="text-secondary"> Number of arrows: </strong><strong class="text-dark">' + round.shotsCount  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-bullseye"></i><strong class="text-secondary"> Target face: </strong><strong class="text-dark">' + round.targetFace  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-calculator"></i><strong class="text-secondary"> Total score: </strong><strong class="text-dark">' + round.sum + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong class="text-secondary"> Average score: </strong><strong class="text-dark">' + round.avg + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-geo-alt"></i><strong class="text-secondary"> Location: </strong><strong class="text-dark">' + round.city + ', ' + round.country + '</strong></li>' +
                                           '</ul>' +
                                           '<div class="card-body">' + round.comment + '</div>' +
                                         '</div>' +
@@ -1085,16 +1085,15 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
                                         '<h5 class="card-title">' + competition.competitionType + ' on ' + new Date(competition.competitionDate).toLocaleDateString() + '</h5>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><strong>Age class: </strong>' + competition.ageClass + '</li>' +
-                                            '<li class="list-group-item"><strong>Number of arrows: </strong>' + competition.shotsCount  + '</li>' +
-                                            '<li class="list-group-item"><strong>Sum: </strong>' + competition.sum + '</li>' +
-                                            '<li class="list-group-item"><strong>Avg: </strong>' + competition.avg + '</li>' +
-                                            '<li class="list-group-item"><strong>Country: </strong>' + competition.country + '</li>' +
-                                            '<li class="list-group-item"><strong>City: </strong>' + competition.city + '</li>' +
+                                            '<li class="list-group-item"><i class="bi bi-person-lines-fill"></i><strong class="text-secondary"> Age class: </strong><strong class="text-dark">' + competition.ageClass + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-123"></i><strong class="text-secondary"> Number of arrows: </strong><strong class="text-dark">' + competition.shotsCount  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-calculator"></i><strong class="text-secondary"> Total Score: </strong><strong class="text-dark">' + competition.sum + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong class="text-secondary"> Average score: </strong><strong class="text-dark">' + competition.avg + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-geo-alt"></i><strong class="text-secondary"> Location: </strong><strong class="text-dark">' + competition.city + ', ' + competition.country + '</strong></li>' +
                                           '</ul>' +
                                           '<div class="card-body">' +
-                                            '<h5 class="card-title">Rounds summary:</h5><p class="card-text">' + roundsSummaryList + '</p>' +
-                                            '<h5 class="card-title">Additional comments:</h5><p class="card-text">' + competition.comment + '</p>' +
+                                            '<h6 class="card-title"><i class="bi bi-card-list"></i><strong class="text-secondary"> Rounds summary:</strong></h6><p class="card-text">' + roundsSummaryList + '</p>' +
+                                            '<h6 class="card-title"><i class="bi bi-chat-left-text"></i><strong class="text-secondary"> Additional comments:</strong></h6><p class="card-text">' + competition.comment + '</p>' +
                                           '</div>' +
                                         '</div>' +
                                         '</summary></br>');
@@ -1109,11 +1108,11 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
                                             '<h5 class="card-title">Round #' + (s + 1) + ': ' + round.distance + ' meters' + '</h5>' +
                                         '</div>' +
                                               '<ul class="list-group list-group-flush">' +
-                                                '<li class="list-group-item"><strong>Bow: </strong>' + round.bow.name + ' : ' + round.bow.type + '</li>' +
-                                                '<li class="list-group-item"><strong>Number of arrows: </strong>' + round.shotsCount  + '</li>' +
-                                                '<li class="list-group-item"><strong>Target face: </strong>' + round.targetFace  + '</li>' +
-                                                '<li class="list-group-item"><strong>Sum: </strong>' + round.sum + '</li>' +
-                                                '<li class="list-group-item"><strong>Avg: </strong>' + round.avg + '</li>' +
+                                                '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong class="text-secondary"> Bow: </strong><strong class="text-dark">' + round.bow.name + ' : ' + round.bow.type + '</strong></li>' +
+                                                '<li class="list-group-item"><i class="bi bi-123"></i><strong class="text-secondary"> Number of arrows: </strong><strong class="text-dark">' + round.shotsCount  + '</strong></li>' +
+                                                '<li class="list-group-item"><i class="bi bi-bullseye"></i><strong class="text-secondary"> Target face: </strong><strong class="text-dark">' + round.targetFace  + '</strong></li>' +
+                                                '<li class="list-group-item"><i class="bi bi-calculator"></i><strong class="text-secondary"><strong> Total score: </strong><strong class="text-dark">' + round.sum + '</strong></li>' +
+                                                '<li class="list-group-item"><i class="bi bi-graph-up"></i><strong class="text-secondary"><strong> Average score: </strong><strong class="text-dark">' + round.avg + '</strong></li>' +
                                               '</ul>' +
                                               '<div class="card-body">' + round.comment + '</div>' +
                                             '</div>' +
@@ -1146,7 +1145,7 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
 
                             jQuery.each(end.shots, function(r, shot) {
                                 if (shot.shotScore === 10) {
-                                    tr.append('<td class="bg-warning text-success"><strong>' + shot.shotScore + '</strong></td>')
+                                    tr.append('<td class="bg-warning text-success"><i class="bi bi-crosshair"></i><strong> ' + shot.shotScore + '</strong></td>')
     							} else if (shot.shotScore === 9) {
                                     tr.append('<td class="bg-warning text-success">' + shot.shotScore + '</td>')
     							} else if (shot.shotScore === 8 || shot.shotScore === 7) {

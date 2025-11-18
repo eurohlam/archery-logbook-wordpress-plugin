@@ -27,25 +27,25 @@
                                         '</div>' +
                                     '</div>' +
                                           '<ul class="list-group list-group-flush">' +
-                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong> Type: </strong>' + bow.type + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-backpack4"></i><strong> Poundage: </strong>' + bow.poundage  + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-bar-chart"></i><strong> Level: </strong>' + bow.level + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-arrow-bar-right"></i><strong class="text-secondary"> Type: </strong><strong class="text-dark">' + bow.type + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-backpack4"></i><strong class="text-secondary"> Poundage: </strong><strong class="text-dark">' + bow.poundage  + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-bar-chart"></i><strong class="text-secondary"> Level: </strong><strong class="text-dark">' + bow.level + '</strong></li>';
                     if ((bow.type === "RECURVE") || (bow.type === "BAREBOW")) {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Riser model: </strong>' + bow.riserModel + '</li>' +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Limbs model: </strong>' + bow.limbsModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Riser model: </strong><strong class="text-dark">' + bow.riserModel + '</strong></li>' +
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Limbs model: </strong><strong class="text-dark">' + bow.limbsModel + '</strong></li>';
                     }
                     if (bow.type === "COMPOUND") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Compound model: </strong>' + bow.compoundModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Compound model: </strong><strong class="text-dark">' + bow.compoundModel + '</strong></li>';
                     }
                     if (bow.type === "TRADITIONAL") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Traditional model: </strong>' + bow.traditionalModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Traditional model: </strong><strong class="text-dark">' + bow.traditionalModel + '</strong></li>';
                     }
                     if (bow.type === "LONGBOW") {
                         bowSummary = bowSummary +
-                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong> Longbow model: </strong>' + bow.longbowModel + '</li>';
+                                            '<li class="list-group-item"><i class="bi bi-tag"></i><strong class="text-secondary"> Longbow model: </strong><strong class="text-dark">' + bow.longbowModel + '</strong></li>';
                     }
                     bowSummary = bowSummary + '</ul>' +
                                         '</div>' +
