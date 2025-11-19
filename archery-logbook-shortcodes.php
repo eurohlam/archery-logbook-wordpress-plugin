@@ -8,14 +8,14 @@ function archery_logbook_shortcodes_init()
     function archery_logbook_main_shortcode($atts = [], $content = null)
     {
         $form = '<head>
-            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css">
-            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap-icons.css">
+            <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/bootstrap.min.css">
+            <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/bootstrap-icons.css">
             </head>
             <section id="archery_logbook_section">'
             . do_shortcode($content) .
             '</section>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.bundle.min.js"></script>';
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstrap.bundle.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/archerylogbook.bundle.min.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_main', 'archery_logbook_main_shortcode');
@@ -423,8 +423,8 @@ function archery_logbook_shortcodes_init()
                     });
                 });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>';
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_new_round', 'archery_logbook_new_round_shortcode');
@@ -440,8 +440,8 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getRoundsAsTables(' . $user_id . ',jQuery("#roundsHistoryDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
             <div id="roundsHistoryDiv" class="container"></div>';
         return $form;
     }
@@ -459,8 +459,8 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getBowsWithDetails(' . $user_id . ',jQuery("#bowsDetailsDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
             <div id="bowsDetailsDiv"></div>';
         return $form;
     }
@@ -477,9 +477,9 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getScoresProgress(' . $user_id . ',jQuery("#scoresProgressDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/chart/chart.umd.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/chart/chart.umd.js"></script>
             <div id="scoresProgressDiv" class="container"></div>';
         return $form;
     }
@@ -597,8 +597,8 @@ function archery_logbook_shortcodes_init()
                     });
                 });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>';
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_new_competition', 'archery_logbook_new_competition_shortcode');
@@ -614,8 +614,8 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getCompetitionsAsTables(' . $user_id . ',jQuery("#competitionsHistoryDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
             <div id="competitionsHistoryDiv" class="container"></div>';
         return $form;
     }
