@@ -150,10 +150,10 @@
                     var roundsSummaryList = '<ul>';
                     if (Array.isArray(competition.roundsSummary)) {
                         jQuery.each(competition.roundsSummary, function (s, rs) {
-                            roundsSummaryList = roundsSummaryList + '<li>' + rs + '</li>';
+                            roundsSummaryList = roundsSummaryList + '<li><strong>' + rs + '</strong></li>';
                         });
                     } else {
-                        roundsSummaryList = roundsSummaryList + '<li>' + competition.roundsSummary + '</li>';
+                        roundsSummaryList = roundsSummaryList + '<li><strong>' + competition.roundsSummary + '</strong></li>';
                     }
                     roundsSummaryList = roundsSummaryList + '</ul>';
 
