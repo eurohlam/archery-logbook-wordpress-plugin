@@ -9,27 +9,126 @@
     };
 
     jQuery.fn.loadDashboardStats = function(archerId) {
-        // Load rounds statistics
+        
+        // Load best rounds statistics
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
             type: "POST",
             dataType: "JSON",
             data: {
                 'action': 'archery_logbook_get_data',
-                'path': '/archers/' + archerId + '/rounds?page=0&size=100'
+                'path': '/archers/' + archerId + '/rounds/statistics/best'
             },
             cache: false,
             success: function(data) {
-                if (!data || !data.items) {
-                    jQuery('#totalRounds').text('0');
-                    jQuery('#avgScore').text('N/A');
-                    jQuery('#roundsThisMonth').html('<i class="bi bi-info-circle"></i> No data yet');
+                //console.log("Archery Logbook API listBestRounds statistics/best response: " + JSON.stringify(data));
+
+                if (!data || data.length === 0) {
+                    jQuery('#bestRoundsContainer').html('<p class="text-center text-muted">No rounds yet. Add your first round to get started!</p>');
                     return;
                 }
 
-                // Calculate statistics
-                var totalRounds = data.totalItems || data.items.length;
-                jQuery('#totalRounds').text(totalRounds);
+                var container = jQuery('<div>').addClass('row');
+                
+                jQuery.each(data, function(i, round) {
+                    var badgeColor = 'bg-info';
+                    if (round.avg >= 9) badgeColor = 'bg-warning';
+                    else if (round.avg >= 7) badgeColor = 'bg-danger';
+                    else if (round.avg >= 5) badgeColor = 'bg-primary';
+                    
+                    var card = jQuery('<div>').addClass('col-lg-4 col-md-6 mb-3').html(
+                        '<div class="card recent-round-card">' +
+                        '    <div class="card-body">' +
+                        '        <div class="d-flex justify-content-between align-items-start mb-3">' +
+                        '            <div>' +
+                        '                <h5 class="card-title mb-1">' + round.distance + ' meters</h5>' +
+                        '                <small class="text-muted"><i class="bi bi-calendar"></i> ' + new Date(round.roundDate).toLocaleDateString() + '</small>' +
+                        '            </div>' +
+                        '            <span class="round-badge ' + badgeColor + ' text-white">' + round.sum + '</span>' +
+                        '        </div>' +
+                        '        <div class="row mb-2">' +
+                        '            <div class="col-6">' +
+                        '                <small class="text-muted">Bow:</small>' +
+                        '                <p class="mb-0 fw-bold">' + round.bow.name + '</p>' +
+                        '            </div>' +
+                        '            <div class="col-6">' +
+                        '                <small class="text-muted">Target:</small>' +
+                        '                <p class="mb-0 fw-bold">' + round.targetFace + '</p>' +
+                        '            </div>' +
+                        '        </div>' +
+                        '        <div class="row">' +
+                        '            <div class="col-6">' +
+                        '                <small class="text-muted">Arrows:</small>' +
+                        '                <p class="mb-0 fw-bold">' + round.shotsCount + '</p>' +
+                        '            </div>' +
+                        '            <div class="col-6">' +
+                        '                <small class="text-muted">Average:</small>' +
+                        '                <p class="mb-0 fw-bold">' + round.avg + '</p>' +
+                        '            </div>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>'
+                    );
+                    
+                    container.append(card);
+                });
+                
+                jQuery('#bestRoundsContainer').html(container);
+            },
+            error: function() {
+                jQuery('#bestRoundsContainer').html('<p class="text-center text-danger">Failed to load best rounds</p>');
+            }
+        });
+
+        // Load total rounds number
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_get_data',
+                'path': '/archers/' + archerId + '/rounds/statistics/total'
+            },
+            cache: false,
+            success: function(data) {
+                //console.log("Archery Logbook API getTotalRounds statistics/total response: " + JSON.stringify(data));
+
+
+                jQuery('#totalRounds').text(data);
+            }
+        });
+
+        // Load number of rounds for last month
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_get_data',
+                'path': '/archers/' + archerId + '/rounds/statistics/total/lastMonth'
+            },
+            cache: false,
+            success: function(data) {
+                //console.log("Archery Logbook API getTotalLastMonthRounds statistics/total/lastMonth response: " + JSON.stringify(data));
+
+
+                jQuery('#roundsThisMonth').html('<i class="bi bi-arrow-up"></i> ' + data + ' this month');
+            }
+        });
+
+        // Load avg
+        jQuery.ajax({
+            url: "/wp-admin/admin-ajax.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                'action': 'archery_logbook_get_data',
+                'path': '/archers/' + archerId + '/rounds'
+            },
+            cache: false,
+            success: function(data) {
+                console.log("Archery Logbook API AI code response: " + JSON.stringify(data));
+
 
                 // Calculate overall average score
                 var totalAvg = 0;
@@ -103,7 +202,7 @@
                     jQuery('#totalCompetitions').text('0');
                     return;
                 }
-                var total = data.totalItems || data.items.length;
+                var total = data.items.length;
                 jQuery('#totalCompetitions').text(total);
             },
             error: function() {
@@ -274,7 +373,7 @@
                         '            </div>' +
                         '            <div class="col-6">' +
                         '                <small class="text-muted">Average:</small>' +
-                        '                <p class="mb-0 fw-bold">' + (round.avg ? round.avg.toFixed(2) : 'N/A') + '</p>' +
+                        '                <p class="mb-0 fw-bold">' + round.avg + '</p>' +
                         '            </div>' +
                         '        </div>' +
                         '    </div>' +

@@ -12,7 +12,8 @@ gulp.task('build-js', function() {
     'js/archerylogbook/functions/bows.js',
     'js/archerylogbook/functions/rounds.js',
     'js/archerylogbook/functions/competitions.js',
-    'js/archerylogbook/functions/progress.js'
+    'js/archerylogbook/functions/progress.js',
+      'js/archerylogbook/functions/dashboard.js'
   ])
   // Remove IIFE opening from each file (matches at start of file)
   .pipe(replace(/^\(function\(jQuery\)\s*\{?\s*\n?/m, ''))

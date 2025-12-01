@@ -10,6 +10,7 @@ function archery_logbook_shortcodes_init()
         $form = '<head>
             <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/bootstrap.min.css">
             <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/bootstrap-icons.css">
+            <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/archery-logbook.css">
             </head>
             <section id="archery_logbook_section">'
             . do_shortcode($content) .
@@ -631,186 +632,7 @@ function archery_logbook_shortcodes_init()
         $first_name = $user_info->first_name ? $user_info->first_name : $user_info->display_name;
         
         $dashboard = '
-        <style>
-            :root {
-                --primary-color: #198754;
-                --secondary-color: #0d6efd;
-                --danger-color: #dc3545;
-                --warning-color: #ffc107;
-                --dark-color: #212529;
-                --light-bg: #f8f9fa;
-            }
-
-            .dashboard-header {
-                background: linear-gradient(135deg, var(--primary-color) 0%, #20c997 100%);
-                color: white;
-                padding: 2rem 0;
-                margin-bottom: 2rem;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                border-radius: 12px;
-            }
-
-            .stat-card {
-                border: none;
-                border-radius: 12px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                height: 100%;
-            }
-
-            .stat-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-            }
-
-            .stat-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.8rem;
-            }
-
-            .stat-icon.success {
-                background: linear-gradient(135deg, #198754 0%, #20c997 100%);
-                color: white;
-            }
-
-            .stat-icon.primary {
-                background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
-                color: white;
-            }
-
-            .stat-icon.warning {
-                background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
-                color: white;
-            }
-
-            .stat-icon.danger {
-                background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
-                color: white;
-            }
-
-            .action-card {
-                border: none;
-                border-radius: 12px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                text-align: center;
-                padding: 1.5rem;
-                cursor: pointer;
-                background: white;
-                text-decoration: none;
-                display: block;
-            }
-
-            .action-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-            }
-
-            .action-icon {
-                font-size: 2.5rem;
-                margin-bottom: 0.5rem;
-                color: var(--primary-color);
-            }
-
-            .section-title {
-                font-weight: 600;
-                margin-bottom: 1.5rem;
-                color: var(--dark-color);
-                position: relative;
-                padding-bottom: 0.5rem;
-            }
-
-            .section-title::after {
-                content: "";
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 60px;
-                height: 3px;
-                background: var(--primary-color);
-                border-radius: 2px;
-            }
-
-            .recent-round-card {
-                border: none;
-                border-radius: 12px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                margin-bottom: 1rem;
-                transition: transform 0.2s ease;
-            }
-
-            .recent-round-card:hover {
-                transform: translateX(5px);
-            }
-
-            .round-badge {
-                padding: 0.35rem 0.75rem;
-                border-radius: 20px;
-                font-size: 0.875rem;
-                font-weight: 500;
-            }
-
-            .chart-container {
-                background: white;
-                border-radius: 12px;
-                padding: 1.5rem;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                min-height: 400px;
-            }
-
-            .bow-card {
-                border: none;
-                border-radius: 12px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                transition: transform 0.3s ease;
-            }
-
-            .bow-card:hover {
-                transform: scale(1.02);
-            }
-
-            .badge-bow-type {
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-size: 0.875rem;
-            }
-
-            .activity-item {
-                padding: 1rem;
-                border-left: 3px solid var(--primary-color);
-                background: white;
-                border-radius: 8px;
-                margin-bottom: 1rem;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-            }
-
-            .activity-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: var(--light-bg);
-                color: var(--primary-color);
-            }
-
-            @media (max-width: 768px) {
-                .dashboard-header {
-                    padding: 1rem 0;
-                }
-                
-                .stat-card {
-                    margin-bottom: 1rem;
-                }
-            }
-        </style>
-
+       
         <!-- Dashboard Header -->
         <div class="dashboard-header">
             <div class="container">
@@ -874,7 +696,6 @@ function archery_logbook_shortcodes_init()
                                 <div>
                                     <h6 class="text-muted mb-1">Competitions</h6>
                                     <h3 class="mb-0 fw-bold" id="totalCompetitions">...</h3>
-                                    <small class="text-muted">Loading...</small>
                                 </div>
                             </div>
                         </div>
@@ -891,7 +712,6 @@ function archery_logbook_shortcodes_init()
                                 <div>
                                     <h6 class="text-muted mb-1">Total Bows</h6>
                                     <h3 class="mb-0 fw-bold" id="totalBows">...</h3>
-                                    <small class="text-muted">Loading...</small>
                                 </div>
                             </div>
                         </div>
@@ -899,58 +719,17 @@ function archery_logbook_shortcodes_init()
                 </div>
             </div>
 
-            <!-- Quick Actions -->
+            <!-- Best Rounds -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <h4 class="section-title">Quick Actions</h4>
+                    <h4 class="section-title">Best Rounds</h4>
                 </div>
-                <div class="col-lg-2 col-md-4 col-6 mb-3">
-                    <a href="#" class="action-card" data-action="new-round">
-                        <div class="action-icon">
-                            <i class="bi bi-plus-circle-fill"></i>
+                <div class="col-12" id="bestRoundsContainer">
+                    <div class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                        <h6 class="mb-0">Add Round</h6>
-                    </a>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6 mb-3">
-                    <a href="#" class="action-card" data-action="new-bow">
-                        <div class="action-icon">
-                            <i class="bi bi-arrow-bar-right"></i>
-                        </div>
-                        <h6 class="mb-0">Add Bow</h6>
-                    </a>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6 mb-3">
-                    <a href="#" class="action-card" data-action="new-competition">
-                        <div class="action-icon">
-                            <i class="bi bi-trophy-fill"></i>
-                        </div>
-                        <h6 class="mb-0">Competition</h6>
-                    </a>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6 mb-3">
-                    <a href="#" class="action-card" data-action="bows">
-                        <div class="action-icon">
-                            <i class="bi bi-list-ul"></i>
-                        </div>
-                        <h6 class="mb-0">My Bows</h6>
-                    </a>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6 mb-3">
-                    <a href="#" class="action-card" data-action="history">
-                        <div class="action-icon">
-                            <i class="bi bi-clock-history"></i>
-                        </div>
-                        <h6 class="mb-0">History</h6>
-                    </a>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6 mb-3">
-                    <a href="#" class="action-card" data-action="progress">
-                        <div class="action-icon">
-                            <i class="bi bi-graph-up"></i>
-                        </div>
-                        <h6 class="mb-0">Progress</h6>
-                    </a>
+                    </div>
                 </div>
             </div>
 
