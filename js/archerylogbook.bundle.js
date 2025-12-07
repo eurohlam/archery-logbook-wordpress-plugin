@@ -1432,9 +1432,9 @@ jQuery.fn.loadDashboardData = function(archerId) {
                 
                 jQuery.each(data, function(i, round) {
                     var badgeColor = 'bg-info';
-                    if (round.avg >= 9) badgeColor = 'bg-warning';
-                    else if (round.avg >= 7) badgeColor = 'bg-danger';
-                    else if (round.avg >= 5) badgeColor = 'bg-primary';
+                    if (round.avg >= 8) badgeColor = 'bg-warning';
+                    else if (round.avg >= 6) badgeColor = 'bg-danger';
+                    else if (round.avg >= 4) badgeColor = 'bg-primary';
                     
                     var card = jQuery('<div>').addClass('col-lg-4 col-md-6 mb-3').html(
                         '<div class="card recent-round-card">' +
