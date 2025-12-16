@@ -211,11 +211,11 @@
                     '             <div class="card-body">' +
                     '                <div class="form-floating mb-3">' +
                     '                   <input id="distance' + bow.id + '" class="form-control" required type="number" placeholder="Distance" />' +
-                    '                   <label for="distance' + bow.id + '">Distance<span style="color:red">*</span></label>' +
+                    '                   <label for="distance' + bow.id + '"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>' +
                     '                </div>' +
                     '                <div class="form-floating mb-3">' +
                     '                   <input id="sight' + bow.id + '" class="form-control" required type="text" placeholder="Sight" />' +
-                    '                   <label for="sight' + bow.id + '">Sight<span style="color:red">*</span></label>' +
+                    '                   <label for="sight' + bow.id + '"><i class="bi bi-crosshair"></i> Sight<span style="color:red">*</span></label>' +
                     '                </div>' +
                     '                <div class="mb-3">' +
                     '                   <input id="isTested' + bow.id + '" class="form-check-input" type="checkbox" placeholder="Is tested?" />' +
@@ -284,7 +284,7 @@
                 var div = jQuery('<div>')
                     .addClass('form-floating')
                     .append(select)
-                    .append('<label for="bowList">Bow name<span style="color:red">*</span></label>');
+                    .append('<label for="bowList"><i class="bi bi-arrow-bar-right"></i> Bow name<span style="color:red">*</span></label>');
                 parentDiv.html(div);
             },
             error: function() {

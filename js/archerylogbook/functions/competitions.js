@@ -3,13 +3,13 @@
     jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
         var roundCard =
         '<div class="card row mb-3">' +
-        '    <div class="card-header"><h3>Round #' + roundNumber + '</h3></div>' +
+        '    <div class="card-header"><h3><i class="bi bi-arrow-repeat"></i> Round #' + roundNumber + '</h3></div>' +
         '    <div class="card-body">' +
         '        <div class="row">' +
         '            <div class="col-md mb-3">' +
         '                <div class="form-floating">' +
         '                    <input id="roundDistance' + roundNumber + '" class="form-control" required type="text" placeholder="Distance" />' +
-        '                    <label for="roundDistance' + roundNumber + '">Distance<span style="color:red">*</span></label>' +
+        '                    <label for="roundDistance' + roundNumber + '"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>' +
         '                </div>' +
         '            </div>' +
         '            <div class="col-md mb-3">' +
@@ -22,7 +22,7 @@
         '                      <option value="40cm">40 cm</option>' +
         '                      <option value="Multi-spot">Multi-spot</option>' +
         '                    </select>' +
-        '                    <label for="roundTargetFace' + roundNumber + '">Target face<span style="color:red">*</span></label>' +
+        '                    <label for="roundTargetFace' + roundNumber + '"><i class="bi bi-bullseye"></i> Target face<span style="color:red">*</span></label>' +
         '                </div>' +
         '            </div>' +
         '        </div>' +
@@ -30,7 +30,7 @@
         '            <div class="col-md">' +
         '                <div class="form-floating">' +
         '                    <input id="roundComment' + roundNumber + '" class="form-control" type="text" placeholder="Comment" />' +
-        '                    <label for="roundComment' + roundNumber + '">Round comment</label>' +
+        '                    <label for="roundComment' + roundNumber + '"><i class="bi bi-chat-left-text"></i> Round comment</label>' +
         '                </div>' +
         '            </div>' +
         '        </div>' +
@@ -207,11 +207,11 @@
                         var roundDetailsHeader = jQuery('<thead>').addClass('table-success');
                         var roundDetailsHeaderTr = jQuery('<tr>')
                                     .append('<th scope="col">End #</th>')
-                                    .append('<th scope="col">Sum</th>')
+                                    .append('<th scope="col">Score</th>')
                                     .append('<th scope="col">Avg</th>');
 
                         for (let r = 0; r < round.ends[0].shots.length; r++) {
-                            roundDetailsHeaderTr.append('<th scope="col">Arrow #' + (r + 1) + '</th>');
+                            roundDetailsHeaderTr.append('<th scope="col">Shot #' + (r + 1) + '</th>');
                         };
                         roundDetailsHeader.append(roundDetailsHeaderTr);
 

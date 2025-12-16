@@ -150,7 +150,7 @@ function archery_logbook_shortcodes_init()
                    <div class="col-md">
                       <div class="form-floating">
                         <input id="bowName" class="form-control" required type="text" placeholder="Bow name"/>
-                        <label for="bowName">Bow name<span style="color:red">*</span></label>
+                        <label for="bowName"><i class="bi bi-alphabet"></i> Bow name<span style="color:red">*</span></label>
                       </div>
                    </div>
                 </div>
@@ -163,19 +163,19 @@ function archery_logbook_shortcodes_init()
                               <option value="INTERMEDIATE">Intermediate</option>
                               <option value="ADVANCED">Advanced</option>
                             </select>
-                            <label for="bowLevel">Bow level<span style="color:red">*</span></label>
+                            <label for="bowLevel"><i class="bi bi-bar-chart"></i> Bow level<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="poundage" class="form-control" required type="text" pattern="\d{1,3}|\d{2}-\d{2}" title= "Format: [ddd] or [dd]-[dd]" placeholder="Poundage"/>
-                            <label for="poundage">Poundage<span style="color:red">*</span></label>
+                            <label for="poundage"><i class="bi bi-backpack4"></i> Poundage<span style="color:red">*</span></label>
                         </div>
                     </div>
                  </div>
                  <div class="row mb-3">
                      <div class="col"><div class="card">
-                     <div class="card-header">Bow type</div>
+                     <div class="card-header"><i class="bi bi-arrow-bar-right"></i> Bow type</div>
                      <div class="card-body">
                          <div class="row">
                              <div class="col btn-group-vertical list-group">
@@ -205,30 +205,30 @@ function archery_logbook_shortcodes_init()
                                       <div class="tab-pane fade show active" id="recurveTab" role="tabpanel">
                                           <div class="row form-floating mb-2">
                                               <input id="riserModel" class="form-control" type="text" placeholder="Riser model"/>
-                                              <label for="riserModel">Riser model</label>
+                                              <label for="riserModel"><i class="bi bi-tag"></i> Riser model</label>
                                           </div>
                                           <div class="row form-floating">
                                               <input id="limbsModel" class="form-control" type="text" placeholder="Limbs model"/>
-                                              <label for="limbsModel">Limbs model</label>
+                                              <label for="limbsModel"><i class="bi bi-tag"></i> Limbs model</label>
                                           </div>
                                       </div>
                                      <!-- toggled div-->
                                      <div class="tab-pane fade" id="compoundTab" role="tabpanel">
                                           <div class="row form-floating">
                                               <input id="compoundModel" class="form-control" type="text" placeholder="Compound bow model"/>
-                                              <label for="compoundModel">Bow model</label>
+                                              <label for="compoundModel"><i class="bi bi-tag"></i> Bow model</label>
                                           </div>
                                       </div>
                                       <div class="tab-pane fade" id="traditionalTab" role="tabpanel">
                                            <div class="row form-floating">
                                                <input id="traditionalModel" class="form-control" type="text" placeholder="Traditional bow model"/>
-                                               <label for="traditionalModel">Bow model</label>
+                                               <label for="traditionalModel"><i class="bi bi-tag"></i> Bow model</label>
                                            </div>
                                        </div>
                                        <div class="tab-pane fade" id="longbowTab" role="tabpanel">
                                             <div class="row form-floating">
                                                 <input id="longbowModel" class="form-control" type="text" placeholder="Longbow model"/>
-                                                <label for="longbowModel">Bow model</label>
+                                                <label for="longbowModel"><i class="bi bi-tag"></i> Bow model</label>
                                             </div>
                                         </div>
                                    </div>
@@ -269,11 +269,11 @@ function archery_logbook_shortcodes_init()
                             <div class="card-body">
                                  <div class="form-floating mb-3">
                                     <input id="distance" class="form-control" required type="number" placeholder="Distance" />
-                                    <label for="distance">Distance<span style="color:red">*</span></label>
+                                    <label for="distance"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>
                                  </div>
                                  <div class="form-floating mb-3">
                                     <input id="sight" class="form-control" required type="text" placeholder="Sight"/>
-                                    <label for="sight">Sight<span style="color:red">*</span></label>
+                                    <label for="sight"><i class="bi bi-crosshair"></i> Sight<span style="color:red">*</span></label>
                                  </div>
                                  <div class="mb-3">
                                     <input id="isTested" class="form-check-input" type="checkbox" placeholder="Is tested?"/>
@@ -318,7 +318,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="roundDistance" class="form-control" required type="text" placeholder="Distance" />
-                            <label for="roundDistance">Distance<span style="color:red">*</span></label>
+                            <label for="roundDistance"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
@@ -331,7 +331,7 @@ function archery_logbook_shortcodes_init()
                               <option value="40cm">40 cm</option>
                               <option value="Multi-spot">Multi-spot</option>
                             </select>
-                            <label for="roundTargetFace">Target face<span style="color:red">*</span></label>
+                            <label for="roundTargetFace"><i class="bi bi-bullseye"></i> Target face<span style="color:red">*</span></label>
                         </div>
                     </div>
                 </div>
@@ -339,13 +339,13 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="roundCountry" class="form-control" type="text" placeholder="Country" />
-                            <label for="roundCountry">Country</label>
+                            <label for="roundCountry"><i class="bi bi-geo-alt"></i> Country</label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="roundCity" class="form-control" type="text" placeholder="City" />
-                            <label for="roundCity">City</label>
+                            <label for="roundCity"><i class="bi bi-buildings"></i> City</label>
                         </div>
                     </div>
                 </div>
@@ -353,7 +353,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md">
                         <div class="form-floating">
                             <input id="roundComment" class="form-control" type="text" placeholder="Comment" />
-                            <label for="roundComment">Comment</label>
+                            <label for="roundComment"><i class="bi bi-chat-left-text"></i> Comment</label>
                         </div>
                     </div>
                 </div>
@@ -509,13 +509,13 @@ function archery_logbook_shortcodes_init()
                                 <option value="Short Burton">Short Burton</option>
                                 <option value="Silver Fern">Silver Fern</option>
                             </select>
-                          <label for="competitionType">Competition type<span style="color:red">*</span></label>
+                          <label for="competitionType"><i class="bi bi-trophy"></i> Competition type<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="ageClass" class="form-control" type="text" placeholder="Age class" />
-                            <label for="ageClass">Age class</label>
+                            <label for="ageClass"><i class="bi bi-person-lines-fill"></i> Age class</label>
                         </div>
                     </div>
                 </div>
@@ -528,13 +528,13 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="competitionCountry" class="form-control" type="text" placeholder="Country" />
-                            <label for="competitionCountry">Country</label>
+                            <label for="competitionCountry"><i class="bi bi-geo-alt"></i> Country</label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="competitionCity" class="form-control" type="text" placeholder="City" />
-                            <label for="compeitionCity">City</label>
+                            <label for="compeitionCity"><i class="bi bi-buildings"></i> City</label>
                         </div>
                     </div>
                 </div>
@@ -542,7 +542,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md">
                         <div class="form-floating">
                             <input id="competitionComment" class="form-control" type="text" placeholder="Comment" />
-                            <label for="competitionComment">Comment</label>
+                            <label for="competitionComment"><i class="bi bi-chat-left-text"></i> Comment</label>
                         </div>
                     </div>
                 </div>

@@ -148,11 +148,11 @@
                     var roundDetailsHeader = jQuery('<thead>').addClass('table-success');
                     var roundDetailsHeaderTr = jQuery('<tr>')
                                 .append('<th scope="col">End #</th>')
-                                .append('<th scope="col">Sum</th>')
+                                .append('<th scope="col">Score</th>')
                                 .append('<th scope="col">Avg</th>');
 
                     for (let r = 0; r < round.ends[0].shots.length; r++) {
-                        roundDetailsHeaderTr.append('<th scope="col">Arrow #' + (r + 1) + '</th>');
+                        roundDetailsHeaderTr.append('<th scope="col">Shot #' + (r + 1) + '</th>');
                     }
                     roundDetailsHeader.append(roundDetailsHeaderTr);
 

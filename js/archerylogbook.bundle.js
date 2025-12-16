@@ -440,11 +440,11 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
                     '             <div class="card-body">' +
                     '                <div class="form-floating mb-3">' +
                     '                   <input id="distance' + bow.id + '" class="form-control" required type="number" placeholder="Distance" />' +
-                    '                   <label for="distance' + bow.id + '">Distance<span style="color:red">*</span></label>' +
+                    '                   <label for="distance' + bow.id + '"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>' +
                     '                </div>' +
                     '                <div class="form-floating mb-3">' +
                     '                   <input id="sight' + bow.id + '" class="form-control" required type="text" placeholder="Sight" />' +
-                    '                   <label for="sight' + bow.id + '">Sight<span style="color:red">*</span></label>' +
+                    '                   <label for="sight' + bow.id + '"><i class="bi bi-crosshair"></i> Sight<span style="color:red">*</span></label>' +
                     '                </div>' +
                     '                <div class="mb-3">' +
                     '                   <input id="isTested' + bow.id + '" class="form-check-input" type="checkbox" placeholder="Is tested?" />' +
@@ -513,7 +513,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
                 var div = jQuery('<div>')
                     .addClass('form-floating')
                     .append(select)
-                    .append('<label for="bowList">Bow name<span style="color:red">*</span></label>');
+                    .append('<label for="bowList"><i class="bi bi-arrow-bar-right"></i> Bow name<span style="color:red">*</span></label>');
                 parentDiv.html(div);
             },
             error: function() {
@@ -781,11 +781,11 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
                     var roundDetailsHeader = jQuery('<thead>').addClass('table-success');
                     var roundDetailsHeaderTr = jQuery('<tr>')
                                 .append('<th scope="col">End #</th>')
-                                .append('<th scope="col">Sum</th>')
+                                .append('<th scope="col">Score</th>')
                                 .append('<th scope="col">Avg</th>');
 
                     for (let r = 0; r < round.ends[0].shots.length; r++) {
-                        roundDetailsHeaderTr.append('<th scope="col">Arrow #' + (r + 1) + '</th>');
+                        roundDetailsHeaderTr.append('<th scope="col">Shot #' + (r + 1) + '</th>');
                     }
                     roundDetailsHeader.append(roundDetailsHeaderTr);
 
@@ -924,13 +924,13 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
 jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
         var roundCard =
         '<div class="card row mb-3">' +
-        '    <div class="card-header"><h3>Round #' + roundNumber + '</h3></div>' +
+        '    <div class="card-header"><h3><i class="bi bi-arrow-repeat"></i> Round #' + roundNumber + '</h3></div>' +
         '    <div class="card-body">' +
         '        <div class="row">' +
         '            <div class="col-md mb-3">' +
         '                <div class="form-floating">' +
         '                    <input id="roundDistance' + roundNumber + '" class="form-control" required type="text" placeholder="Distance" />' +
-        '                    <label for="roundDistance' + roundNumber + '">Distance<span style="color:red">*</span></label>' +
+        '                    <label for="roundDistance' + roundNumber + '"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>' +
         '                </div>' +
         '            </div>' +
         '            <div class="col-md mb-3">' +
@@ -943,7 +943,7 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
         '                      <option value="40cm">40 cm</option>' +
         '                      <option value="Multi-spot">Multi-spot</option>' +
         '                    </select>' +
-        '                    <label for="roundTargetFace' + roundNumber + '">Target face<span style="color:red">*</span></label>' +
+        '                    <label for="roundTargetFace' + roundNumber + '"><i class="bi bi-bullseye"></i> Target face<span style="color:red">*</span></label>' +
         '                </div>' +
         '            </div>' +
         '        </div>' +
@@ -951,7 +951,7 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
         '            <div class="col-md">' +
         '                <div class="form-floating">' +
         '                    <input id="roundComment' + roundNumber + '" class="form-control" type="text" placeholder="Comment" />' +
-        '                    <label for="roundComment' + roundNumber + '">Round comment</label>' +
+        '                    <label for="roundComment' + roundNumber + '"><i class="bi bi-chat-left-text"></i> Round comment</label>' +
         '                </div>' +
         '            </div>' +
         '        </div>' +
@@ -1128,11 +1128,11 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
                         var roundDetailsHeader = jQuery('<thead>').addClass('table-success');
                         var roundDetailsHeaderTr = jQuery('<tr>')
                                     .append('<th scope="col">End #</th>')
-                                    .append('<th scope="col">Sum</th>')
+                                    .append('<th scope="col">Score</th>')
                                     .append('<th scope="col">Avg</th>');
 
                         for (let r = 0; r < round.ends[0].shots.length; r++) {
-                            roundDetailsHeaderTr.append('<th scope="col">Arrow #' + (r + 1) + '</th>');
+                            roundDetailsHeaderTr.append('<th scope="col">Shot #' + (r + 1) + '</th>');
                         };
                         roundDetailsHeader.append(roundDetailsHeaderTr);
 
