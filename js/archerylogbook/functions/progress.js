@@ -11,7 +11,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
                 if (!data) {
                     return;

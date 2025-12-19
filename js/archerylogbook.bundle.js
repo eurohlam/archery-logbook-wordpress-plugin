@@ -193,7 +193,7 @@ jQuery.fn.getClubs = function(parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 parentDiv.html("<p>" + JSON.stringify(data) + "</p>");
             },
             error: function() {
@@ -216,7 +216,7 @@ jQuery.fn.getClubs = function(parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getArchers response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getArchers response: " + JSON.stringify(data));
                 parentDiv.html("<p>" + JSON.stringify(data) + "</p>");
             },
             error: function() {
@@ -240,7 +240,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
 
                 var bows = jQuery('<div>').addClass('container');
                 jQuery.each(data, function (i, bow) {
@@ -500,7 +500,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getBows response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getBows response: " + JSON.stringify(data));
 
                 var select = jQuery('<select>')
                     .addClass('form-select')
@@ -540,7 +540,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
         bowData.longbowModel = longbowModel;
 
         var requestJson = JSON.stringify(bowData);
-        console.log("Archery Logbook API updateBow request: \n" + requestJson);
+        //console.log("Archery Logbook API updateBow request: \n" + requestJson);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#editBowAlertDiv'));
 
         jQuery.ajax({
@@ -583,7 +583,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>The bow has been deleted</strong>", jQuery('div#deleteBowAlertDiv'));
                 window.location.reload();
             },
@@ -604,7 +604,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
         settingsData.isTested = isTested;
 
         var requestJson = JSON.stringify(settingsData);
-        console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
+        //console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newDistanceAlertDiv'));
 
         jQuery.ajax({
@@ -619,7 +619,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
                 window.location.reload();
             },
@@ -634,7 +634,7 @@ jQuery.fn.getBowsWithDetails = function(archerId, parentDiv) {
 
 
 jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTableJson, country, city, comment) {
-        console.log("Parsing json: \n" +  scoreTableJson);
+        //console.log("Parsing json: \n" +  scoreTableJson);
         var roundJson = {
             "bowId": bowId,
             "distance": distance,
@@ -678,7 +678,7 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
         }
 
         //calling API
-        console.log("Sending json to Archery Logbook API postRound: \n" + JSON.stringify(roundJson));
+        //console.log("Sending json to Archery Logbook API postRound: \n" + JSON.stringify(roundJson));
 
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
@@ -691,7 +691,7 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API postRound response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API postRound response: " + JSON.stringify(data));
                 showAlert("success", "<strong>Your new score has been stored</strong>", jQuery('div#newRoundAlertDiv'));
                 window.location.reload();
             },
@@ -713,9 +713,58 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
             },
             cache: false,
             success: function(data, status, xhr) {
-                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
                 var history = jQuery('<div>').addClass('container');
+
+                var filters = jQuery('<p class="d-inline-flex gap-1">' +
+                    '<a class="btn btn-link" data-bs-toggle="collapse" href="#filterRounds"  role="button" aria-expanded="false" aria-controls="filterRounds">' +
+                    '    Filters' +
+                    '</a>' +
+                    '</p>' +
+                    '<div class="card mb-3 collapse" id="filterRounds">' +
+                    '<div class="card-header">' +
+                    '    <h5 class="mb-0">Filter Rounds</h5>' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '    <div class="row g-3">' +
+                    '    <div class="col-md-4">' +
+                    '        <div class="form-floating">' +
+                    '            <input id="roundDistance" class="form-control" required type="text" placeholder="Distance" />' +
+                    '            <label for="roundDistance"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>' +
+                    '       </div>' +
+                    '    </div>' +
+                    '    <div class="col-md-4">' +
+                    '       <div class="form-floating">' +
+                    '            <select id="roundTargetFace" class="form-select" required>' +
+                    '                <option value="" selected>Select a target face</option>' +
+                    '                <option value="122cm">122 cm</option>' +
+                    '                <option value="80cm">80 cm</option>' +
+                    '                <option value="60cm">60 cm</option>' +
+                    '                <option value="40cm">40 cm</option>' +
+                    '                <option value="Multi-spot">Multi-spot</option>' +
+                    '            </select>' +
+                    '            <label for="roundTargetFace"><i class="bi bi-bullseye"></i> Target face<span style="color:red">*</span></label>' +
+                    '        </div>' +
+                    '    </div>' +
+                    '    <div class="col-md-4" id="filterRoundsBowListDiv">' +
+                    '    </div>' +
+                    '  </div>' +
+                    '  <div class="mt-3">' +
+                    '    <button id="clearFilters" class="btn btn-outline-secondary btn-sm">' +
+                    '        Clear All Filters' +
+                    '    </button>' +
+                    '  </div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<script>' +
+                    '  jQuery(document).ready(function () {' +
+                    '    jQuery.fn.getBowsAsDropdown(' + archerId + ', jQuery("div#filterRoundsBowListDiv"));' +
+                    '  });' +
+                    '</script>');
+                
+                history.append(filters);    
+
                 jQuery.each(data.items, function (s, round) {
                     var details = jQuery('<details>').addClass('mb-3');
 
@@ -892,7 +941,7 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
     } //getRoundsAsTables
 
     jQuery.fn.deleteRound = function(archerId, roundId) {
-        console.log("Archery Logbook API deleteRound: " + roundId);
+        //console.log("Archery Logbook API deleteRound: " + roundId);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#deleteRoundAlertDiv'));
 
         jQuery.ajax({
@@ -907,7 +956,7 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>The score has been deleted</strong>", jQuery('div#deleteRoundAlertDiv'));
                 window.location.reload();
             },
@@ -1004,7 +1053,7 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
     } //addNewRoundTableForCompetition
 
     jQuery.fn.postNewCompetition = function(archerId, competitionType, ageClass, bowId, competitionCountry, competitionCity, competitionComment, roundsJson) {
-        console.log("Rounds json: \n" +  roundsJson);
+        //console.log("Rounds json: \n" +  roundsJson);
         var competitionJson = {
             "competitionType": competitionType,
             "ageClass": ageClass,
@@ -1063,7 +1112,7 @@ jQuery.fn.addNewRoundTableForCompetition = function(roundNumber, parentDiv) {
             },
             cache: false,
             success: function(data, status, xhr) {
-                console.log("Archery Logbook API getCompetitions response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getCompetitions response: " + JSON.stringify(data));
 
                 var history = jQuery('<div>').addClass('container');
                 jQuery.each(data.items, function (c, competition) {
@@ -1254,7 +1303,7 @@ jQuery.fn.getScoresProgress = function(archerId, parentDiv) {
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getRounds response: " + JSON.stringify(data));
 
                 if (!data) {
                     return;

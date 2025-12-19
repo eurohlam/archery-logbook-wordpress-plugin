@@ -11,7 +11,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getBow response: " + JSON.stringify(data));
 
                 var bows = jQuery('<div>').addClass('container');
                 jQuery.each(data, function (i, bow) {
@@ -271,7 +271,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getBows response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getBows response: " + JSON.stringify(data));
 
                 var select = jQuery('<select>')
                     .addClass('form-select')
@@ -311,7 +311,7 @@
         bowData.longbowModel = longbowModel;
 
         var requestJson = JSON.stringify(bowData);
-        console.log("Archery Logbook API updateBow request: \n" + requestJson);
+        //console.log("Archery Logbook API updateBow request: \n" + requestJson);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#editBowAlertDiv'));
 
         jQuery.ajax({
@@ -354,7 +354,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>The bow has been deleted</strong>", jQuery('div#deleteBowAlertDiv'));
                 window.location.reload();
             },
@@ -375,7 +375,7 @@
         settingsData.isTested = isTested;
 
         var requestJson = JSON.stringify(settingsData);
-        console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
+        //console.log("Archery Logbook API newDistanceSettings request: \n" + requestJson);
         showAlert("success", "<strong>Connecting to Archery Logbook API service. Please, wait for a moment ...</strong>", jQuery('div#newDistanceAlertDiv'));
 
         jQuery.ajax({
@@ -390,7 +390,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 showAlert("success", "<strong>New settings have been added</strong>", jQuery('div#newDistanceAlertDiv'));
                 window.location.reload();
             },

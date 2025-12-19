@@ -11,7 +11,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API response: " + JSON.stringify(data));
                 parentDiv.html("<p>" + JSON.stringify(data) + "</p>");
             },
             error: function() {
@@ -34,7 +34,7 @@
             },
             cache: false,
             success: function(data) {
-                console.log("Archery Logbook API getArchers response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getArchers response: " + JSON.stringify(data));
                 parentDiv.html("<p>" + JSON.stringify(data) + "</p>");
             },
             error: function() {

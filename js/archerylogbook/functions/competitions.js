@@ -83,7 +83,7 @@
     } //addNewRoundTableForCompetition
 
     jQuery.fn.postNewCompetition = function(archerId, competitionType, ageClass, bowId, competitionCountry, competitionCity, competitionComment, roundsJson) {
-        console.log("Rounds json: \n" +  roundsJson);
+        //console.log("Rounds json: \n" +  roundsJson);
         var competitionJson = {
             "competitionType": competitionType,
             "ageClass": ageClass,
@@ -142,7 +142,7 @@
             },
             cache: false,
             success: function(data, status, xhr) {
-                console.log("Archery Logbook API getCompetitions response: " + JSON.stringify(data));
+                //console.log("Archery Logbook API getCompetitions response: " + JSON.stringify(data));
 
                 var history = jQuery('<div>').addClass('container');
                 jQuery.each(data.items, function (c, competition) {
