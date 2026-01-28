@@ -702,14 +702,25 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
         });
     } //postNewRound
 
-    jQuery.fn.getRoundsAsTables = function(archerId, parentDiv, page = 0, size = 5) {
+    jQuery.fn.getRoundsAsTables = function(archerId, parentDiv, page = 0, size = 5, distance, targetFace, bowId) {
+        var url = '/archers/' + archerId + '/rounds?page=' + page + "&size=" + size;
+        if (distance) {
+            url = url + "&distance=" + distance;
+        }
+        if (targetFace) {
+            url = url + "&targetFace=" + targetFace;
+        }
+        if (bowId) {
+            url = url + "&bowId=" + bowId;
+        }
+        console.log("URL: " + url);
         jQuery.ajax({
             url: "/wp-admin/admin-ajax.php",
             type: "POST",
             dataType: "JSON",
             data: {
                 'action': 'archery_logbook_get_data',
-                'path': '/archers/' + archerId + '/rounds?page=' + page + "&size=" + size
+                'path': url
             },
             cache: false,
             success: function(data, status, xhr) {
@@ -726,17 +737,18 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
                     '<div class="card-header">' +
                     '    <h5 class="mb-0">Filter Rounds</h5>' +
                     '</div>' +
+                    '<form id="filterRoundsForm">' +
                     '<div class="card-body">' +
                     '    <div class="row g-3">' +
                     '    <div class="col-md-4">' +
                     '        <div class="form-floating">' +
-                    '            <input id="roundDistance" class="form-control" required type="text" placeholder="Distance" />' +
-                    '            <label for="roundDistance"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>' +
+                    '            <input id="roundDistance" class="form-control" type="text" placeholder="Distance" />' +
+                    '            <label for="roundDistance"><i class="bi bi-binoculars"></i> Distance</label>' +
                     '       </div>' +
                     '    </div>' +
                     '    <div class="col-md-4">' +
                     '       <div class="form-floating">' +
-                    '            <select id="roundTargetFace" class="form-select" required>' +
+                    '            <select id="roundTargetFace" class="form-select">' +
                     '                <option value="" selected>Select a target face</option>' +
                     '                <option value="122cm">122 cm</option>' +
                     '                <option value="80cm">80 cm</option>' +
@@ -744,22 +756,40 @@ jQuery.fn.postNewRound = function(archerId, bowId, distance, targetFace, scoreTa
                     '                <option value="40cm">40 cm</option>' +
                     '                <option value="Multi-spot">Multi-spot</option>' +
                     '            </select>' +
-                    '            <label for="roundTargetFace"><i class="bi bi-bullseye"></i> Target face<span style="color:red">*</span></label>' +
+                    '            <label for="roundTargetFace"><i class="bi bi-bullseye"></i> Target face</label>' +
                     '        </div>' +
                     '    </div>' +
                     '    <div class="col-md-4" id="filterRoundsBowListDiv">' +
                     '    </div>' +
                     '  </div>' +
-                    '  <div class="mt-3">' +
-                    '    <button id="clearFilters" class="btn btn-outline-secondary btn-sm">' +
+                    '</div>' +
+                    '  <div class="card-footer btn-toolbar justify-content-between">' +
+                    '    <button id="applyFilters" type="submit" class="btn btn-outline-secondary btn-sm">' +
+                    '        Apply Filters' +
+                    '    </button>' +
+                    '    <button id="clearFilters" type="button" class="btn btn-outline-secondary btn-sm">' +
                     '        Clear All Filters' +
                     '    </button>' +
                     '  </div>' +
                     '</div>' +
-                    '</div>' +
+                    '</form>' +
                     '<script>' +
                     '  jQuery(document).ready(function () {' +
                     '    jQuery.fn.getBowsAsDropdown(' + archerId + ', jQuery("div#filterRoundsBowListDiv"));' +
+                    '    jQuery("#filterRoundsForm").submit(function(event){' +
+                    '        var distance = jQuery("#roundDistance").val();' +
+                    '        var targetFace = jQuery("#roundTargetFace").val();' +
+                    '        var bowId = jQuery("#bowList").val();' +
+                    '        jQuery.fn.getRoundsAsTables(' + archerId + ',jQuery("#roundsHistoryDiv"), ' + page + ', ' + size + ', distance, targetFace, bowId);' +
+                    '        return false;' +
+                    '    });' +                    
+                    '    jQuery("#clearFilters").click(function(event){' +
+                    '        jQuery("#roundDistance").val("");' +
+                    '        jQuery("#roundTargetFace").val("");' +
+                    '        jQuery("#bowList").val("");' +
+                    '        jQuery.fn.getRoundsAsTables(' + archerId + ',jQuery("#roundsHistoryDiv"), ' + page + ', ' + size + ');' +
+                    '        return false;' +
+                    '    });' +
                     '  });' +
                     '</script>');
                 
