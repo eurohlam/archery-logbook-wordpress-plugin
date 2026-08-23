@@ -8,14 +8,15 @@ function archery_logbook_shortcodes_init()
     function archery_logbook_main_shortcode($atts = [], $content = null)
     {
         $form = '<head>
-            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap.min.css">
-            <link rel="stylesheet" href="/wp-content/plugins/archery-logbook/css/bootstrap-icons.css">
+            <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/bootstrap.min.css">
+            <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/bootstrap-icons.css">
+            <link rel="stylesheet" href="' . plugin_dir_url(__FILE__) . 'css/archery-logbook.css">
             </head>
             <section id="archery_logbook_section">'
             . do_shortcode($content) .
             '</section>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstrap.bundle.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/archerylogbook.js"></script>';
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstrap.bundle.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/archerylogbook.bundle.min.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_main', 'archery_logbook_main_shortcode');
@@ -149,7 +150,7 @@ function archery_logbook_shortcodes_init()
                    <div class="col-md">
                       <div class="form-floating">
                         <input id="bowName" class="form-control" required type="text" placeholder="Bow name"/>
-                        <label for="bowName">Bow name<span style="color:red">*</span></label>
+                        <label for="bowName"><i class="bi bi-alphabet"></i> Bow name<span style="color:red">*</span></label>
                       </div>
                    </div>
                 </div>
@@ -162,19 +163,19 @@ function archery_logbook_shortcodes_init()
                               <option value="INTERMEDIATE">Intermediate</option>
                               <option value="ADVANCED">Advanced</option>
                             </select>
-                            <label for="bowLevel">Bow level<span style="color:red">*</span></label>
+                            <label for="bowLevel"><i class="bi bi-bar-chart"></i> Bow level<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="poundage" class="form-control" required type="text" pattern="\d{1,3}|\d{2}-\d{2}" title= "Format: [ddd] or [dd]-[dd]" placeholder="Poundage"/>
-                            <label for="poundage">Poundage<span style="color:red">*</span></label>
+                            <label for="poundage"><i class="bi bi-backpack4"></i> Poundage<span style="color:red">*</span></label>
                         </div>
                     </div>
                  </div>
                  <div class="row mb-3">
                      <div class="col"><div class="card">
-                     <div class="card-header">Bow type</div>
+                     <div class="card-header"><i class="bi bi-arrow-bar-right"></i> Bow type</div>
                      <div class="card-body">
                          <div class="row">
                              <div class="col btn-group-vertical list-group">
@@ -204,30 +205,30 @@ function archery_logbook_shortcodes_init()
                                       <div class="tab-pane fade show active" id="recurveTab" role="tabpanel">
                                           <div class="row form-floating mb-2">
                                               <input id="riserModel" class="form-control" type="text" placeholder="Riser model"/>
-                                              <label for="riserModel">Riser model</label>
+                                              <label for="riserModel"><i class="bi bi-tag"></i> Riser model</label>
                                           </div>
                                           <div class="row form-floating">
                                               <input id="limbsModel" class="form-control" type="text" placeholder="Limbs model"/>
-                                              <label for="limbsModel">Limbs model</label>
+                                              <label for="limbsModel"><i class="bi bi-tag"></i> Limbs model</label>
                                           </div>
                                       </div>
                                      <!-- toggled div-->
                                      <div class="tab-pane fade" id="compoundTab" role="tabpanel">
                                           <div class="row form-floating">
                                               <input id="compoundModel" class="form-control" type="text" placeholder="Compound bow model"/>
-                                              <label for="compoundModel">Bow model</label>
+                                              <label for="compoundModel"><i class="bi bi-tag"></i> Bow model</label>
                                           </div>
                                       </div>
                                       <div class="tab-pane fade" id="traditionalTab" role="tabpanel">
                                            <div class="row form-floating">
                                                <input id="traditionalModel" class="form-control" type="text" placeholder="Traditional bow model"/>
-                                               <label for="traditionalModel">Bow model</label>
+                                               <label for="traditionalModel"><i class="bi bi-tag"></i> Bow model</label>
                                            </div>
                                        </div>
                                        <div class="tab-pane fade" id="longbowTab" role="tabpanel">
                                             <div class="row form-floating">
                                                 <input id="longbowModel" class="form-control" type="text" placeholder="Longbow model"/>
-                                                <label for="longbowModel">Bow model</label>
+                                                <label for="longbowModel"><i class="bi bi-tag"></i> Bow model</label>
                                             </div>
                                         </div>
                                    </div>
@@ -268,11 +269,11 @@ function archery_logbook_shortcodes_init()
                             <div class="card-body">
                                  <div class="form-floating mb-3">
                                     <input id="distance" class="form-control" required type="number" placeholder="Distance" />
-                                    <label for="distance">Distance<span style="color:red">*</span></label>
+                                    <label for="distance"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>
                                  </div>
                                  <div class="form-floating mb-3">
                                     <input id="sight" class="form-control" required type="text" placeholder="Sight"/>
-                                    <label for="sight">Sight<span style="color:red">*</span></label>
+                                    <label for="sight"><i class="bi bi-crosshair"></i> Sight<span style="color:red">*</span></label>
                                  </div>
                                  <div class="mb-3">
                                     <input id="isTested" class="form-check-input" type="checkbox" placeholder="Is tested?"/>
@@ -317,7 +318,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="roundDistance" class="form-control" required type="text" placeholder="Distance" />
-                            <label for="roundDistance">Distance<span style="color:red">*</span></label>
+                            <label for="roundDistance"><i class="bi bi-binoculars"></i> Distance<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
@@ -330,7 +331,7 @@ function archery_logbook_shortcodes_init()
                               <option value="40cm">40 cm</option>
                               <option value="Multi-spot">Multi-spot</option>
                             </select>
-                            <label for="roundTargetFace">Target face<span style="color:red">*</span></label>
+                            <label for="roundTargetFace"><i class="bi bi-bullseye"></i> Target face<span style="color:red">*</span></label>
                         </div>
                     </div>
                 </div>
@@ -338,13 +339,13 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="roundCountry" class="form-control" type="text" placeholder="Country" />
-                            <label for="roundCountry">Country</label>
+                            <label for="roundCountry"><i class="bi bi-geo-alt"></i> Country</label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="roundCity" class="form-control" type="text" placeholder="City" />
-                            <label for="roundCity">City</label>
+                            <label for="roundCity"><i class="bi bi-buildings"></i> City</label>
                         </div>
                     </div>
                 </div>
@@ -352,7 +353,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md">
                         <div class="form-floating">
                             <input id="roundComment" class="form-control" type="text" placeholder="Comment" />
-                            <label for="roundComment">Comment</label>
+                            <label for="roundComment"><i class="bi bi-chat-left-text"></i> Comment</label>
                         </div>
                     </div>
                 </div>
@@ -423,8 +424,8 @@ function archery_logbook_shortcodes_init()
                     });
                 });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>';
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_new_round', 'archery_logbook_new_round_shortcode');
@@ -440,8 +441,8 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getRoundsAsTables(' . $user_id . ',jQuery("#roundsHistoryDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
             <div id="roundsHistoryDiv" class="container"></div>';
         return $form;
     }
@@ -459,8 +460,8 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getBowsWithDetails(' . $user_id . ',jQuery("#bowsDetailsDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
             <div id="bowsDetailsDiv"></div>';
         return $form;
     }
@@ -477,9 +478,9 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getScoresProgress(' . $user_id . ',jQuery("#scoresProgressDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/chart/chart.umd.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/chart/chart.umd.js"></script>
             <div id="scoresProgressDiv" class="container"></div>';
         return $form;
     }
@@ -508,13 +509,13 @@ function archery_logbook_shortcodes_init()
                                 <option value="Short Burton">Short Burton</option>
                                 <option value="Silver Fern">Silver Fern</option>
                             </select>
-                          <label for="competitionType">Competition type<span style="color:red">*</span></label>
+                          <label for="competitionType"><i class="bi bi-trophy"></i> Competition type<span style="color:red">*</span></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="ageClass" class="form-control" type="text" placeholder="Age class" />
-                            <label for="ageClass">Age class</label>
+                            <label for="ageClass"><i class="bi bi-person-lines-fill"></i> Age class</label>
                         </div>
                     </div>
                 </div>
@@ -527,13 +528,13 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="competitionCountry" class="form-control" type="text" placeholder="Country" />
-                            <label for="competitionCountry">Country</label>
+                            <label for="competitionCountry"><i class="bi bi-geo-alt"></i> Country</label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <input id="competitionCity" class="form-control" type="text" placeholder="City" />
-                            <label for="compeitionCity">City</label>
+                            <label for="compeitionCity"><i class="bi bi-buildings"></i> City</label>
                         </div>
                     </div>
                 </div>
@@ -541,7 +542,7 @@ function archery_logbook_shortcodes_init()
                     <div class="col-md">
                         <div class="form-floating">
                             <input id="competitionComment" class="form-control" type="text" placeholder="Comment" />
-                            <label for="competitionComment">Comment</label>
+                            <label for="competitionComment"><i class="bi bi-chat-left-text"></i> Comment</label>
                         </div>
                     </div>
                 </div>
@@ -597,8 +598,8 @@ function archery_logbook_shortcodes_init()
                     });
                 });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>';
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>';
         return $form;
     }
     add_shortcode('archery_logbook_new_competition', 'archery_logbook_new_competition_shortcode');
@@ -614,11 +615,176 @@ function archery_logbook_shortcodes_init()
                     jQuery.fn.getCompetitionsAsTables(' . $user_id . ',jQuery("#competitionsHistoryDiv"));
             });
             </script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/jquery.min.js"></script>
-            <script type="text/javascript" src="/wp-content/plugins/archery-logbook/js/bootstable.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/jquery.min.js"></script>
+            <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/bootstable.js"></script>
             <div id="competitionsHistoryDiv" class="container"></div>';
         return $form;
     }
     add_shortcode('archery_logbook_competitions_history', 'archery_logbook_competitions_history_shortcode');
+
+    /**
+     * Shortcode that shows the main dashboard
+     */
+    function archery_logbook_dashboard_shortcode($atts = [], $content = null)
+    {
+        $user_id = get_current_user_id();
+        $user_info = get_userdata($user_id);
+        $first_name = $user_info->first_name ? $user_info->first_name : $user_info->display_name;
+        
+        $dashboard = '
+       
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <h1 class="display-5 fw-bold mb-2">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </h1>
+                        <p class="lead mb-0">Welcome back, ' . esc_html($first_name) . '! Track your progress and improve your skills.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container mb-5">
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4" id="dashboardStats">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon success me-3">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Rounds</h6>
+                                    <h3 class="mb-0 fw-bold" id="totalRounds">...</h3>
+                                    <small class="text-muted" id="roundsThisMonth">Loading...</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon primary me-3">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Average Score</h6>
+                                    <h3 class="mb-0 fw-bold" id="avgScore">...</h3>
+                                    <small class="text-muted" id="avgImprovement">Loading...</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon warning me-3">
+                                    <i class="bi bi-trophy"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Competitions</h6>
+                                    <h3 class="mb-0 fw-bold" id="totalCompetitions">...</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon danger me-3">
+                                    <i class="bi bi-arrow-bar-right"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Bows</h6>
+                                    <h3 class="mb-0 fw-bold" id="totalBows">...</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Rounds -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="section-title">Best Rounds</h4>
+                </div>
+                <div class="col-12" id="bestRoundsContainer">
+                    <div class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score Progress Chart -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="section-title">Score Progress</h4>
+                </div>
+                <div class="col-12">
+                    <div class="chart-container">
+                        <canvas id="dashboardScoreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Rounds -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="section-title">Recent Rounds</h4>
+                </div>
+                <div class="col-12" id="recentRoundsContainer">
+                    <div class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Bows -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="section-title">My Bows</h4>
+                </div>
+                <div class="col-12" id="myBowsContainer">
+                    <div class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            jQuery(document).ready(function() {
+                jQuery.fn.loadDashboardData(' . $user_id . ');
+            });
+        </script>
+        <script type="text/javascript" src="' . plugin_dir_url(__FILE__) . 'js/chart/chart.umd.js"></script>
+        ';
+        
+        return $dashboard;
+    }
+    add_shortcode('archery_logbook_dashboard', 'archery_logbook_dashboard_shortcode');
 
 }

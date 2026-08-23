@@ -1,4 +1,6 @@
 .DS_Store
-archery-forms.html
+archery-*.html
 score.json
 js/jquery.min.js
+.idea
+node_modules

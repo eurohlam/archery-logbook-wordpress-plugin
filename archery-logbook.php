@@ -3,7 +3,7 @@
  * Plugin Name: Archery Logbook Integration
  * Plugin URI: https://wordpress.org/plugins/
  * Description: Integration with Archery Logbook REST API
- * Version: 1.0.8
+ * Version: 2.0.0
  * Author: Roundkick.Studio, eurohlam
  * Author URI: https://roundkick.nz
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) exit;
 include_once 'class-archery-logbook-integration.php';
 include_once 'archery-logbook-shortcodes.php';
 
-define('ARCHERY_LOGBOOK_INT_VERSION', '1.0.8');
+define('ARCHERY_LOGBOOK_INT_VERSION', '2.0.0');
 
 if (!class_exists('WP_Archery_Logbook_Int')) {
 	class WP_Archery_Logbook_Int {
@@ -94,12 +94,12 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 			$secret = get_option($this->secret_option);
 			$url = get_option($this->url_option);
 			$request = '{"id": "' . $user_id . '",' .
-				'"firstName": "' . $_POST['first_name'] . '",' .
-				'"lastName": "' . $_POST['last_name'] . '",' .
-				'"email": "' . $_POST['user_email'] . '",' .
-				'"country": "' . $_POST['billing_country'] . '",' .
-				'"city": "' . $_POST['billing_city'] . '",' .
-				'"clubName": "' . $_POST['archery_club'] . '"}';
+				'"firstName": "' . esc_attr($_POST['first_name']) . '",' .
+				'"lastName": "' . esc_attr($_POST['last_name']) . '",' .
+				'"email": "' . esc_attr($_POST['user_email']) . '",' .
+				'"country": "' . esc_attr($_POST['billing_country']) . '",' .
+				'"city": "' . esc_attr($_POST['billing_city']) . '",' .
+				'"clubName": "' . esc_attr($_POST['archery_club']) . '"}';
 			$path = "/archers";
 			$method = "POST";
 
@@ -221,7 +221,7 @@ if (!class_exists('WP_Archery_Logbook_Int')) {
 			$accessKey = get_option($this->accessKey_option);
 			$secret = get_option($this->secret_option);
 			$url = get_option($this->url_option);
-			$request = stripcslashes($_POST['request']);
+			$request = stripcslashes(esc_attr($_POST['request']));
 			$path = $_POST['path'];
 
 			if (!empty($accessKey) && !empty($secret) && !empty($url) && !empty($path)) {

@@ -1,0 +1,28 @@
+{
+  "name": "archery-logbook-wordpress-plugin",
+  "version": "1.0.0",
+  "description": "archery-logbook-wordpress-plugin =================================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eurohlam/archery-logbook-wordpress-plugin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/eurohlam/archery-logbook-wordpress-plugin/issues"
+  },
+  "homepage": "https://github.com/eurohlam/archery-logbook-wordpress-plugin#readme",
+  "devDependencies": {
+    "gulp": "^5.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^2.1.0",
+    "gulp-replace": "^1.1.4",
+    "gulp-uglify": "^3.0.2"
+  }
+}
